@@ -4,16 +4,23 @@
   "version": "${version}",
   "name": "NovaVisual",
   "description": "A clean, customizable visual experience for Minecraft.",
-  "authors": ["NovaCraft Team"],
+  "authors": [
+    "NovaCraft Team"
+  ],
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
-    "client": ["com.novacraft.novavisual.NovaVisualClient"]
+    "client": [
+      "com.novacraft.novavisual.NovaVisualClient"
+    ]
   },
   "depends": {
     "fabricloader": ">=0.19.0",
     "minecraft": "~1.21.11",
     "java": ">=21",
     "fabric-api": "*"
-  }
+  },
+  "mixins": [
+    "novavisual.mixins.json"
+  ]
 }
