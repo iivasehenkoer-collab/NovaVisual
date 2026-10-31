@@ -35,6 +35,7 @@ public final class NovaModrinthScreen extends Screen {
     private final List<Project> projects = new ArrayList<>();
     private TextFieldWidget search;
     private String status = "Search Modrinth for Fabric mods";
+    private String lastQuery = "";
     private boolean busy;
     private int page;
 
@@ -63,7 +64,8 @@ public final class NovaModrinthScreen extends Screen {
 
     private void searchMods() {
         if (busy) return;
-        String query = search == null ? "" : search.getText().trim();
+        String query = search == null ? lastQuery : search.getText().trim();
+        lastQuery = query;
         busy = true;
         status = "Searching Modrinth...";
         projects.clear();
@@ -98,6 +100,7 @@ public final class NovaModrinthScreen extends Screen {
         int left = Math.max(12, width / 2 - 210);
         search = new TextFieldWidget(textRenderer, left, 22, Math.max(100, width - 2 * left - 64), 20, Text.literal("Search mods"));
         search.setMaxLength(100);
+        search.setText(lastQuery);
         addDrawableChild(search);
         addDrawableChild(ButtonWidget.builder(Text.literal("Search"), b -> { page = 0; searchMods(); })
                 .dimensions(width - left - 58, 22, 58, 20).build());
