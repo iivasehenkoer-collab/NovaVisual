@@ -2,7 +2,7 @@ package com.novacraft.novavisual;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;\nimport net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;\nimport net.minecraft.client.render.entity.PlayerEntityRenderer;\nimport net.minecraft.entity.EntityType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -30,6 +30,19 @@ public final class NovaVisualClient implements ClientModInitializer {
         ));
 
         NovaEventMarker.register();
+
+        LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
+                (entityType, entityRenderer, helper, context) -> {
+                    if (entityType == EntityType.PLAYER
+                            && entityRenderer instanceof PlayerEntityRenderer<?, ?> playerRenderer) {
+                        @SuppressWarnings("unchecked")
+                        var playerContext = (net.minecraft.client.render.entity.feature.FeatureRendererContext<
+                                net.minecraft.client.render.entity.state.PlayerEntityRenderState,
+                                net.minecraft.client.render.entity.model.PlayerEntityModel>) playerRenderer;
+                        helper.register(new NovaWingsFeature(playerContext));
+                    }
+                }
+        );
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.wasPressed()) {
