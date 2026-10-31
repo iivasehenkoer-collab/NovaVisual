@@ -119,9 +119,14 @@ public final class NovaBrowserScreen extends Screen {
     @Override public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
         int l=12, r=width-12, t=76, b=height-28;
-        ctx.fill(l,t,r,b,0xEF101B2A); ctx.fill(l,t,r,t+3,NovaVisualSettings.accent);
-        ctx.drawText(textRenderer,title,l+12,t+12,0xFFFFFFFF,false);
-        ctx.drawText(textRenderer,status,l+12,t+28,0xFF9CB2C8,false);
+        ctx.fill(l-4,t-4,r+4,b+4,0x304CAEDC);
+        ctx.fill(l,t,r,b,0xB9121D2D);
+        ctx.fill(l+2,t+2,r-2,b-2,0x72283D55);
+        ctx.fill(l+1,t+1,r-1,t+2,0x88FFFFFF);
+        ctx.fill(l+12,t+42,r-12,t+43,0x558BD7F5);
+        ctx.drawText(textRenderer,"N O V A   /   S P A T I A L   B R O W S E R",l+12,t+10,0xFFB9D0E5,false);
+        ctx.drawText(textRenderer,title,l+12,t+17,0xFFFFFFFF,false);
+        ctx.drawText(textRenderer,status,l+12,t+30,0xFF83CFF4,false);
         int y=t+48-scroll;
         for (String line: lines) {
             for (var wrapped:textRenderer.wrapLines(Text.literal(line),r-l-24)) {
@@ -130,13 +135,28 @@ public final class NovaBrowserScreen extends Screen {
             }
         }
         int linkY=b-16, x=l+12;
-        ctx.drawText(textRenderer,"Links:",x,linkY,0xFF39BDF8,false); x+=42;
+        ctx.drawText(textRenderer,"LINKS",x,linkY,0xFF83D7FF,false); x+=42;
         for (int i=0;i<Math.min(4,links.size());i++) {
             String label=textRenderer.trimToWidth(links.get(i).label,100);
-            ctx.drawText(textRenderer,label,x,linkY,0xFF39BDF8,false); x+=textRenderer.getWidth(label)+12;
+            ctx.drawText(textRenderer,label,x,linkY,0xFFB8E7FF,false); x+=textRenderer.getWidth(label)+12;
             if(x>r-100) break;
         }
         super.render(ctx,mx,my,delta);
+        int bx=Math.max(12,width/2-220);
+        glassButton(ctx,width-bx-58,18,58,20,"GO",mx,my);
+        glassButton(ctx,bx,44,60,20,"BACK",mx,my);
+        glassButton(ctx,bx+66,44,72,20,"REFRESH",mx,my);
+        glassButton(ctx,bx+144,44,60,20,"HOME",mx,my);
+        glassButton(ctx,width-bx-60,44,60,20,"CLOSE",mx,my);
+    }
+
+    private void glassButton(DrawContext ctx,int x,int y,int w,int h,String label,int mx,int my) {
+        boolean hover=mx>=x&&mx<=x+w&&my>=y&&my<=y+h;
+        ctx.fill(x-1,y-1,x+w+1,y+h+1,hover?0xAA72D8FF:0x554B9CC8);
+        ctx.fill(x,y,x+w,y+h,hover?0xE53C5873:0xC51B2B40);
+        ctx.fill(x+2,y+1,x+w-2,y+2,0x66FFFFFF);
+        ctx.fill(x+1,y+1,x+2,y+h-1,hover?0xFFB9EEFF:0x8878CFF2);
+        ctx.drawCenteredText(textRenderer,label,x+w/2,y+6,0xFFFFFFFF);
     }
 
     @Override public boolean mouseClicked(Click click, boolean doubled) {
