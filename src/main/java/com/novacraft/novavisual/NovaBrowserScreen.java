@@ -26,6 +26,7 @@ public final class NovaBrowserScreen extends Screen {
     private String url = "https://example.com", title = "NovaVisual Internet", status = "Enter a website address";
     private boolean loading;
     private int scroll;
+    private final long openedAt = System.currentTimeMillis();
 
     private record Link(String label, String url) {}
 
@@ -118,11 +119,12 @@ public final class NovaBrowserScreen extends Screen {
 
     @Override public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
+        float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
         int l=12, r=width-12, t=76, b=height-28;
-        ctx.fill(l-4,t-4,r+4,b+4,0x304CAEDC);
-        ctx.fill(l,t,r,b,0xB9121D2D);
-        ctx.fill(l+2,t+2,r-2,b-2,0x72283D55);
-        ctx.fill(l+1,t+1,r-1,t+2,0x88FFFFFF);
+        ctx.fill(l-4,t-4,r+4,b+4,withAlpha(0x304CAEDC,entrance));
+        ctx.fill(l,t,r,b,withAlpha(0xB9121D2D,entrance));
+        ctx.fill(l+2,t+2,r-2,b-2,withAlpha(0x72283D55,entrance));
+        ctx.fill(l+1,t+1,r-1,t+2,withAlpha(0x88FFFFFF,entrance));
         ctx.fill(l+12,t+42,r-12,t+43,0x558BD7F5);
         ctx.drawText(textRenderer,"N O V A   /   S P A T I A L   B R O W S E R",l+12,t+10,0xFFB9D0E5,false);
         ctx.drawText(textRenderer,title,l+12,t+17,0xFFFFFFFF,false);
@@ -152,7 +154,8 @@ public final class NovaBrowserScreen extends Screen {
 
     private void glassButton(DrawContext ctx,int x,int y,int w,int h,String label,int mx,int my) {
         boolean hover=mx>=x&&mx<=x+w&&my>=y&&my<=y+h;
-        ctx.fill(x-1,y-1,x+w+1,y+h+1,hover?0xAA72D8FF:0x554B9CC8);
+        int glow=hover?(0x70+(int)(35*(0.5+0.5*Math.sin(System.currentTimeMillis()/150.0)))):0x55;
+        ctx.fill(x-2,y-2,x+w+2,y+h+2,hover?(glow<<24)|0x72D8FF:0x554B9CC8);
         ctx.fill(x,y,x+w,y+h,hover?0xE53C5873:0xC51B2B40);
         ctx.fill(x+2,y+1,x+w-2,y+2,0x66FFFFFF);
         ctx.fill(x+1,y+1,x+2,y+h-1,hover?0xFFB9EEFF:0x8878CFF2);
@@ -177,6 +180,8 @@ public final class NovaBrowserScreen extends Screen {
         scroll=Math.max(0,Math.min(Math.max(0,lines.size()*11-(height-150)),scroll-(int)(vertical*24)));
         return true;
     }
+    private static float easeOut(float t) { float p=1f-t; return 1f-p*p*p; }
+    private static int withAlpha(int color,float amount) { return ((int)(((color>>>24)&255)*amount)<<24)|(color&0x00FFFFFF); }
     @Override public void close() { if(client!=null) client.setScreen(new NovaVisualScreen()); }
     @Override public boolean shouldPause() { return false; }
 }
