@@ -9,6 +9,7 @@ public final class NovaVisualScreen extends Screen {
     private static final int PANEL = 0xE8141D2B;
     private static final int CYAN = 0xFF39BDF8;
     private static final int MUTED = 0xFF9CB2C8;
+    private final long openedAt = System.currentTimeMillis();
 
     public NovaVisualScreen() { super(Text.literal("NovaVisual")); }
 
@@ -42,13 +43,14 @@ public final class NovaVisualScreen extends Screen {
 
     @Override public void render(DrawContext context,int mouseX,int mouseY,float delta) {
         renderBackground(context,mouseX,mouseY,delta);
-        int left=width/2-156,top=height/2-150,right=width/2+156,bottom=height/2+168;
+        float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
+        int left=width/2-(int)(156*entrance),top=height/2-(int)(150*entrance),right=width/2+(int)(156*entrance),bottom=height/2+(int)(168*entrance);
         // Layered translucent surfaces create a spatial-glass look without requiring shaders.
-        context.fill(left-5,top-5,right+5,bottom+5,0x302A9DCE);
-        context.fill(left,top,right,bottom,0xB9101828);
-        context.fill(left+2,top+2,right-2,bottom-2,0x7A26384D);
-        context.fill(left+1,top+1,right-1,top+2,0x88FFFFFF);
-        context.fill(left+1,top+1,left+2,bottom-1,0x5599DFFF);
+        context.fill(left-5,top-5,right+5,bottom+5,withAlpha(0x302A9DCE, entrance));
+        context.fill(left,top,right,bottom,withAlpha(0xB9101828, entrance));
+        context.fill(left+2,top+2,right-2,bottom-2,withAlpha(0x7A26384D, entrance));
+        context.fill(left+1,top+1,right-1,top+2,withAlpha(0x88FFFFFF, entrance));
+        context.fill(left+1,top+1,left+2,bottom-1,withAlpha(0x5599DFFF, entrance));
         context.fill(left+14,top+48,right-14,top+49,0x5595D9F5);
         context.fill(left+14,top+49,left+15,bottom-18,0x2269C9F5);
         context.drawText(textRenderer,"N O V A C R A F T   /   S P A T I A L   U I",left+18,top+13,MUTED,false);
@@ -76,6 +78,6 @@ public final class NovaVisualScreen extends Screen {
         ctx.fill(x+1,y+1,x+2,y+h-1,hover?0xFFB9EEFF:0x8878CFF2);
         ctx.drawText(textRenderer,label,x+12,y+6,hover?0xFFFFFFFF:0xFFE4F2FF,false);
     }
-    @Override public void close(){if(client!=null)client.setScreen(null);}
+    private static float easeOut(float t) { float p=1f-t; return 1f-p*p*p; }\n    private static int withAlpha(int color,float amount) { return ((int)(((color>>>24)&255)*amount)<<24)|(color&0x00FFFFFF); }\n    @Override public void close(){if(client!=null)client.setScreen(null);}
     @Override public boolean shouldPause(){return false;}
 }
