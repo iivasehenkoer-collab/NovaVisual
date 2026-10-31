@@ -18,7 +18,7 @@ public final class NovaCosmeticsScreen extends Screen {
     @Override
     protected void init() {
         int x = width / 2 - 104;
-        int y = height / 2 + 70;
+        int y = height / 2 + 82;
         addDrawableChild(ButtonWidget.builder(Text.literal("Style: " + STYLES[NovaVisualSettings.wingStyle]), button -> {
             NovaVisualSettings.wingStyle = (NovaVisualSettings.wingStyle + 1) % STYLES.length;
             button.setMessage(Text.literal("Style: " + STYLES[NovaVisualSettings.wingStyle]));
@@ -53,7 +53,7 @@ public final class NovaCosmeticsScreen extends Screen {
         int left = width / 2 - 142;
         int top = height / 2 - 132;
         int right = width / 2 + 142;
-        int bottom = height / 2 + 104;
+        int bottom = height / 2 + 200;
         context.fill(left - 4, top - 4, right + 4, bottom + 4, 0x5039BDF8);
         context.fill(left, top, right, bottom, 0xE8141D2B);
         context.fill(left + 2, top + 2, right - 2, bottom - 2, 0x7A26384D);
