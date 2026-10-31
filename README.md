@@ -2,13 +2,13 @@
 
 A client-side visual settings mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.0.0
+## Version 1.1.0 development
 
-**Status:** source prototype; gameplay effects are not implemented yet.
-
-### Included
+### Included / in development
 - NovaVisual settings screen (Right Shift)
-- Animated menu, compact HUD, damage flash and ambient-particle prototype toggles
+- Fullbright toggle using the client gamma setting
+- Enemy ESP toggle for hostile mobs using Minecraft's glowing outline
+- Existing prototype toggles: animated menu, compact HUD, damage flash and ambient particles
 - Nova Blue / Nova Violet accent selector
 - Client-only, non-pausing settings screen
 
@@ -29,4 +29,4 @@ Install Fabric Loader and Fabric API for Minecraft 1.21.11, then place the built
 - `src/main/resources` — Fabric metadata and translations
 - `builds/` — version source archives
 
-The 1.0.0 switches are UI prototypes; HUD rendering, damage flash and ambient particle effects are planned for later releases.
+The Fullbright and Enemy ESP code is now implemented in the client tick handler, but the project still requires a successful Gradle build and in-game test before this development version can be called verified.
