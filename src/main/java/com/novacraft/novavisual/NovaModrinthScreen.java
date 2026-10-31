@@ -236,7 +236,7 @@ public final class NovaModrinthScreen extends Screen {
         ctx.fill(x, y, x + w, y + h, hover ? 0xE53C5873 : 0xC51B2B40);
         ctx.fill(x + 2, y + 1, x + w - 2, y + 2, 0x66FFFFFF);
         ctx.fill(x + 1, y + 1, x + 2, y + h - 1, hover ? 0xFFB9EEFF : 0x8878CFF2);
-        ctx.drawCenteredText(textRenderer, label, x + w / 2, y + 6, 0xFFFFFFFF);
+        ctx.drawText(textRenderer, label, x + (w - textRenderer.getWidth(label)) / 2, y + 6, 0xFFFFFFFF, false);
     }
 
     private static String compact(int value) {
