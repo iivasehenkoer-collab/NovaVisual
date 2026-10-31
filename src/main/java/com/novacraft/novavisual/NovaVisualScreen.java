@@ -17,24 +17,28 @@ public final class NovaVisualScreen extends Screen {
     @Override
     protected void init() {
         int center = width / 2;
-        int top = height / 2 - 82;
+        int top = height / 2 - 108;
         int buttonWidth = 220;
         int x = center - buttonWidth / 2;
 
         addDrawableChild(toggleButton(x, top + 38, "Animated menu", () -> NovaVisualSettings.animatedMenu,
                 value -> NovaVisualSettings.animatedMenu = value));
-        addDrawableChild(toggleButton(x, top + 64, "Compact HUD", () -> NovaVisualSettings.compactHud,
+        addDrawableChild(toggleButton(x, top + 62, "Compact HUD", () -> NovaVisualSettings.compactHud,
                 value -> NovaVisualSettings.compactHud = value));
-        addDrawableChild(toggleButton(x, top + 90, "Damage flash", () -> NovaVisualSettings.damageFlash,
+        addDrawableChild(toggleButton(x, top + 86, "Damage flash", () -> NovaVisualSettings.damageFlash,
                 value -> NovaVisualSettings.damageFlash = value));
-        addDrawableChild(toggleButton(x, top + 116, "Ambient particles", () -> NovaVisualSettings.particles,
+        addDrawableChild(toggleButton(x, top + 110, "Ambient particles", () -> NovaVisualSettings.particles,
                 value -> NovaVisualSettings.particles = value));
+        addDrawableChild(toggleButton(x, top + 134, "Fullbright", () -> NovaVisualSettings.fullbright,
+                value -> NovaVisualSettings.fullbright = value));
+        addDrawableChild(toggleButton(x, top + 158, "Enemy ESP", () -> NovaVisualSettings.enemyEsp,
+                value -> NovaVisualSettings.enemyEsp = value));
         addDrawableChild(ButtonWidget.builder(Text.literal("Accent: Nova Blue"), button -> {
             NovaVisualSettings.accent = NovaVisualSettings.accent == CYAN ? 0xFF9B7BFF : CYAN;
             button.setMessage(Text.literal(NovaVisualSettings.accent == CYAN ? "Accent: Nova Blue" : "Accent: Nova Violet"));
-        }).dimensions(x, top + 146, buttonWidth, 20).build());
+        }).dimensions(x, top + 184, buttonWidth, 20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Done"), button -> close())
-                .dimensions(x, top + 174, buttonWidth, 20).build());
+                .dimensions(x, top + 210, buttonWidth, 20).build());
     }
 
     private ButtonWidget toggleButton(int x, int y, String label,
@@ -55,9 +59,9 @@ public final class NovaVisualScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         renderBackground(context, mouseX, mouseY, delta);
         int left = width / 2 - 132;
-        int top = height / 2 - 92;
+        int top = height / 2 - 118;
         int right = width / 2 + 132;
-        int bottom = height / 2 + 108;
+        int bottom = height / 2 + 132;
 
         context.fill(left, top, right, bottom, PANEL);
         context.fill(left, top, right, top + 3, NovaVisualSettings.accent);
