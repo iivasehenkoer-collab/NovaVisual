@@ -29,7 +29,7 @@ public final class NovaVisualClient implements ClientModInitializer {
                 KeyBinding.Category.MISC
         ));
 
-        NovaEventMarker.register();
+        NovaEventMarker.register();\n        NovaCombatWarning.register();
 
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
                 (entityType, entityRenderer, helper, context) -> {
