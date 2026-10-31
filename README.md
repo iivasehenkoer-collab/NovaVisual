@@ -2,15 +2,20 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.2.0 development
+## Version 1.3.0 development
 
 ### Features
 - NovaVisual settings screen (Right Shift)
 - Fullbright toggle using the client gamma setting
 - Enemy ESP toggle for hostile mobs using the vanilla glowing outline
-- In-game Internet screen with address bar, Back, Refresh, Home and clickable links
+- In-game Modrinth browser: search Fabric mods compatible with Minecraft 1.21.11
+- One-click mod JAR download and installation into the game's `mods` folder
+- In-game lightweight Internet screen with address bar, Back, Refresh, Home and clickable links
 - Lightweight HTML text extraction using Jsoup
 - Nova Blue / Nova Violet accent selector
+
+### Modrinth installer notes
+The Modrinth screen searches projects marked as mods with Fabric support for Minecraft 1.21.11. It downloads the selected compatible JAR into the current Minecraft instance's `mods` folder. Restart Minecraft to load newly installed mods. Check each mod's description and dependencies before installing. Only install mods you trust.
 
 ### Browser limitations
 The built-in browser is a lightweight HTML text reader, not Chromium. It displays readable page text and a selection of links, but does not execute JavaScript, render full CSS layouts, play video, or support complex web applications. YouTube and other JavaScript-heavy websites may not work as expected. Only HTTP and HTTPS addresses are accepted.
