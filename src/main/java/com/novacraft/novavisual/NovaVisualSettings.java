@@ -9,7 +9,7 @@ public final class NovaVisualSettings {
     public static boolean particles = false;
     public static boolean fullbright = false;
     public static boolean enemyEsp = false;
-    public static boolean eventAutoMarker = true;
+    public static boolean eventAutoMarker = true;\n    public static boolean combatExitWarning = true;
     public static int accent = 0xFF39BDF8;
     public static boolean cosmeticsEnabled = true;
     public static boolean rgbWings = true;
