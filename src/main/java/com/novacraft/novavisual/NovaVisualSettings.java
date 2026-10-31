@@ -9,5 +9,6 @@ public final class NovaVisualSettings {
     public static boolean particles = false;
     public static boolean fullbright = false;
     public static boolean enemyEsp = false;
+    public static boolean eventAutoMarker = true;
     public static int accent = 0xFF39BDF8;
 }
