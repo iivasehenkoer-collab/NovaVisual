@@ -42,14 +42,39 @@ public final class NovaVisualScreen extends Screen {
 
     @Override public void render(DrawContext context,int mouseX,int mouseY,float delta) {
         renderBackground(context,mouseX,mouseY,delta);
-        int left=width/2-132,top=height/2-142,right=width/2+132,bottom=height/2+154;
-        context.fill(left,top,right,bottom,PANEL);
-        context.fill(left,top,right,top+3,NovaVisualSettings.accent);
-        context.fill(left+12,top+30,right-12,top+31,0x5539BDF8);
-        context.drawText(textRenderer,"NOVACRAFT / VISUAL ENGINE",left+16,top+11,MUTED,false);
-        context.drawText(textRenderer,"NovaVisual",left+16,top+43,0xFFFFFFFF,false);
-        context.drawText(textRenderer,"CUSTOMIZE YOUR GAME",left+16,bottom-15,CYAN,false);
+        int left=width/2-156,top=height/2-150,right=width/2+156,bottom=height/2+168;
+        // Layered translucent surfaces create a spatial-glass look without requiring shaders.
+        context.fill(left-5,top-5,right+5,bottom+5,0x302A9DCE);
+        context.fill(left,top,right,bottom,0xB9101828);
+        context.fill(left+2,top+2,right-2,bottom-2,0x7A26384D);
+        context.fill(left+1,top+1,right-1,top+2,0x88FFFFFF);
+        context.fill(left+1,top+1,left+2,bottom-1,0x5599DFFF);
+        context.fill(left+14,top+48,right-14,top+49,0x5595D9F5);
+        context.fill(left+14,top+49,left+15,bottom-18,0x2269C9F5);
+        context.drawText(textRenderer,"N O V A C R A F T   /   S P A T I A L   U I",left+18,top+13,MUTED,false);
+        context.drawText(textRenderer,"NovaVisual",left+18,top+30,0xFFFFFFFF,false);
+        context.drawText(textRenderer,"A calmer, more immersive Minecraft workspace",left+18,top+42,0xFFB6CBE0,false);
         super.render(context,mouseX,mouseY,delta);
+        int x=width/2-110, y=height/2-132;
+        glassButton(context,x,y+38,220,20,"Animated menu   ·   "+(NovaVisualSettings.animatedMenu?"ON":"OFF"),mouseX,mouseY);
+        glassButton(context,x,y+62,220,20,"Compact HUD   ·   "+(NovaVisualSettings.compactHud?"ON":"OFF"),mouseX,mouseY);
+        glassButton(context,x,y+86,220,20,"Damage flash   ·   "+(NovaVisualSettings.damageFlash?"ON":"OFF"),mouseX,mouseY);
+        glassButton(context,x,y+110,220,20,"Ambient particles   ·   "+(NovaVisualSettings.particles?"ON":"OFF"),mouseX,mouseY);
+        glassButton(context,x,y+134,220,20,"Fullbright   ·   "+(NovaVisualSettings.fullbright?"ON":"OFF"),mouseX,mouseY);
+        glassButton(context,x,y+158,220,20,"Enemy ESP   ·   "+(NovaVisualSettings.enemyEsp?"ON":"OFF"),mouseX,mouseY);
+        glassButton(context,x,y+184,220,20,"Accent: "+(NovaVisualSettings.accent==CYAN?"Nova Blue":"Nova Violet"),mouseX,mouseY);
+        glassButton(context,x,y+210,220,20,"MODRINTH  /  MOD LIBRARY",mouseX,mouseY);
+        glassButton(context,x,y+234,220,20,"INTERNET  /  WEB",mouseX,mouseY);
+        glassButton(context,x,y+258,220,20,"DONE",mouseX,mouseY);
+    }
+
+    private void glassButton(DrawContext ctx,int x,int y,int w,int h,String label,int mx,int my) {
+        boolean hover=mx>=x&&mx<=x+w&&my>=y&&my<=y+h;
+        ctx.fill(x-1,y-1,x+w+1,y+h+1,hover?0xAA72D8FF:0x554B9CC8);
+        ctx.fill(x,y,x+w,y+h,hover?0xE53C5873:0xC51B2B40);
+        ctx.fill(x+2,y+1,x+w-2,y+2,0x66FFFFFF);
+        ctx.fill(x+1,y+1,x+2,y+h-1,hover?0xFFB9EEFF:0x8878CFF2);
+        ctx.drawText(textRenderer,label,x+12,y+6,hover?0xFFFFFFFF:0xFFE4F2FF,false);
     }
     @Override public void close(){if(client!=null)client.setScreen(null);}
     @Override public boolean shouldPause(){return false;}
