@@ -2,6 +2,7 @@ package com.novacraft.novavisual;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -138,9 +139,10 @@ public final class NovaBrowserScreen extends Screen {
         super.render(ctx,mx,my,delta);
     }
 
-    @Override public boolean mouseClicked(double mx,double my,int button) {
-        int y=height-44, x=54;
-        if(button==0 && my>=y-3 && my<=y+12) {
+    @Override public boolean mouseClicked(Click click, boolean doubled) {
+        double mx = click.x(), my = click.y();
+        int y=height-44, x=66;
+        if(click.button()==0 && my>=y-3 && my<=y+12) {
             for(int i=0;i<Math.min(4,links.size());i++) {
                 String label=textRenderer.trimToWidth(links.get(i).label,100);
                 int w=textRenderer.getWidth(label);
@@ -148,7 +150,7 @@ public final class NovaBrowserScreen extends Screen {
                 x+=w+12; if(x>width-110) break;
             }
         }
-        return super.mouseClicked(mx,my,button);
+        return super.mouseClicked(click,doubled);
     }
 
     @Override public boolean mouseScrolled(double mx,double my,double horizontal,double vertical) {
