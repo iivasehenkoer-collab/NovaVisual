@@ -26,10 +26,12 @@ public final class NovaVisualScreen extends Screen {
             NovaVisualSettings.accent=NovaVisualSettings.accent==CYAN?0xFF9B7BFF:CYAN;
             b.setMessage(Text.literal(NovaVisualSettings.accent==CYAN?"Accent: Nova Blue":"Accent: Nova Violet"));
         }).dimensions(x,top+210,bw,20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Modrinth"),b->{if(client!=null)client.setScreen(new NovaModrinthScreen());})
+        addDrawableChild(ButtonWidget.builder(Text.literal("Cosmetics  /  Skin Studio"),b->{if(client!=null)client.setScreen(new NovaCosmeticsScreen());})
                 .dimensions(x,top+236,bw,20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Internet"),b->{if(client!=null)client.setScreen(new NovaBrowserScreen());})
+        addDrawableChild(ButtonWidget.builder(Text.literal("Modrinth"),b->{if(client!=null)client.setScreen(new NovaModrinthScreen());})
                 .dimensions(x,top+260,bw,20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Internet"),b->{if(client!=null)client.setScreen(new NovaBrowserScreen());})
+                .dimensions(x,top+308,bw,20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Done"),b->close()).dimensions(x,top+284,bw,20).build());
     }
 
@@ -45,7 +47,7 @@ public final class NovaVisualScreen extends Screen {
     @Override public void render(DrawContext context,int mouseX,int mouseY,float delta) {
         renderBackground(context,mouseX,mouseY,delta);
         float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
-        int left=width/2-(int)(156*entrance),top=height/2-(int)(150*entrance),right=width/2+(int)(156*entrance),bottom=height/2+(int)(194*entrance);
+        int left=width/2-(int)(156*entrance),top=height/2-(int)(150*entrance),right=width/2+(int)(156*entrance),bottom=height/2+(int)(218*entrance);
         // Layered translucent surfaces create a spatial-glass look without requiring shaders.
         context.fill(left-5,top-5,right+5,bottom+5,withAlpha(0x302A9DCE, entrance));
         context.fill(left,top,right,bottom,withAlpha(0xB9101828, entrance));
@@ -67,9 +69,10 @@ public final class NovaVisualScreen extends Screen {
         glassButton(context,x,y+158,220,20,"Enemy ESP   ·   "+(NovaVisualSettings.enemyEsp?"ON":"OFF"),mouseX,mouseY);
         glassButton(context,x,y+184,220,20,"HolyWorld event marker   ·   "+(NovaVisualSettings.eventAutoMarker?"ON":"OFF"),mouseX,mouseY);
         glassButton(context,x,y+210,220,20,"Accent: "+(NovaVisualSettings.accent==CYAN?"Nova Blue":"Nova Violet"),mouseX,mouseY);
-        glassButton(context,x,y+236,220,20,"MODRINTH  /  MOD LIBRARY",mouseX,mouseY);
-        glassButton(context,x,y+260,220,20,"INTERNET  /  WEB",mouseX,mouseY);
-        glassButton(context,x,y+284,220,20,"DONE",mouseX,mouseY);
+        glassButton(context,x,y+236,220,20,"COSMETICS  /  SKIN STUDIO",mouseX,mouseY);
+        glassButton(context,x,y+260,220,20,"MODRINTH  /  MOD LIBRARY",mouseX,mouseY);
+        glassButton(context,x,y+284,220,20,"INTERNET  /  WEB",mouseX,mouseY);
+        glassButton(context,x,y+308,220,20,"DONE",mouseX,mouseY);
     }
 
     private void glassButton(DrawContext ctx,int x,int y,int w,int h,String label,int mx,int my) {
