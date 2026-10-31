@@ -29,6 +29,8 @@ public final class NovaVisualClient implements ClientModInitializer {
                 KeyBinding.Category.MISC
         ));
 
+        NovaEventMarker.register();
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.wasPressed()) {
                 if (client.currentScreen == null) {
