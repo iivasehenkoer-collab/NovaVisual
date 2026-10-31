@@ -2,7 +2,10 @@ package com.novacraft.novavisual;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;\nimport net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;\nimport net.minecraft.client.render.entity.PlayerEntityRenderer;\nimport net.minecraft.entity.EntityType;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.entity.EntityType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -29,7 +32,8 @@ public final class NovaVisualClient implements ClientModInitializer {
                 KeyBinding.Category.MISC
         ));
 
-        NovaEventMarker.register();\n        NovaCombatWarning.register();
+        NovaEventMarker.register();
+        NovaCombatWarning.register();
 
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
                 (entityType, entityRenderer, helper, context) -> {
