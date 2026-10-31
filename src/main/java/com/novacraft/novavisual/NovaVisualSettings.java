@@ -7,5 +7,7 @@ public final class NovaVisualSettings {
     public static boolean compactHud = true;
     public static boolean damageFlash = true;
     public static boolean particles = false;
+    public static boolean fullbright = false;
+    public static boolean enemyEsp = false;
     public static int accent = 0xFF39BDF8;
 }
