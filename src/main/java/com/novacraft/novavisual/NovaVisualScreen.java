@@ -24,9 +24,11 @@ public final class NovaVisualScreen extends Screen {
             NovaVisualSettings.accent=NovaVisualSettings.accent==CYAN?0xFF9B7BFF:CYAN;
             b.setMessage(Text.literal(NovaVisualSettings.accent==CYAN?"Accent: Nova Blue":"Accent: Nova Violet"));
         }).dimensions(x,top+184,bw,20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Internet"),b->{if(client!=null)client.setScreen(new NovaBrowserScreen());})
+        addDrawableChild(ButtonWidget.builder(Text.literal("Modrinth"),b->{if(client!=null)client.setScreen(new NovaModrinthScreen());})
                 .dimensions(x,top+210,bw,20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Done"),b->close()).dimensions(x,top+234,bw,20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Internet"),b->{if(client!=null)client.setScreen(new NovaBrowserScreen());})
+                .dimensions(x,top+234,bw,20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Done"),b->close()).dimensions(x,top+258,bw,20).build());
     }
 
     private ButtonWidget toggleButton(int x,int y,String label,java.util.function.BooleanSupplier getter,java.util.function.Consumer<Boolean> setter) {
