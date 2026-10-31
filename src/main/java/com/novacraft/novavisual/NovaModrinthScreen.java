@@ -38,6 +38,7 @@ public final class NovaModrinthScreen extends Screen {
     private String lastQuery = "";
     private boolean busy;
     private int page;
+    private final long openedAt = System.currentTimeMillis();
 
     private record Project(String id, String title, String description, String author, int downloads) {}
 
@@ -198,12 +199,13 @@ public final class NovaModrinthScreen extends Screen {
     @Override public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
         super.render(ctx, mx, my, delta);
+        float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
         int left = Math.max(12, width / 2 - 210), right = width - left;
         int top = 54, bottom = height - 40;
-        ctx.fill(left - 4, top - 4, right + 4, bottom + 4, 0x304CAEDC);
-        ctx.fill(left, top, right, bottom, 0xB9121D2D);
-        ctx.fill(left + 2, top + 2, right - 2, bottom - 2, 0x72283D55);
-        ctx.fill(left + 1, top + 1, right - 1, top + 2, 0x88FFFFFF);
+        ctx.fill(left - 4, top - 4, right + 4, bottom + 4, withAlpha(0x304CAEDC, entrance));
+        ctx.fill(left, top, right, bottom, withAlpha(0xB9121D2D, entrance));
+        ctx.fill(left + 2, top + 2, right - 2, bottom - 2, withAlpha(0x72283D55, entrance));
+        ctx.fill(left + 1, top + 1, right - 1, top + 2, withAlpha(0x88FFFFFF, entrance));
         ctx.fill(left + 12, top + 47, right - 12, top + 48, 0x558BD7F5);
         ctx.drawText(textRenderer, "MODRINTH  /  DISCOVER", left + 14, top + 11, 0xFFFFFFFF, false);
         ctx.drawText(textRenderer, "Find your next world-changing mod", left + 14, top + 25, 0xFFB9D0E5, false);
@@ -229,7 +231,8 @@ public final class NovaModrinthScreen extends Screen {
 
     private void glassButton(DrawContext ctx, int x, int y, int w, int h, String label, int mx, int my) {
         boolean hover = mx >= x && mx <= x + w && my >= y && my <= y + h;
-        ctx.fill(x - 1, y - 1, x + w + 1, y + h + 1, hover ? 0xAA72D8FF : 0x554B9CC8);
+        int glow = hover ? (0x70 + (int)(35 * (0.5 + 0.5 * Math.sin(System.currentTimeMillis() / 150.0)))) : 0x55;
+        ctx.fill(x - 2, y - 2, x + w + 2, y + h + 2, hover ? (glow << 24) | 0x72D8FF : 0x554B9CC8);
         ctx.fill(x, y, x + w, y + h, hover ? 0xE53C5873 : 0xC51B2B40);
         ctx.fill(x + 2, y + 1, x + w - 2, y + 2, 0x66FFFFFF);
         ctx.fill(x + 1, y + 1, x + 2, y + h - 1, hover ? 0xFFB9EEFF : 0x8878CFF2);
@@ -242,6 +245,8 @@ public final class NovaModrinthScreen extends Screen {
         return Integer.toString(value);
     }
 
+    private static float easeOut(float t) { float p=1f-t; return 1f-p*p*p; }
+    private static int withAlpha(int color,float amount) { return ((int)(((color>>>24)&255)*amount)<<24)|(color&0x00FFFFFF); }
     @Override public void close() { if (client != null) client.setScreen(new NovaVisualScreen()); }
     @Override public boolean shouldPause() { return false; }
 }
