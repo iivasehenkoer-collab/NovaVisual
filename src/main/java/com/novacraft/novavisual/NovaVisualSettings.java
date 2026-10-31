@@ -16,4 +16,6 @@ public final class NovaVisualSettings {
     public static boolean rgbAura = false;
     public static boolean particleTrail = false;
     public static int wingStyle = 0;
+    public static boolean optimizationEnabled = false;
+    public static int optimizationPreset = 1;
 }
