@@ -78,6 +78,8 @@ public final class NovaVisualScreen extends Screen {
         ctx.fill(x+1,y+1,x+2,y+h-1,hover?0xFFB9EEFF:0x8878CFF2);
         ctx.drawText(textRenderer,label,x+12,y+6,hover?0xFFFFFFFF:0xFFE4F2FF,false);
     }
-    private static float easeOut(float t) { float p=1f-t; return 1f-p*p*p; }\n    private static int withAlpha(int color,float amount) { return ((int)(((color>>>24)&255)*amount)<<24)|(color&0x00FFFFFF); }\n    @Override public void close(){if(client!=null)client.setScreen(null);}
+    private static float easeOut(float t) { float p=1f-t; return 1f-p*p*p; }
+    private static int withAlpha(int color,float amount) { return ((int)(((color>>>24)&255)*amount)<<24)|(color&0x00FFFFFF); }
+    @Override public void close(){if(client!=null)client.setScreen(null);}
     @Override public boolean shouldPause(){return false;}
 }
