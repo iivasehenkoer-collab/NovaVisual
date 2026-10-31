@@ -18,19 +18,21 @@ public final class NovaCosmeticsScreen extends Screen {
     @Override
     protected void init() {
         int x = width / 2 - 104;
-        int y = height / 2 + 82;
+        int y = height / 2 + 42;
         addDrawableChild(ButtonWidget.builder(Text.literal("Style: " + STYLES[NovaVisualSettings.wingStyle]), button -> {
             NovaVisualSettings.wingStyle = (NovaVisualSettings.wingStyle + 1) % STYLES.length;
             button.setMessage(Text.literal("Style: " + STYLES[NovaVisualSettings.wingStyle]));
         }).dimensions(x, y, 208, 20).build());
-        addDrawableChild(toggleButton(x, y + 24, "RGB animation", () -> NovaVisualSettings.rgbWings,
+        addDrawableChild(toggleButton(x, y + 24, "3D wings", () -> NovaVisualSettings.cosmeticsEnabled,
+                value -> NovaVisualSettings.cosmeticsEnabled = value));
+        addDrawableChild(toggleButton(x, y + 48, "RGB animation", () -> NovaVisualSettings.rgbWings,
                 value -> NovaVisualSettings.rgbWings = value));
-        addDrawableChild(toggleButton(x, y + 48, "RGB aura", () -> NovaVisualSettings.rgbAura,
+        addDrawableChild(toggleButton(x, y + 72, "RGB aura", () -> NovaVisualSettings.rgbAura,
                 value -> NovaVisualSettings.rgbAura = value));
-        addDrawableChild(toggleButton(x, y + 72, "Particle trail", () -> NovaVisualSettings.particleTrail,
+        addDrawableChild(toggleButton(x, y + 96, "Particle trail", () -> NovaVisualSettings.particleTrail,
                 value -> NovaVisualSettings.particleTrail = value));
         addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
-                .dimensions(x, y + 100, 208, 20).build());
+                .dimensions(x, y + 124, 208, 20).build());
     }
 
     private ButtonWidget toggleButton(int x, int y, String label,
@@ -64,8 +66,8 @@ public final class NovaCosmeticsScreen extends Screen {
 
         int color = NovaVisualSettings.rgbWings ? rainbowColor() : 0xFF6BCBFF;
         drawWingPreview(context, width / 2, top + 118, color);
-        context.drawText(textRenderer, "Cosmetic preview", width / 2 - 44, top + 192, MUTED, false);
-        context.drawText(textRenderer, "Local visual concept · not uploaded to your Minecraft skin",
+        context.drawText(textRenderer, "Live 3D wings · attached to player", width / 2 - 44, top + 192, MUTED, false);
+        context.drawText(textRenderer, "Client-side cosmetic · visible with NovaVisual installed",
                 width / 2 - 126, top + 207, 0xFFB6CBE0, false);
         super.render(context, mouseX, mouseY, delta);
     }
