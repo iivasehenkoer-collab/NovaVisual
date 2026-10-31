@@ -31,8 +31,8 @@ public final class NovaVisualScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.literal("Modrinth"),b->{if(client!=null)client.setScreen(new NovaModrinthScreen());})
                 .dimensions(x,top+260,bw,20).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Internet"),b->{if(client!=null)client.setScreen(new NovaBrowserScreen());})
-                .dimensions(x,top+308,bw,20).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Done"),b->close()).dimensions(x,top+284,bw,20).build());
+                .dimensions(x,top+284,bw,20).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Done"),b->close()).dimensions(x,top+308,bw,20).build());
     }
 
     private ButtonWidget toggleButton(int x,int y,String label,java.util.function.BooleanSupplier getter,java.util.function.Consumer<Boolean> setter) {
