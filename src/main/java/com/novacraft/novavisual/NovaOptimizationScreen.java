@@ -69,6 +69,12 @@ public final class NovaOptimizationScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // Intentionally empty: the custom opaque background is drawn in render().
+        // This prevents vanilla's per-frame blur pipeline from being requested.
+    }
+
+    @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         // Draw an opaque custom backdrop. Screen.renderBackground() can request
         // the vanilla blur pipeline, which may already have run earlier this frame.
