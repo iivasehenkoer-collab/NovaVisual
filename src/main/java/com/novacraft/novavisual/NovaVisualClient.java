@@ -73,7 +73,7 @@ public final class NovaVisualClient implements ClientModInitializer {
                 previousGamma = client.options.getGamma().getValue();
                 fullbrightWasApplied = true;
             }
-            client.options.getGamma().setValue(16.0);
+            client.options.getGamma().setValue(1.0);
         } else if (fullbrightWasApplied) {
             client.options.getGamma().setValue(previousGamma);
             fullbrightWasApplied = false;
