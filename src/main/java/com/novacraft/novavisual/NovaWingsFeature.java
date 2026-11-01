@@ -51,7 +51,7 @@ public final class NovaWingsFeature extends FeatureRenderer<PlayerEntityRenderSt
                 .cuboid(-12.0F, 16.0F, -1.0F, 8.0F, 7.0F, 2.0F)
                 .cuboid(-12.0F, 21.0F, -1.0F, 5.0F, 6.0F, 2.0F);
         }
-        return new ModelPartData(mesh.build(), ModelTransform.pivot(0.0F, 0.0F, 0.0F)).createPart(64, 32);
+        return new ModelPartData(mesh.build(), ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F)).createPart(64, 32);
     }
 
     @Override
