@@ -1,6 +1,7 @@
 package com.novacraft.novavisual;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
@@ -25,6 +26,9 @@ public final class NovaVisualClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        NovaVisualSettings.load();
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> NovaVisualSettings.save());
+
         openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.novavisual.open_menu",
                 InputUtil.Type.KEYSYM,
@@ -34,6 +38,7 @@ public final class NovaVisualClient implements ClientModInitializer {
 
         NovaEventMarker.register();
         NovaCombatWarning.register();
+        NovaVisualEffects.register();
 
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
                 (entityType, entityRenderer, helper, context) -> {

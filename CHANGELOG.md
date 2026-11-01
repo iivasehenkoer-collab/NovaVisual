@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.1 - development
+- Implemented the Compact HUD with player coordinates, health, armor, dimension and FPS.
+- Implemented a short red edge flash when the local player's health decreases.
+- Implemented low-frequency ambient End Rod particles around the local player.
+- Added persistent client settings in config/novavisual.properties.
+- Added settings save hooks for screen transitions and client shutdown.
+- Reworked the main settings panel into two columns and fixed overlapping navigation controls.
+- Documented the chat-based event marker and the limits of the local PvP combat estimate.
+
 ## 1.3.0 - development
 - Added an in-game Modrinth browser for Fabric mods compatible with Minecraft 1.21.11.
 - Added paginated mod search and one-click JAR installation into the active instance's mods folder.
@@ -23,4 +32,4 @@
 - Added prototype toggles for animated menu, compact HUD, damage flash and ambient particles.
 - Added Nova Blue / Nova Violet accent selection.
 
-Note: the built-in Internet screen is a lightweight HTML text reader, not a full JavaScript-capable browser. Build and in-game testing are still required.
+Note: the built-in Internet screen is a lightweight HTML text reader, not a full JavaScript-capable browser. Gradle builds and in-game testing are separate verification steps.
