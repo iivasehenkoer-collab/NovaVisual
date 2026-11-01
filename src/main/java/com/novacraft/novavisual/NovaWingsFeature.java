@@ -2,8 +2,11 @@ package com.novacraft.novavisual;
 
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
+import net.minecraft.client.model.ModelPartData;
+import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
@@ -13,7 +16,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 import java.awt.Color;
-import java.util.Map;
 
 /**
  * Client-only cosmetic wings attached to the normal player render pipeline.
@@ -22,7 +24,7 @@ import java.util.Map;
 public final class NovaWingsFeature extends FeatureRenderer<PlayerEntityRenderState, PlayerEntityModel> {
     private static final Identifier WING_TEXTURE =
             Identifier.of("minecraft", "textures/entity/elytra.png");
-    private static final RenderLayer WING_LAYER = RenderLayer.getEntityCutoutNoCull(WING_TEXTURE);
+    private static final RenderLayer WING_LAYER = RenderLayers.entityCutoutNoCull(WING_TEXTURE);
 
     private final ModelPart leftWing;
     private final ModelPart rightWing;
@@ -49,7 +51,7 @@ public final class NovaWingsFeature extends FeatureRenderer<PlayerEntityRenderSt
                 .cuboid(-12.0F, 16.0F, -1.0F, 8.0F, 7.0F, 2.0F)
                 .cuboid(-12.0F, 21.0F, -1.0F, 5.0F, 6.0F, 2.0F);
         }
-        return new ModelPart(mesh.build(), Map.of());
+        return new ModelPartData(mesh.build(), ModelTransform.pivot(0.0F, 0.0F, 0.0F)).createPart(64, 32);
     }
 
     @Override
