@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.2 - development
+- Fixed Optimization Center rendering crash by using a custom opaque backdrop instead of the vanilla blur request.
+- Changed optimization presets to conservative render/simulation distances: 6/4, 8/5 and 10/6 chunks.
+- Added Safe Mode reset to 12 render and 8 simulation chunks.
+- Save optimization settings after applying or resetting.
+- Fixed Fullbright gamma from invalid 16.0 to 1.0 and retained restoration of the previous value.
+
+
 ## 1.3.1 - development
 - Implemented the Compact HUD with player coordinates, health, armor, dimension and FPS.
 - Implemented a short red edge flash when the local player's health decreases.
