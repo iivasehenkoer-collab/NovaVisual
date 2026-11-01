@@ -3,7 +3,8 @@
   "package": "com.novacraft.novavisual.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "GameMenuScreenMixin"
+    "GameMenuScreenMixin",
+    "SplashOverlayMixin"
   ],
   "injectors": {
     "defaultRequire": 1
