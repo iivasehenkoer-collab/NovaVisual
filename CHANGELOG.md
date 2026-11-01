@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.3 - development
+- Fixed the Optimization Center blur crash by overriding the vanilla `renderBackground` hook with a no-op; the screen keeps its own opaque custom background.
+- Retained conservative render/simulation presets and the Safe Mode reset from 1.3.2.
+- No binary release is published until the repository build passes.
+
+
 ## 1.3.2 - development
 - Fixed Optimization Center rendering crash by using a custom opaque backdrop instead of the vanilla blur request.
 - Changed optimization presets to conservative render/simulation distances: 6/4, 8/5 and 10/6 chunks.
