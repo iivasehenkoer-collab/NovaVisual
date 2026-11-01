@@ -2,7 +2,7 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.3.1 development
+## Version 1.3.2 development
 
 ### Visual features
 - NovaVisual spatial-glass settings screen, opened with **Right Shift**
@@ -17,7 +17,9 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Server and utility features
 - HolyWorld event marker that reads event announcements from chat when they contain X/Z coordinates
 - PvP disconnect warning based on locally observed player damage activity; this is an estimate, not an authoritative server combat-tag check
-- Optimization Center presets for vanilla render and simulation distance
+- Optimization Center with conservative render/simulation presets (6/4, 8/5, 10/6 chunks) and Safe Mode reset (12/8 chunks)
+- Optimization screen uses a custom opaque backdrop instead of requesting the vanilla blur pipeline
+- Fullbright uses the supported gamma maximum (1.0), avoiding repeated invalid-option errors
 - In-game Modrinth browser for Fabric mods compatible with Minecraft 1.21.11
 - One-click mod JAR download and installation into the active game's mods folder
 - Lightweight Internet screen with HTTP/HTTPS navigation, readable page text and clickable links
