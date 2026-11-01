@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.4 - development
+- Fixed the Optimization Center blur crash by overriding the vanilla `renderBackground` hook so the custom opaque background does not trigger a second blur pass.
+- Retained conservative render/simulation presets and Safe Mode reset.
+- Build and in-game verification are pending; no release binary is claimed.
+
+
 ## 1.3.3 - development
 - Fixed the Optimization Center blur crash by overriding the vanilla `renderBackground` hook with a no-op; the screen keeps its own opaque custom background.
 - Retained conservative render/simulation presets and the Safe Mode reset from 1.3.2.
