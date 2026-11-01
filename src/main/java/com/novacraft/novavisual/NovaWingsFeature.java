@@ -3,6 +3,7 @@ package com.novacraft.novavisual;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
 import net.minecraft.client.model.ModelPartData;
+import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -51,7 +52,9 @@ public final class NovaWingsFeature extends FeatureRenderer<PlayerEntityRenderSt
                 .cuboid(-12.0F, 16.0F, -1.0F, 8.0F, 7.0F, 2.0F)
                 .cuboid(-12.0F, 21.0F, -1.0F, 5.0F, 6.0F, 2.0F);
         }
-        return new ModelPartData(mesh.build(), ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F)).createPart(64, 32);
+        ModelData modelData = new ModelData();
+        ModelPartData root = modelData.getRoot();
+        return root.addChild("wing", mesh, ModelTransform.NONE).createPart(64, 32);
     }
 
     @Override
