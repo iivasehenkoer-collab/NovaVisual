@@ -38,7 +38,7 @@ public final class NovaVisualClient implements ClientModInitializer {
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register(
                 (entityType, entityRenderer, helper, context) -> {
                     if (entityType == EntityType.PLAYER
-                            && entityRenderer instanceof PlayerEntityRenderer<?, ?> playerRenderer) {
+                            && entityRenderer instanceof PlayerEntityRenderer playerRenderer) {
                         @SuppressWarnings("unchecked")
                         var playerContext = (net.minecraft.client.render.entity.feature.FeatureRendererContext<
                                 net.minecraft.client.render.entity.state.PlayerEntityRenderState,
