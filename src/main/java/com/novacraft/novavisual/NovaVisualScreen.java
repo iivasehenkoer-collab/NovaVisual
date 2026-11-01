@@ -48,7 +48,8 @@ public final class NovaVisualScreen extends Screen {
     }
 
     @Override public void render(DrawContext context,int mouseX,int mouseY,float delta) {
-        renderBackground(context,mouseX,mouseY,delta);
+        // Screen.render() handles the background once; calling renderBackground here too
+        // triggers Minecraft 1.21.11's 'Can only blur once per frame' exception.
         float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
         int left=width/2-(int)(156*entrance),top=height/2-(int)(150*entrance),right=width/2+(int)(156*entrance),bottom=height/2+(int)(242*entrance);
         // Layered translucent surfaces create a spatial-glass look without requiring shaders.
