@@ -2,7 +2,7 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.3.4 development
+## Version 1.3.5 development
 
 ### Visual features
 - NovaVisual spatial-glass settings screen, opened with **Right Shift**
