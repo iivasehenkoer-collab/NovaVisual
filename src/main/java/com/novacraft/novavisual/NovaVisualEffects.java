@@ -43,7 +43,7 @@ public final class NovaVisualEffects {
             double x = client.player.getX() + Math.cos(angle) * 0.7;
             double y = client.player.getY() + 0.35 + (ticks % 12) * 0.035;
             double z = client.player.getZ() + Math.sin(angle) * 0.7;
-            client.world.addParticle(ParticleTypes.END_ROD, x, y, z, 0.0, 0.012, 0.0);
+            client.world.addParticle(ParticleTypes.END_ROD, false, false, x, y, z, 0.0, 0.012, 0.0);
         }
     }
 
