@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.5 - development
+- Explicitly override the Optimization Center background-render hook to avoid triggering Minecraft's blur pipeline a second time in the same frame.
+- Keep the screen's custom opaque background and conservative preset controls.
+- Build and in-game verification pending; no binary release claimed.
+
+
 ## 1.3.4 - development
 - Fixed the Optimization Center blur crash by overriding the vanilla `renderBackground` hook so the custom opaque background does not trigger a second blur pass.
 - Retained conservative render/simulation presets and Safe Mode reset.
