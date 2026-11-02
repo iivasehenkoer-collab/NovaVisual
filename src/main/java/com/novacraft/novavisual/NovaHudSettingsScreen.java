@@ -16,7 +16,7 @@ public final class NovaHudSettingsScreen extends Screen {
     @Override
     protected void init() {
         int x = width / 2 - 110;
-        int y = height / 2 - 54;
+        int y = height / 2 - 38;
 
         addDrawableChild(toggleButton(x, y, "Coordinates",
                 () -> NovaVisualSettings.hudCoordinates,
@@ -70,9 +70,9 @@ public final class NovaHudSettingsScreen extends Screen {
         context.fill(0, 0, width, height, 0xD908101B);
 
         int left = width / 2 - 150;
-        int top = height / 2 - 100;
+        int top = height / 2 - 120;
         int right = width / 2 + 150;
-        int bottom = height / 2 + 100;
+        int bottom = height / 2 + 120;
         context.fill(left - 4, top - 4, right + 4, bottom + 4, 0x5039BDF8);
         context.fill(left, top, right, bottom, 0xE8141D2B);
         context.fill(left + 2, top + 2, right - 2, bottom - 2, 0x7A26384D);
