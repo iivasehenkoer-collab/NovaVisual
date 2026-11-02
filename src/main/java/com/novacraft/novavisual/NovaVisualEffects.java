@@ -68,10 +68,6 @@ public final class NovaVisualEffects {
         }
     }
 
-    /**
-     * Draws a lightweight, locally rendered RGB dust ring around the player.
-     * Ten particles are emitted every five ticks to keep the effect inexpensive.
-     */
     private static void spawnRgbAura(MinecraftClient client) {
         float baseHue = (System.currentTimeMillis() % 6000L) / 6000.0F;
         double rotation = ticks * 0.045;
@@ -84,8 +80,7 @@ public final class NovaVisualEffects {
             DustParticleEffect dust = new DustParticleEffect(color, 0.85F);
 
             double x = client.player.getX() + Math.cos(angle) * radius;
-            double y = client.player.getY() + 0.35
-                    + Math.sin(angle * 2.0 + rotation) * 0.16;
+            double y = client.player.getY() + 0.35 + Math.sin(angle * 2.0 + rotation) * 0.16;
             double z = client.player.getZ() + Math.sin(angle) * radius;
             client.particleManager.addParticle(dust, x, y, z, 0.0, 0.008, 0.0);
         }
@@ -127,7 +122,14 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.hudStatus) {
             String dimension = client.world.getRegistryKey().getValue().getPath()
                     .replace('_', ' ').toUpperCase(Locale.ROOT);
-            lines.add(dimension + "    " + client.getCurrentFps() + " FPS");
+            String ping = "—";
+            if (client.getNetworkHandler() != null) {
+                var playerListEntry = client.getNetworkHandler().getPlayerListEntry(client.player.getUuid());
+                if (playerListEntry != null) {
+                    ping = playerListEntry.getLatency() + " ms";
+                }
+            }
+            lines.add(dimension + "    " + client.getCurrentFps() + " FPS    " + ping + " PING");
             colors.add(0xFFB6CBE0);
         }
         if (lines.isEmpty()) return;
