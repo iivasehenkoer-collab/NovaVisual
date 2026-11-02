@@ -10,7 +10,8 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - New HUD Layout screen: independently show/hide coordinates, health/armor and dimension/FPS
 - Move the compact HUD between top-left, top-right, bottom-left and bottom-right corners
 - Damage flash when the local player's health decreases
-- Optional ambient End Rod particles around the local player
+- Optional ambient End Rod particles orbiting the local player
+- Optional End Rod particle trail behind the player while moving (Cosmetics → Particle Trail)
 - Animated menu and Nova Blue / Nova Violet accent
 - Fullbright toggle that restores the previous gamma value when disabled
 - Hostile-mob outline toggle (players are not targeted)

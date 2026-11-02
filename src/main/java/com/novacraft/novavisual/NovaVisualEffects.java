@@ -6,6 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,17 @@ public final class NovaVisualEffects {
             double y = client.player.getY() + 0.35 + (ticks % 12) * 0.035;
             double z = client.player.getZ() + Math.sin(angle) * 0.7;
             client.particleManager.addParticle(ParticleTypes.END_ROD, x, y, z, 0.0, 0.012, 0.0);
+        }
+
+        if (NovaVisualSettings.particleTrail && ticks % 3 == 0) {
+            Vec3d velocity = client.player.getVelocity();
+            double horizontalSpeedSquared = velocity.x * velocity.x + velocity.z * velocity.z;
+            if (horizontalSpeedSquared > 0.0025) {
+                double x = client.player.getX() - velocity.x * 0.65;
+                double y = client.player.getY() + 0.15;
+                double z = client.player.getZ() - velocity.z * 0.65;
+                client.particleManager.addParticle(ParticleTypes.END_ROD, x, y, z, 0.0, 0.015, 0.0);
+            }
         }
     }
 

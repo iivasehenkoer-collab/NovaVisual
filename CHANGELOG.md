@@ -5,6 +5,7 @@
 - Added four HUD anchor positions: top-left, top-right, bottom-left and bottom-right.
 - Persisted the new HUD visibility and anchor settings in config/novavisual.properties.
 - Fixed the Modrinth browser blur crash reported by the client log by skipping the vanilla background blur and drawing a custom opaque backdrop.
+- Made the existing Particle Trail toggle emit a subtle End Rod trail behind the moving player.
 - Updated Modrinth integration User-Agent strings.
 - Gradle and in-game verification pending; no binary release is claimed.
 
