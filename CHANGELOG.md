@@ -1,15 +1,17 @@
 # Changelog
 
-## 1.3.8 - development
-- Added live multiplayer ping to the Compact HUD status row using the local player's player-list entry.
-- Shows an em dash when no multiplayer ping entry is available (singleplayer or unavailable player list).
-- Kept the HUD setting persisted and the existing status-row toggle controls the new ping field.
+## 1.3.9 - development
+- Added a live left-click CPS counter to the compact HUD using a rolling one-second window.
+- Added a compact 32-sample FPS history graph to the HUD status panel.
+- Mouse clicks are counted only while the game window has no open screen; counters reset when leaving the world.
 - Gradle build and in-game verification pending; no binary release is claimed.
+
+## 1.3.8 - development
+- Added multiplayer ping to the Compact HUD status row.
+- Shows an em dash when no multiplayer ping entry is available.
 
 ## 1.3.7 - development
 - Implemented RGB Aura as an animated ring of colored dust particles around the local player.
-- Reused the persisted rgbAura setting; no config migration required.
-- Gradle build and in-game verification are tracked separately.
 
 ## 1.3.6 - development
 - Added HUD Layout controls for coordinates, health/armor, dimension/FPS and four HUD anchor positions.
