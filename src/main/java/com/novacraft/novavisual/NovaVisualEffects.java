@@ -4,6 +4,9 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Items;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
@@ -131,7 +134,9 @@ public final class NovaVisualEffects {
             context.fill(width - 7, 0, width, height, tint);
         }
 
-        if (!NovaVisualSettings.compactHud || client.options.hudHidden || client.currentScreen != null) return;
+        if (client.options.hudHidden || client.currentScreen != null) return;
+        renderCombatWidgets(context, client);
+        if (!NovaVisualSettings.compactHud) return;
 
         List<String> lines = new ArrayList<>(3);
         List<Integer> colors = new ArrayList<>(3);
@@ -202,4 +207,54 @@ public final class NovaVisualEffects {
             }
         }
     }
+
+    private static void renderCombatWidgets(DrawContext context, MinecraftClient client) {
+        int width = context.getScaledWindowWidth();
+        int height = context.getScaledWindowHeight();
+        if (NovaVisualSettings.keystrokesHud) {
+            int x = 10;
+            int y = height - 76;
+            drawKey(context, client, x + 25, y, "W", client.options.forwardKey.isPressed());
+            drawKey(context, client, x, y + 25, "A", client.options.leftKey.isPressed());
+            drawKey(context, client, x + 25, y + 25, "S", client.options.backKey.isPressed());
+            drawKey(context, client, x + 50, y + 25, "D", client.options.rightKey.isPressed());
+            drawKey(context, client, x, y + 50, "LMB", GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS);
+            drawKey(context, client, x + 50, y + 50, "RMB", GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS);
+        }
+        if (NovaVisualSettings.totemCounter) {
+            int count = client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
+            String label = "TOTEMS  " + count;
+            int x = width - client.textRenderer.getWidth(label) - 18;
+            int y = height - 22;
+            context.fill(x - 7, y - 5, width - 8, y + 13, 0xB9121D2D);
+            context.fill(x - 7, y - 5, width - 8, y - 3, NovaVisualSettings.accent);
+            context.drawText(client.textRenderer, label, x, y, 0xFFEAF6FF, false);
+        }
+        if (NovaVisualSettings.targetHud && client.crosshairTarget instanceof EntityHitResult hit
+                && hit.getEntity() instanceof LivingEntity target && target.isAlive()) {
+            String name = target.getDisplayName().getString();
+            String health = String.format(Locale.ROOT, "%.1f / %.1f HP", target.getHealth(), target.getMaxHealth());
+            int panelWidth = Math.max(150, Math.max(client.textRenderer.getWidth(name), client.textRenderer.getWidth(health)) + 20);
+            int x = (width - panelWidth) / 2;
+            int y = 12;
+            context.fill(x, y, x + panelWidth, y + 39, 0xC9121D2D);
+            context.fill(x, y, x + panelWidth, y + 2, NovaVisualSettings.accent);
+            context.drawText(client.textRenderer, client.textRenderer.trimToWidth(name, panelWidth - 12), x + 7, y + 7, 0xFFFFFFFF, false);
+            context.drawText(client.textRenderer, health, x + 7, y + 20, 0xFFB6CBE0, false);
+            int barLeft = x + 7;
+            int barRight = x + panelWidth - 7;
+            context.fill(barLeft, y + 33, barRight, y + 36, 0xFF35465A);
+            float ratio = target.getMaxHealth() <= 0 ? 0 : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
+            context.fill(barLeft, y + 33, barLeft + (int)((barRight - barLeft) * ratio), y + 36, 0xFF55D98B);
+        }
+    }
+
+    private static void drawKey(DrawContext context, MinecraftClient client, int x, int y, String label, boolean pressed) {
+        int boxWidth = label.length() > 1 ? 24 : 22;
+        context.fill(x, y, x + boxWidth, y + 20, pressed ? 0xE539BDF8 : 0xB9121D2D);
+        context.fill(x, y, x + boxWidth, y + 2, pressed ? 0xFFFFFFFF : NovaVisualSettings.accent);
+        int textWidth = client.textRenderer.getWidth(label);
+        context.drawText(client.textRenderer, label, x + (boxWidth - textWidth) / 2, y + 6, 0xFFFFFFFF, false);
+    }
+
 }

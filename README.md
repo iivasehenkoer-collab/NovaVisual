@@ -2,16 +2,18 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.3.9 development
+## Version 1.4.0 development
 
 ### Visual features
-- Spatial-glass settings screen, opened with Right Shift
-- Compact HUD with coordinates, health, armor, dimension, FPS, multiplayer ping and left-click CPS
-- Compact FPS history graph in the HUD status panel
-- HUD Layout screen with independent data rows and four screen-corner positions
+- Spatial-glass settings screen, opened with **Right Shift**
+- Compact HUD with coordinates, health, armor, dimension, FPS, ping and CPS
+- Compact FPS history graph
+- PvP Target HUD with target name, health and health bar
+- Keystrokes HUD with WASD and left/right mouse button indicators
+- Totem Counter showing carried totems
+- HUD Layout controls with independently persisted combat-widget toggles
 - Damage flash, ambient particles, RGB Aura and moving particle trail
-- Nova Blue / Nova Violet accent and animated menu
-- Fullbright with previous gamma restoration
+- Nova Blue / Nova Violet accent, animated menu and Fullbright
 - Hostile-mob outline toggle (players are not targeted)
 - Client-side 3D cosmetic wings with selectable styles and RGB animation
 

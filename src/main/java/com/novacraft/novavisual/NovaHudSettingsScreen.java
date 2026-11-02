@@ -28,13 +28,20 @@ public final class NovaHudSettingsScreen extends Screen {
                 () -> NovaVisualSettings.hudStatus,
                 value -> NovaVisualSettings.hudStatus = value));
 
+        addDrawableChild(toggleButton(x, y + 84, "Keystrokes",
+                () -> NovaVisualSettings.keystrokesHud, value -> NovaVisualSettings.keystrokesHud = value));
+        addDrawableChild(toggleButton(x, y + 112, "Totem Counter",
+                () -> NovaVisualSettings.totemCounter, value -> NovaVisualSettings.totemCounter = value));
+        addDrawableChild(toggleButton(x, y + 140, "PvP Target HUD",
+                () -> NovaVisualSettings.targetHud, value -> NovaVisualSettings.targetHud = value));
+
         addDrawableChild(ButtonWidget.builder(Text.literal("Position: " + anchorName()), button -> {
             NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
             button.setMessage(Text.literal("Position: " + anchorName()));
-        }).dimensions(x, y + 84, 220, 22).build());
+        }).dimensions(x, y + 168, 220, 22).build());
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
-                .dimensions(x, y + 114, 220, 22).build());
+                .dimensions(x, y + 198, 220, 22).build());
     }
 
     private ButtonWidget toggleButton(int x, int y, String label,
@@ -70,9 +77,9 @@ public final class NovaHudSettingsScreen extends Screen {
         context.fill(0, 0, width, height, 0xD908101B);
 
         int left = width / 2 - 150;
-        int top = height / 2 - 120;
+        int top = height / 2 - 170;
         int right = width / 2 + 150;
-        int bottom = height / 2 + 120;
+        int bottom = height / 2 + 170;
         context.fill(left - 4, top - 4, right + 4, bottom + 4, 0x5039BDF8);
         context.fill(left, top, right, bottom, 0xE8141D2B);
         context.fill(left + 2, top + 2, right - 2, bottom - 2, 0x7A26384D);
@@ -80,7 +87,7 @@ public final class NovaHudSettingsScreen extends Screen {
         context.drawText(textRenderer, "N O V A C R A F T   /   HUD CUSTOMIZATION",
                 left + 16, top + 14, MUTED, false);
         context.drawText(textRenderer, "HUD Layout", left + 16, top + 31, WHITE, false);
-        context.drawText(textRenderer, "Choose the data shown and its screen corner.",
+        context.drawText(textRenderer, "Toggle combat widgets and choose their screen corner.",
                 left + 16, top + 48, 0xFFB6CBE0, false);
 
         super.render(context, mouseX, mouseY, delta);

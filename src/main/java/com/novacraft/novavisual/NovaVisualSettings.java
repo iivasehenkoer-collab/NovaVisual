@@ -34,6 +34,9 @@ public final class NovaVisualSettings {
     public static boolean hudVitals = true;
     public static boolean hudStatus = true;
     public static int hudAnchor = 0;
+    public static boolean keystrokesHud = true;
+    public static boolean totemCounter = true;
+    public static boolean targetHud = true;
 
     public static void load() {
         Path file = configPath();
@@ -64,6 +67,9 @@ public final class NovaVisualSettings {
         hudVitals = bool(values, "hudVitals", hudVitals);
         hudStatus = bool(values, "hudStatus", hudStatus);
         hudAnchor = clamp(integer(values, "hudAnchor", hudAnchor), 0, 3);
+        keystrokesHud = bool(values, "keystrokesHud", keystrokesHud);
+        totemCounter = bool(values, "totemCounter", totemCounter);
+        targetHud = bool(values, "targetHud", targetHud);
         accent = parseHex(values.getProperty("accent"), accent);
         wingStyle = clamp(integer(values, "wingStyle", wingStyle), 0, 4);
         optimizationPreset = clamp(integer(values, "optimizationPreset", optimizationPreset), 0, 2);
@@ -92,6 +98,9 @@ public final class NovaVisualSettings {
         values.setProperty("hudVitals", Boolean.toString(hudVitals));
         values.setProperty("hudStatus", Boolean.toString(hudStatus));
         values.setProperty("hudAnchor", Integer.toString(hudAnchor));
+        values.setProperty("keystrokesHud", Boolean.toString(keystrokesHud));
+        values.setProperty("totemCounter", Boolean.toString(totemCounter));
+        values.setProperty("targetHud", Boolean.toString(targetHud));
 
         Path file = configPath();
         try {

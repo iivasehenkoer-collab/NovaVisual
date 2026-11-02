@@ -1,20 +1,23 @@
 # Changelog
 
-## 1.3.9 - development
-- Added a live left-click CPS counter to the compact HUD using a rolling one-second window.
-- Added a compact 32-sample FPS history graph to the HUD status panel.
-- Mouse clicks are counted only while the game window has no open screen; counters reset when leaving the world.
+## 1.4.0 - development
+- Added a PvP Target HUD for the living entity under the crosshair, including health text and a health bar.
+- Added a Keystrokes HUD for WASD and left/right mouse buttons.
+- Added a Totem Counter for totems in the player's inventory.
+- Added persistent toggles for all three combat HUD widgets in HUD / Layout.
 - Gradle build and in-game verification pending; no binary release is claimed.
+
+## 1.3.9 - development
+- Added a live left-click CPS counter and compact 32-sample FPS history graph.
 
 ## 1.3.8 - development
 - Added multiplayer ping to the Compact HUD status row.
-- Shows an em dash when no multiplayer ping entry is available.
 
 ## 1.3.7 - development
-- Implemented RGB Aura as an animated ring of colored dust particles around the local player.
+- Implemented RGB Aura as an animated ring of colored dust particles.
 
 ## 1.3.6 - development
-- Added HUD Layout controls for coordinates, health/armor, dimension/FPS and four HUD anchor positions.
+- Added HUD Layout controls for coordinates, health/armor, dimension/FPS and four screen-corner positions.
 - Persisted HUD layout settings.
 - Fixed the Modrinth browser duplicate-blur crash and implemented the Particle Trail toggle.
 
