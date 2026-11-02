@@ -30,6 +30,10 @@ public final class NovaVisualSettings {
     public static int wingStyle = 0;
     public static boolean optimizationEnabled = false;
     public static int optimizationPreset = 1;
+    public static boolean hudCoordinates = true;
+    public static boolean hudVitals = true;
+    public static boolean hudStatus = true;
+    public static int hudAnchor = 0;
 
     public static void load() {
         Path file = configPath();
@@ -56,6 +60,10 @@ public final class NovaVisualSettings {
         rgbAura = bool(values, "rgbAura", rgbAura);
         particleTrail = bool(values, "particleTrail", particleTrail);
         optimizationEnabled = bool(values, "optimizationEnabled", optimizationEnabled);
+        hudCoordinates = bool(values, "hudCoordinates", hudCoordinates);
+        hudVitals = bool(values, "hudVitals", hudVitals);
+        hudStatus = bool(values, "hudStatus", hudStatus);
+        hudAnchor = clamp(integer(values, "hudAnchor", hudAnchor), 0, 3);
         accent = parseHex(values.getProperty("accent"), accent);
         wingStyle = clamp(integer(values, "wingStyle", wingStyle), 0, 4);
         optimizationPreset = clamp(integer(values, "optimizationPreset", optimizationPreset), 0, 2);
@@ -63,7 +71,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "1");
+        values.setProperty("formatVersion", "2");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -80,6 +88,10 @@ public final class NovaVisualSettings {
         values.setProperty("wingStyle", Integer.toString(wingStyle));
         values.setProperty("optimizationEnabled", Boolean.toString(optimizationEnabled));
         values.setProperty("optimizationPreset", Integer.toString(optimizationPreset));
+        values.setProperty("hudCoordinates", Boolean.toString(hudCoordinates));
+        values.setProperty("hudVitals", Boolean.toString(hudVitals));
+        values.setProperty("hudStatus", Boolean.toString(hudStatus));
+        values.setProperty("hudAnchor", Integer.toString(hudAnchor));
 
         Path file = configPath();
         try {

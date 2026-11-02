@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.3.6 - development
+- Added a dedicated HUD Layout screen with independent coordinate, health/armor and dimension/FPS visibility controls.
+- Added four HUD anchor positions: top-left, top-right, bottom-left and bottom-right.
+- Persisted the new HUD visibility and anchor settings in config/novavisual.properties.
+- Fixed the Modrinth browser blur crash reported by the client log by skipping the vanilla background blur and drawing a custom opaque backdrop.
+- Updated Modrinth integration User-Agent strings.
+- Gradle and in-game verification pending; no binary release is claimed.
+
+
 ## 1.3.5 - development
 - Explicitly override the Optimization Center background-render hook to avoid triggering Minecraft's blur pipeline a second time in the same frame.
 - Keep the screen's custom opaque background and conservative preset controls.
@@ -7,13 +16,13 @@
 
 
 ## 1.3.4 - development
-- Fixed the Optimization Center blur crash by overriding the vanilla `renderBackground` hook so the custom opaque background does not trigger a second blur pass.
+- Fixed the Optimization Center blur crash by overriding the vanilla renderBackground hook so the custom opaque background does not trigger a second blur pass.
 - Retained conservative render/simulation presets and Safe Mode reset.
 - Build and in-game verification are pending; no release binary is claimed.
 
 
 ## 1.3.3 - development
-- Fixed the Optimization Center blur crash by overriding the vanilla `renderBackground` hook with a no-op; the screen keeps its own opaque custom background.
+- Fixed the Optimization Center blur crash by overriding the vanilla renderBackground hook with a no-op; the screen keeps its own opaque custom background.
 - Retained conservative render/simulation presets and the Safe Mode reset from 1.3.2.
 - No binary release is published until the repository build passes.
 

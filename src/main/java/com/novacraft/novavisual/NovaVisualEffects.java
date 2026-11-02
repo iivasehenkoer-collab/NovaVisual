@@ -7,6 +7,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public final class NovaVisualEffects {
@@ -68,24 +70,49 @@ public final class NovaVisualEffects {
             return;
         }
 
-        int x = 8;
-        int y = 8;
-        String coordinates = "XYZ  " + client.player.getBlockX() + "  "
-                + client.player.getBlockY() + "  " + client.player.getBlockZ();
-        String vitals = "HP  " + (int) Math.ceil(client.player.getHealth()) + "/"
-                + (int) Math.ceil(client.player.getMaxHealth()) + "    ARMOR  " + client.player.getArmor();
-        String dimension = client.world.getRegistryKey().getValue().getPath()
-                .replace('_', ' ').toUpperCase(Locale.ROOT);
-        String status = dimension + "    " + client.getCurrentFps() + " FPS";
+        List<String> lines = new ArrayList<>(3);
+        List<Integer> colors = new ArrayList<>(3);
+        if (NovaVisualSettings.hudCoordinates) {
+            lines.add("XYZ  " + client.player.getBlockX() + "  "
+                    + client.player.getBlockY() + "  " + client.player.getBlockZ());
+            colors.add(0xFFEAF6FF);
+        }
+        if (NovaVisualSettings.hudVitals) {
+            lines.add("HP  " + (int) Math.ceil(client.player.getHealth()) + "/"
+                    + (int) Math.ceil(client.player.getMaxHealth()) + "    ARMOR  " + client.player.getArmor());
+            colors.add(0xFF83D7FF);
+        }
+        if (NovaVisualSettings.hudStatus) {
+            String dimension = client.world.getRegistryKey().getValue().getPath()
+                    .replace('_', ' ').toUpperCase(Locale.ROOT);
+            lines.add(dimension + "    " + client.getCurrentFps() + " FPS");
+            colors.add(0xFFB6CBE0);
+        }
+        if (lines.isEmpty()) return;
 
-        int textWidth = Math.max(client.textRenderer.getWidth(coordinates),
-                Math.max(client.textRenderer.getWidth(vitals), client.textRenderer.getWidth(status)));
-        int right = x + textWidth + 18;
-        context.fill(x - 5, y - 5, right, y + 43, 0xB9121D2D);
-        context.fill(x - 5, y - 5, right, y - 3, NovaVisualSettings.accent);
-        context.fill(x - 5, y - 5, x - 3, y + 43, NovaVisualSettings.accent);
-        context.drawText(client.textRenderer, coordinates, x + 5, y + 1, 0xFFEAF6FF, false);
-        context.drawText(client.textRenderer, vitals, x + 5, y + 14, 0xFF83D7FF, false);
-        context.drawText(client.textRenderer, status, x + 5, y + 27, 0xFFB6CBE0, false);
+        int textWidth = 0;
+        for (String line : lines) {
+            textWidth = Math.max(textWidth, client.textRenderer.getWidth(line));
+        }
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+        textWidth = Math.min(textWidth, Math.max(1, screenWidth - 34));
+
+        int panelWidth = textWidth + 18;
+        int panelHeight = 12 + lines.size() * 13;
+        int anchor = Math.max(0, Math.min(3, NovaVisualSettings.hudAnchor));
+        boolean right = anchor == 1 || anchor == 3;
+        boolean bottom = anchor == 2 || anchor == 3;
+        int panelX = right ? screenWidth - panelWidth - 8 : 8;
+        int panelY = bottom ? screenHeight - panelHeight - 8 : 8;
+
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaVisualSettings.accent);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = client.textRenderer.trimToWidth(lines.get(i), textWidth);
+            context.drawText(client.textRenderer, line, panelX + 8, panelY + 6 + i * 13,
+                    colors.get(i), false);
+        }
     }
 }

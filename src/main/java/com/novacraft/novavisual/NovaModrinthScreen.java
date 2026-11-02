@@ -146,7 +146,7 @@ public final class NovaModrinthScreen extends Screen {
                 throw new IllegalStateException("Untrusted download host");
             return new Download(filename, downloadUrl);
         }).thenCompose(download -> HTTP.sendAsync(HttpRequest.newBuilder(URI.create(download.url))
-                .timeout(Duration.ofSeconds(60)).header("User-Agent", "NovaVisual/1.3.0 (Modrinth integration)")
+                .timeout(Duration.ofSeconds(60)).header("User-Agent", "NovaVisual/1.3.6 (Modrinth integration)")
                 .GET().build(), HttpResponse.BodyHandlers.ofByteArray())
                 .thenApply(response -> {
                     if (response.statusCode() != 200) throw new IllegalStateException("Download failed: HTTP " + response.statusCode());
@@ -178,7 +178,7 @@ public final class NovaModrinthScreen extends Screen {
 
     private static CompletableFuture<String> request(String target) {
         HttpRequest request = HttpRequest.newBuilder(URI.create(target)).timeout(Duration.ofSeconds(25))
-                .header("User-Agent", "NovaVisual/1.3.0 (https://github.com/iivasehenkoer-collab/NovaVisual)")
+                .header("User-Agent", "NovaVisual/1.3.6 (https://github.com/iivasehenkoer-collab/NovaVisual)")
                 .header("Accept", "application/json").GET().build();
         return HTTP.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
@@ -196,8 +196,14 @@ public final class NovaModrinthScreen extends Screen {
         return current.getMessage() == null ? "Network error" : current.getMessage();
     }
 
+    @Override
+    public void renderBackground(DrawContext ctx, int mx, int my, float delta) {
+        // Skip vanilla's blur pipeline; this screen draws its own opaque backdrop.
+    }
+
     @Override public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
+        ctx.fill(0, 0, width, height, 0xD908101B);
         super.render(ctx, mx, my, delta);
         float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
         int left = Math.max(12, width / 2 - 210), right = width - left;

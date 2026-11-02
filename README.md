@@ -2,11 +2,13 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.3.5 development
+## Version 1.3.6 development
 
 ### Visual features
 - NovaVisual spatial-glass settings screen, opened with **Right Shift**
 - Compact HUD with coordinates, health, armor, dimension and FPS
+- New HUD Layout screen: independently show/hide coordinates, health/armor and dimension/FPS
+- Move the compact HUD between top-left, top-right, bottom-left and bottom-right corners
 - Damage flash when the local player's health decreases
 - Optional ambient End Rod particles around the local player
 - Animated menu and Nova Blue / Nova Violet accent
@@ -22,10 +24,11 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - Fullbright uses the supported gamma maximum (1.0), avoiding repeated invalid-option errors
 - In-game Modrinth browser for Fabric mods compatible with Minecraft 1.21.11
 - One-click mod JAR download and installation into the active game's mods folder
+- Modrinth browser uses a custom opaque background to avoid requesting the vanilla blur pipeline twice
 - Lightweight Internet screen with HTTP/HTTPS navigation, readable page text and clickable links
 
 ### Settings
-NovaVisual loads and saves client preferences in **config/novavisual.properties**.
+NovaVisual loads and saves client preferences in **config/novavisual.properties**. HUD component toggles and the HUD corner are saved alongside the existing settings.
 
 Settings are loaded when the client mod initializes and saved when settings screens close or the Minecraft client shuts down.
 

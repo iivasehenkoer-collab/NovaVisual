@@ -54,8 +54,11 @@ public final class NovaVisualScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(Text.literal("Internet / Web"),
                 button -> { if (client != null) client.setScreen(new NovaBrowserScreen()); })
                 .dimensions(rightX, firstY + step * 4, 220, 22).build());
-        addDrawableChild(ButtonWidget.builder(Text.literal("Done"), button -> close())
+        addDrawableChild(ButtonWidget.builder(Text.literal("HUD / Layout"),
+                button -> { if (client != null) client.setScreen(new NovaHudSettingsScreen()); })
                 .dimensions(rightX, firstY + step * 5, 220, 22).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal("Done"), button -> close())
+                .dimensions(rightX, firstY + step * 6, 220, 22).build());
     }
 
     private ButtonWidget toggleButton(int x, int y, String label,
@@ -121,7 +124,7 @@ public final class NovaVisualScreen extends Screen {
 
         String[] actions = {
                 "Accent: " + accentName(), "OPTIMIZATION CENTER", "COSMETICS / SKIN STUDIO",
-                "MODRINTH / MOD LIBRARY", "INTERNET / WEB", "DONE"
+                "MODRINTH / MOD LIBRARY", "INTERNET / WEB", "HUD / LAYOUT", "DONE"
         };
         for (int i = 0; i < actions.length; i++) {
             glassButton(context, rightX, firstY + i * step, 220, 22,
