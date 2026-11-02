@@ -4,16 +4,19 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public final class NovaVisualEffects {
     private static final long DAMAGE_FLASH_MS = 360L;
+    private static final int AURA_PARTICLE_COUNT = 10;
     private static long damageFlashUntil;
     private static float previousHealth = -1.0F;
     private static int ticks;
@@ -49,6 +52,10 @@ public final class NovaVisualEffects {
             client.particleManager.addParticle(ParticleTypes.END_ROD, x, y, z, 0.0, 0.012, 0.0);
         }
 
+        if (NovaVisualSettings.rgbAura && ticks % 5 == 0) {
+            spawnRgbAura(client);
+        }
+
         if (NovaVisualSettings.particleTrail && ticks % 3 == 0) {
             Vec3d velocity = client.player.getVelocity();
             double horizontalSpeedSquared = velocity.x * velocity.x + velocity.z * velocity.z;
@@ -58,6 +65,29 @@ public final class NovaVisualEffects {
                 double z = client.player.getZ() - velocity.z * 0.65;
                 client.particleManager.addParticle(ParticleTypes.END_ROD, x, y, z, 0.0, 0.015, 0.0);
             }
+        }
+    }
+
+    /**
+     * Draws a lightweight, locally rendered RGB dust ring around the player.
+     * Ten particles are emitted every five ticks to keep the effect inexpensive.
+     */
+    private static void spawnRgbAura(MinecraftClient client) {
+        float baseHue = (System.currentTimeMillis() % 6000L) / 6000.0F;
+        double rotation = ticks * 0.045;
+        double radius = 0.78;
+
+        for (int i = 0; i < AURA_PARTICLE_COUNT; i++) {
+            double angle = rotation + (Math.PI * 2.0 * i / AURA_PARTICLE_COUNT);
+            float hue = (baseHue + (float) i / AURA_PARTICLE_COUNT) % 1.0F;
+            int color = Color.HSBtoRGB(hue, 0.82F, 1.0F) & 0x00FFFFFF;
+            DustParticleEffect dust = new DustParticleEffect(color, 0.85F);
+
+            double x = client.player.getX() + Math.cos(angle) * radius;
+            double y = client.player.getY() + 0.35
+                    + Math.sin(angle * 2.0 + rotation) * 0.16;
+            double z = client.player.getZ() + Math.sin(angle) * radius;
+            client.particleManager.addParticle(dust, x, y, z, 0.0, 0.008, 0.0);
         }
     }
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.7 - development
+- Implemented the previously non-functional RGB Aura toggle as an animated ring of colored dust particles around the local player.
+- Used the Minecraft 1.21.11 DustParticleEffect API with a low-frequency emission cadence to limit client particle overhead.
+- Kept the effect client-side and reused the existing persisted rgbAura setting; no config migration is required.
+- Gradle and in-game verification pending; no binary release is claimed.
+
 ## 1.3.6 - development
 - Added a dedicated HUD Layout screen with independent coordinate, health/armor and dimension/FPS visibility controls.
 - Added four HUD anchor positions: top-left, top-right, bottom-left and bottom-right.
@@ -9,24 +15,20 @@
 - Updated Modrinth integration User-Agent strings.
 - Gradle and in-game verification pending; no binary release is claimed.
 
-
 ## 1.3.5 - development
 - Explicitly override the Optimization Center background-render hook to avoid triggering Minecraft's blur pipeline a second time in the same frame.
 - Keep the screen's custom opaque background and conservative preset controls.
 - Build and in-game verification pending; no binary release claimed.
 
-
 ## 1.3.4 - development
-- Fixed the Optimization Center blur crash by overriding the vanilla renderBackground hook so the custom opaque background does not trigger a second blur pass.
+- Fixed the Optimization Center blur crash by overriding the vanilla background hook so the custom opaque background does not trigger a second blur pass.
 - Retained conservative render/simulation presets and Safe Mode reset.
 - Build and in-game verification are pending; no release binary is claimed.
 
-
 ## 1.3.3 - development
-- Fixed the Optimization Center blur crash by overriding the vanilla renderBackground hook with a no-op; the screen keeps its own opaque custom background.
-- Retained conservative render/simulation presets and the Safe Mode reset from 1.3.2.
+- Fixed the Optimization Center blur crash by overriding the vanilla background hook with a no-op; the screen keeps its own opaque custom background.
+- Retained conservative render/simulation presets and Safe Mode reset from 1.3.2.
 - No binary release is published until the repository build passes.
-
 
 ## 1.3.2 - development
 - Fixed Optimization Center rendering crash by using a custom opaque backdrop instead of the vanilla blur request.
@@ -34,7 +36,6 @@
 - Added Safe Mode reset to 12 render and 8 simulation chunks.
 - Save optimization settings after applying or resetting.
 - Fixed Fullbright gamma from invalid 16.0 to 1.0 and retained restoration of the previous value.
-
 
 ## 1.3.1 - development
 - Implemented the Compact HUD with player coordinates, health, armor, dimension and FPS.

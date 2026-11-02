@@ -2,16 +2,17 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.3.6 development
+## Version 1.3.7 development
 
 ### Visual features
 - NovaVisual spatial-glass settings screen, opened with **Right Shift**
 - Compact HUD with coordinates, health, armor, dimension and FPS
-- New HUD Layout screen: independently show/hide coordinates, health/armor and dimension/FPS
+- New HUD Layout screen: independently show/hide coordinate, health/armor and dimension/FPS rows
 - Move the compact HUD between top-left, top-right, bottom-left and bottom-right corners
 - Damage flash when the local player's health decreases
 - Optional ambient End Rod particles orbiting the local player
 - Optional End Rod particle trail behind the player while moving (Cosmetics → Particle Trail)
+- **RGB Aura**: an animated multicolor dust-particle ring around the player (Cosmetics → RGB Aura)
 - Animated menu and Nova Blue / Nova Violet accent
 - Fullbright toggle that restores the previous gamma value when disabled
 - Hostile-mob outline toggle (players are not targeted)
@@ -29,7 +30,7 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - Lightweight Internet screen with HTTP/HTTPS navigation, readable page text and clickable links
 
 ### Settings
-NovaVisual loads and saves client preferences in **config/novavisual.properties**. HUD component toggles and the HUD corner are saved alongside the existing settings.
+NovaVisual loads and saves client preferences in **config/novavisual.properties**. HUD component toggles, the HUD corner, RGB Aura, particle effects and other client options are persisted.
 
 Settings are loaded when the client mod initializes and saved when settings screens close or the Minecraft client shuts down.
 
