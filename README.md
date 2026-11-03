@@ -2,7 +2,7 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.4.0 development
+## Version 1.5.0 development
 
 ### Visual features
 - Spatial-glass settings screen, opened with **Right Shift**
@@ -11,7 +11,8 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - PvP Target HUD with target name, health and health bar
 - Keystrokes HUD with WASD and left/right mouse button indicators
 - Totem Counter showing carried totems
-- HUD Layout controls with independently persisted combat-widget toggles
+- Armor Durability HUD with four equipment icons, remaining durability percentages and warning-colored bars
+- HUD Layout controls with independently persisted widget toggles, including Armor Durability HUD
 - Damage flash, ambient particles, RGB Aura and moving particle trail
 - Nova Blue / Nova Violet accent, animated menu and Fullbright
 - Hostile-mob outline toggle (players are not targeted)
@@ -33,4 +34,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run `gradle build`; the remapped JAR should be in `build/libs/`.
 
-The project requires in-game testing on the target Minecraft client and server. A successful Gradle build alone does not verify gameplay or server compatibility.
+The 1.4.0 source revision was built successfully by GitHub Actions. The 1.5.0 Armor Durability HUD revision still requires its own Gradle CI result and in-game testing on the target Minecraft client and server.

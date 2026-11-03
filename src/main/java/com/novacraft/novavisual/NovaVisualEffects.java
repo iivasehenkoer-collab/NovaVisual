@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.particle.DustParticleEffect;
@@ -221,6 +223,10 @@ public final class NovaVisualEffects {
             drawKey(context, client, x, y + 50, "LMB", GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS);
             drawKey(context, client, x + 50, y + 50, "RMB", GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS);
         }
+        if (NovaVisualSettings.armorDurabilityHud) {
+            renderArmorDurability(context, client);
+        }
+
         if (NovaVisualSettings.totemCounter) {
             int count = client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
             String label = "TOTEMS  " + count;
@@ -247,6 +253,61 @@ public final class NovaVisualEffects {
             float ratio = target.getMaxHealth() <= 0 ? 0 : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
             context.fill(barLeft, y + 33, barLeft + (int)((barRight - barLeft) * ratio), y + 36, 0xFF55D98B);
         }
+    }
+
+    private static void renderArmorDurability(DrawContext context, MinecraftClient client) {
+        ItemStack[] armor = {
+                client.player.getEquippedStack(EquipmentSlot.HEAD),
+                client.player.getEquippedStack(EquipmentSlot.CHEST),
+                client.player.getEquippedStack(EquipmentSlot.LEGS),
+                client.player.getEquippedStack(EquipmentSlot.FEET)
+        };
+        String[] slotLabels = {"H", "C", "L", "B"};
+        int panelX = 10;
+        int panelY = context.getScaledWindowHeight() - 122;
+        int panelWidth = 176;
+        int panelHeight = 34;
+
+        context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
+                panelY + panelHeight + 2, 0x5039BDF8);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+
+        for (int i = 0; i < armor.length; i++) {
+            ItemStack stack = armor[i];
+            int slotX = panelX + 4 + i * 42;
+            if (!stack.isEmpty()) {
+                context.drawItem(stack, slotX + 10, panelY + 3);
+            } else {
+                context.drawText(client.textRenderer, slotLabels[i], slotX + 15, panelY + 7,
+                        0xFF8FA6BC, false);
+            }
+
+            String durability = stack.isDamageable()
+                    ? Integer.toString(Math.max(0, 100 - stack.getDamage() * 100 / stack.getMaxDamage())) + "%"
+                    : "—";
+            int textWidth = client.textRenderer.getWidth(durability);
+            context.drawText(client.textRenderer, durability, slotX + (34 - textWidth) / 2,
+                    panelY + 20, stack.isDamageable() ? durabilityColor(stack) : 0xFF8FA6BC, false);
+
+            if (stack.isDamageable()) {
+                int barX = slotX + 1;
+                int barY = panelY + 30;
+                int barWidth = 34;
+                int remaining = Math.max(0, stack.getMaxDamage() - stack.getDamage());
+                int filled = (int) Math.round(barWidth * (double) remaining / stack.getMaxDamage());
+                context.fill(barX, barY, barX + barWidth, barY + 2, 0xFF35465A);
+                context.fill(barX, barY, barX + filled, barY + 2, durabilityColor(stack));
+            }
+        }
+    }
+
+    private static int durabilityColor(ItemStack stack) {
+        if (!stack.isDamageable() || stack.getMaxDamage() <= 0) return 0xFF8FA6BC;
+        double remaining = (double) (stack.getMaxDamage() - stack.getDamage()) / stack.getMaxDamage();
+        if (remaining <= 0.20) return 0xFFFF526B;
+        if (remaining <= 0.50) return 0xFFFFC857;
+        return 0xFF55D98B;
     }
 
     private static void drawKey(DrawContext context, MinecraftClient client, int x, int y, String label, boolean pressed) {

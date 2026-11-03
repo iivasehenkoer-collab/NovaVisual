@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0 - development
+- Added an Armor Durability HUD for helmet, chestplate, leggings and boots.
+- Displays each damageable item's remaining durability percentage and a green/yellow/red warning bar.
+- Added a persisted Armor Durability HUD toggle to HUD / Layout and adjusted the screen's control spacing.
+- Gradle CI and in-game verification pending for this revision.
+
 ## 1.4.0 - development
 - Added a PvP Target HUD for the living entity under the crosshair, including health text and a health bar.
 - Added a Keystrokes HUD for WASD and left/right mouse buttons.

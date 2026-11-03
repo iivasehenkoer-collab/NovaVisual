@@ -16,7 +16,7 @@ public final class NovaHudSettingsScreen extends Screen {
     @Override
     protected void init() {
         int x = width / 2 - 110;
-        int y = height / 2 - 38;
+        int y = height / 2 - 88;
 
         addDrawableChild(toggleButton(x, y, "Coordinates",
                 () -> NovaVisualSettings.hudCoordinates,
@@ -34,14 +34,17 @@ public final class NovaHudSettingsScreen extends Screen {
                 () -> NovaVisualSettings.totemCounter, value -> NovaVisualSettings.totemCounter = value));
         addDrawableChild(toggleButton(x, y + 140, "PvP Target HUD",
                 () -> NovaVisualSettings.targetHud, value -> NovaVisualSettings.targetHud = value));
+        addDrawableChild(toggleButton(x, y + 168, "Armor Durability HUD",
+                () -> NovaVisualSettings.armorDurabilityHud,
+                value -> NovaVisualSettings.armorDurabilityHud = value));
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Position: " + anchorName()), button -> {
             NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
             button.setMessage(Text.literal("Position: " + anchorName()));
-        }).dimensions(x, y + 168, 220, 22).build());
+        }).dimensions(x, y + 196, 220, 22).build());
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
-                .dimensions(x, y + 198, 220, 22).build());
+                .dimensions(x, y + 224, 220, 22).build());
     }
 
     private ButtonWidget toggleButton(int x, int y, String label,
@@ -87,7 +90,7 @@ public final class NovaHudSettingsScreen extends Screen {
         context.drawText(textRenderer, "N O V A C R A F T   /   HUD CUSTOMIZATION",
                 left + 16, top + 14, MUTED, false);
         context.drawText(textRenderer, "HUD Layout", left + 16, top + 31, WHITE, false);
-        context.drawText(textRenderer, "Toggle combat widgets and choose their screen corner.",
+        context.drawText(textRenderer, "Toggle HUD widgets and choose the Compact HUD corner.",
                 left + 16, top + 48, 0xFFB6CBE0, false);
 
         super.render(context, mouseX, mouseY, delta);
