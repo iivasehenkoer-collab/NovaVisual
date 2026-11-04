@@ -38,6 +38,7 @@ public final class NovaVisualSettings {
     public static boolean totemCounter = true;
     public static boolean targetHud = true;
     public static boolean armorDurabilityHud = true;
+    public static boolean statusEffectHud = true;
 
     public static void load() {
         Path file = configPath();
@@ -72,6 +73,7 @@ public final class NovaVisualSettings {
         totemCounter = bool(values, "totemCounter", totemCounter);
         targetHud = bool(values, "targetHud", targetHud);
         armorDurabilityHud = bool(values, "armorDurabilityHud", armorDurabilityHud);
+        statusEffectHud = bool(values, "statusEffectHud", statusEffectHud);
         accent = parseHex(values.getProperty("accent"), accent);
         wingStyle = clamp(integer(values, "wingStyle", wingStyle), 0, 4);
         optimizationPreset = clamp(integer(values, "optimizationPreset", optimizationPreset), 0, 2);
@@ -104,6 +106,7 @@ public final class NovaVisualSettings {
         values.setProperty("totemCounter", Boolean.toString(totemCounter));
         values.setProperty("targetHud", Boolean.toString(targetHud));
         values.setProperty("armorDurabilityHud", Boolean.toString(armorDurabilityHud));
+        values.setProperty("statusEffectHud", Boolean.toString(statusEffectHud));
 
         Path file = configPath();
         try {

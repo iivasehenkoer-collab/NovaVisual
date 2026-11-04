@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -27,6 +28,7 @@ public final class NovaVisualEffects {
     private static final int AURA_PARTICLE_COUNT = 10;
     private static final long CPS_WINDOW_MS = 1000L;
     private static final int GRAPH_SAMPLES = 32;
+    private static final String[] ROMAN_LEVELS = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
     private static long damageFlashUntil;
     private static float previousHealth = -1.0F;
     private static int ticks;
@@ -226,6 +228,9 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.armorDurabilityHud) {
             renderArmorDurability(context, client);
         }
+        if (NovaVisualSettings.statusEffectHud) {
+            renderStatusEffects(context, client);
+        }
 
         if (NovaVisualSettings.totemCounter) {
             int count = client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
@@ -253,6 +258,85 @@ public final class NovaVisualEffects {
             float ratio = target.getMaxHealth() <= 0 ? 0 : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
             context.fill(barLeft, y + 33, barLeft + (int)((barRight - barLeft) * ratio), y + 36, 0xFF55D98B);
         }
+    }
+
+    private static void renderStatusEffects(DrawContext context, MinecraftClient client) {
+        List<StatusEffectInstance> effects = new ArrayList<>(client.player.getStatusEffects());
+        if (effects.isEmpty()) return;
+
+        effects.sort((first, second) -> Long.compare(effectSortDuration(first), effectSortDuration(second)));
+
+        int screenWidth = context.getScaledWindowWidth();
+        int panelWidth = 176;
+        int visibleRows = Math.min(8, effects.size());
+        int overflow = effects.size() - visibleRows;
+        int panelHeight = 22 + visibleRows * 20 + (overflow > 0 ? 14 : 0);
+        int anchor = Math.max(0, Math.min(3, NovaVisualSettings.hudAnchor));
+        boolean compactHudOnRight = NovaVisualSettings.compactHud && (anchor == 1 || anchor == 3);
+        int panelX = compactHudOnRight ? 8 : screenWidth - panelWidth - 8;
+        int panelY = 58;
+
+        context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
+                panelY + panelHeight + 2, 0x5039BDF8);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+
+        String header = "ACTIVE EFFECTS  ·  " + effects.size();
+        context.drawText(client.textRenderer, client.textRenderer.trimToWidth(header, panelWidth - 14),
+                panelX + 7, panelY + 7, 0xFF9CB2C8, false);
+
+        for (int i = 0; i < visibleRows; i++) {
+            StatusEffectInstance instance = effects.get(i);
+            int rowY = panelY + 22 + i * 20;
+            int rgb = instance.getEffectType().value().getColor();
+            int effectColor = 0xFF000000 | (rgb & 0x00FFFFFF);
+
+            context.fill(panelX + 4, rowY + 1, panelX + panelWidth - 4, rowY + 19, 0x321D2B40);
+            context.fill(panelX + 7, rowY + 6, panelX + 13, rowY + 13, effectColor);
+
+            String name = instance.getEffectType().value().getName().getString()
+                    + " " + romanLevel(instance.getAmplifier());
+            String duration = formatEffectDuration(instance);
+            int durationWidth = client.textRenderer.getWidth(duration);
+            int maxNameWidth = Math.max(12, panelWidth - 36 - durationWidth);
+            String trimmedName = client.textRenderer.trimToWidth(name, maxNameWidth);
+            int durationX = panelX + panelWidth - 8 - durationWidth;
+
+            context.drawText(client.textRenderer, trimmedName, panelX + 17, rowY + 5,
+                    0xFFEAF6FF, false);
+            context.drawText(client.textRenderer, duration, durationX, rowY + 5,
+                    effectDurationColor(instance), false);
+        }
+
+        if (overflow > 0) {
+            int moreY = panelY + 22 + visibleRows * 20;
+            context.drawText(client.textRenderer, "+" + overflow + " more effects",
+                    panelX + 8, moreY + 3, 0xFF9CB2C8, false);
+        }
+    }
+
+    private static long effectSortDuration(StatusEffectInstance instance) {
+        return instance.isInfinite() ? Long.MAX_VALUE : Math.max(0L, instance.getDuration());
+    }
+
+    private static String formatEffectDuration(StatusEffectInstance instance) {
+        if (instance.isInfinite()) return "∞";
+        long totalSeconds = (Math.max(0L, (long) instance.getDuration()) + 19L) / 20L;
+        long minutes = totalSeconds / 60L;
+        long seconds = totalSeconds % 60L;
+        return minutes + ":" + (seconds < 10L ? "0" : "") + seconds;
+    }
+
+    private static int effectDurationColor(StatusEffectInstance instance) {
+        if (instance.isInfinite()) return 0xFFB6CBE0;
+        if (instance.getDuration() <= 100) return 0xFFFF526B;
+        if (instance.getDuration() <= 200) return 0xFFFFC857;
+        return 0xFFB6CBE0;
+    }
+
+    private static String romanLevel(int amplifier) {
+        int level = Math.max(1, amplifier + 1);
+        return level <= ROMAN_LEVELS.length ? ROMAN_LEVELS[level - 1] : Integer.toString(level);
     }
 
     private static void renderArmorDurability(DrawContext context, MinecraftClient client) {
