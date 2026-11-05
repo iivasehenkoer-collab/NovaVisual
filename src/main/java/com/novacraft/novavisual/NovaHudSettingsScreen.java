@@ -16,7 +16,7 @@ public final class NovaHudSettingsScreen extends Screen {
     @Override
     protected void init() {
         int x = width / 2 - 110;
-        int y = height / 2 - 104;
+        int y = height / 2 - 140;
 
         addDrawableChild(toggleButton(x, y, "Coordinates",
                 () -> NovaVisualSettings.hudCoordinates,
@@ -40,14 +40,17 @@ public final class NovaHudSettingsScreen extends Screen {
         addDrawableChild(toggleButton(x, y + 196, "Potion Effects HUD",
                 () -> NovaVisualSettings.statusEffectHud,
                 value -> NovaVisualSettings.statusEffectHud = value));
+        addDrawableChild(toggleButton(x, y + 224, "Player Resource Bars",
+                () -> NovaVisualSettings.resourceBarsHud,
+                value -> NovaVisualSettings.resourceBarsHud = value));
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Position: " + anchorName()), button -> {
             NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
             button.setMessage(Text.literal("Position: " + anchorName()));
-        }).dimensions(x, y + 224, 220, 22).build());
+        }).dimensions(x, y + 252, 220, 22).build());
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
-                .dimensions(x, y + 252, 220, 22).build());
+                .dimensions(x, y + 280, 220, 22).build());
     }
 
     private ButtonWidget toggleButton(int x, int y, String label,

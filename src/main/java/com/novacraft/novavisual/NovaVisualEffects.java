@@ -231,6 +231,9 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.statusEffectHud) {
             renderStatusEffects(context, client);
         }
+        if (NovaVisualSettings.resourceBarsHud) {
+            renderResourceBarsHud(context, client);
+        }
 
         if (NovaVisualSettings.totemCounter) {
             int count = client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
@@ -258,6 +261,74 @@ public final class NovaVisualEffects {
             float ratio = target.getMaxHealth() <= 0 ? 0 : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
             context.fill(barLeft, y + 33, barLeft + (int)((barRight - barLeft) * ratio), y + 36, 0xFF55D98B);
         }
+    }
+
+    private static void renderResourceBarsHud(DrawContext context, MinecraftClient client) {
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+        int panelWidth = 180;
+        int panelHeight = 92;
+        int panelX = Math.max(4, screenWidth - panelWidth - 8);
+        int panelY = Math.max(4, screenHeight - panelHeight - 30);
+
+        context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
+                panelY + panelHeight + 2, 0x5039BDF8);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaVisualSettings.accent);
+        context.drawText(client.textRenderer, "PLAYER STATUS", panelX + 8, panelY + 6,
+                0xFF9CB2C8, false);
+
+        float health = client.player.getHealth();
+        float maxHealth = client.player.getMaxHealth();
+        float healthRatio = maxHealth <= 0.0F ? 0.0F : clampRatio(health / maxHealth);
+        int healthColor = healthRatio <= 0.25F ? 0xFFFF526B
+                : healthRatio <= 0.50F ? 0xFFFFC857 : 0xFF55D98B;
+        drawResourceRow(context, client, panelX, panelY + 18, panelWidth,
+                "HEALTH", String.format(Locale.ROOT, "%.1f / %.0f", health, maxHealth),
+                healthRatio, healthColor);
+
+        int armor = Math.max(0, client.player.getArmor());
+        drawResourceRow(context, client, panelX, panelY + 34, panelWidth,
+                "ARMOR", armor + " / 20", clampRatio(armor / 20.0F),
+                armor <= 4 ? 0xFFFFC857 : 0xFF39BDF8);
+
+        int food = client.player.getHungerManager().getFoodLevel();
+        float saturation = client.player.getHungerManager().getSaturationLevel();
+        drawResourceRow(context, client, panelX, panelY + 50, panelWidth,
+                "FOOD", String.format(Locale.ROOT, "%d / 20  ·  %.1f SAT", food, saturation),
+                clampRatio(food / 20.0F), food <= 6 ? 0xFFFF526B : 0xFFFFC857);
+
+        float xpProgress = clampRatio(client.player.experienceProgress);
+        String xpValue = String.format(Locale.ROOT, "LV %d  ·  %d%%",
+                client.player.experienceLevel, Math.round(xpProgress * 100.0F));
+        drawResourceRow(context, client, panelX, panelY + 66, panelWidth,
+                "EXPERIENCE", xpValue, xpProgress, NovaVisualSettings.accent);
+    }
+
+    private static void drawResourceRow(DrawContext context, MinecraftClient client,
+                                       int panelX, int rowY, int panelWidth,
+                                       String label, String value, float ratio, int barColor) {
+        context.drawText(client.textRenderer, label, panelX + 8, rowY + 1,
+                0xFF9CB2C8, false);
+        String trimmedValue = client.textRenderer.trimToWidth(value, panelWidth - 66);
+        int valueWidth = client.textRenderer.getWidth(trimmedValue);
+        context.drawText(client.textRenderer, trimmedValue,
+                panelX + panelWidth - 8 - valueWidth, rowY + 1, 0xFFEAF6FF, false);
+
+        int barLeft = panelX + 8;
+        int barRight = panelX + panelWidth - 8;
+        int barY = rowY + 11;
+        int barWidth = barRight - barLeft;
+        int filledWidth = Math.round(barWidth * clampRatio(ratio));
+        context.fill(barLeft, barY, barRight, barY + 3, 0xFF35465A);
+        if (filledWidth > 0) {
+            context.fill(barLeft, barY, barLeft + filledWidth, barY + 3, barColor);
+        }
+    }
+
+    private static float clampRatio(float ratio) {
+        return Math.max(0.0F, Math.min(1.0F, ratio));
     }
 
     private static void renderStatusEffects(DrawContext context, MinecraftClient client) {
