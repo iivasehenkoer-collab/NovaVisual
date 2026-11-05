@@ -4,7 +4,7 @@
 - Added a Player Resource Bars HUD for health, armor points, hunger/saturation, and XP level/progress.
 - Added ratio-based color-coded bars in the existing spatial-glass HUD style.
 - Added a persisted Player Resource Bars toggle to HUD / Layout and expanded the control layout to fit.
-- Gradle CI and in-game verification pending for this revision.
+- GitHub Actions Gradle build, JAR/source ZIP packaging and Release build-101 succeeded on 2026-11-05; in-game verification remains pending.
 
 ## 1.6.0 - development
 - Added a Potion Effects HUD using the active client-side status effect collection.

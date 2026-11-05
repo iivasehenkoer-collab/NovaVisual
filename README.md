@@ -36,4 +36,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run `gradle build`; the remapped JAR should be in `build/libs/`.
 
-The 1.6.0 Potion Effects HUD source revision was built successfully by GitHub Actions (run #100, 2026-11-04). The 1.7.0 Player Resource Bars revision requires its own Gradle CI result and in-game testing on the target Minecraft client and server.
+The 1.7.0 Player Resource Bars source revision was built successfully by GitHub Actions (run #101, 2026-11-05); the JAR and source ZIP were published in the real build-101 prerelease. In-game testing on the target Minecraft client and server remains pending.
