@@ -4,6 +4,7 @@
 - Added a low-health vignette visual warning with a red edge tint that activates below 35% health.
 - Vignette intensity scales with remaining health and uses a subtle pulse; no mixin or server interaction is required.
 - Added a persisted Low-health Vignette toggle to the main settings screen and HUD / Layout; configuration format advanced to version 4 while retaining fallback loading for previous keys.
+- Adjusted HUD Layout vertical spacing and panel bounds so its expanded controls do not overlap the heading or Back button.
 - GitHub Actions build and in-game verification pending for this revision.
 
 ## 1.7.0 - development

@@ -16,7 +16,7 @@ public final class NovaHudSettingsScreen extends Screen {
     @Override
     protected void init() {
         int x = width / 2 - 110;
-        int y = height / 2 - 140;
+        int y = height / 2 - 112;
 
         addDrawableChild(toggleButton(x, y, "Coordinates",
                 () -> NovaVisualSettings.hudCoordinates,
@@ -54,7 +54,7 @@ public final class NovaHudSettingsScreen extends Screen {
         }).dimensions(x, y + 280, 220, 22).build());
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
-                .dimensions(x, y + 280, 220, 22).build());
+                .dimensions(x, y + 308, 220, 22).build());
     }
 
     private ButtonWidget toggleButton(int x, int y, String label,
@@ -92,7 +92,7 @@ public final class NovaHudSettingsScreen extends Screen {
         int left = width / 2 - 150;
         int top = height / 2 - 170;
         int right = width / 2 + 150;
-        int bottom = height / 2 + 170;
+        int bottom = height / 2 + 225;
         context.fill(left - 4, top - 4, right + 4, bottom + 4, 0x5039BDF8);
         context.fill(left, top, right, bottom, 0xE8141D2B);
         context.fill(left + 2, top + 2, right - 2, bottom - 2, 0x7A26384D);
