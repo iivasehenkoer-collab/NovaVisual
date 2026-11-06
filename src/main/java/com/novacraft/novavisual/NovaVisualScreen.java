@@ -37,6 +37,8 @@ public final class NovaVisualScreen extends Screen {
                 () -> NovaVisualSettings.eventAutoMarker, value -> NovaVisualSettings.eventAutoMarker = value));
         addDrawableChild(toggleButton(leftX, firstY + step * 7, "PvP exit warning",
                 () -> NovaVisualSettings.combatExitWarning, value -> NovaVisualSettings.combatExitWarning = value));
+        addDrawableChild(toggleButton(leftX, firstY + step * 8, "Low-health vignette",
+                () -> NovaVisualSettings.healthVignette, value -> NovaVisualSettings.healthVignette = value));
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Accent: " + accentName()), button -> {
             NovaVisualSettings.accent = NovaVisualSettings.accent == CYAN ? 0xFF9B7BFF : CYAN;
@@ -109,13 +111,15 @@ public final class NovaVisualScreen extends Screen {
         int step = 28;
         String[] labels = {
                 "Animated menu", "Compact HUD", "Damage flash", "Ambient particles",
-                "Fullbright", "Enemy ESP (hostile mobs)", "HolyWorld event marker", "PvP exit warning"
+                "Fullbright", "Enemy ESP (hostile mobs)", "HolyWorld event marker", "PvP exit warning",
+                "Low-health vignette"
         };
         boolean[] enabled = {
                 NovaVisualSettings.animatedMenu, NovaVisualSettings.compactHud,
                 NovaVisualSettings.damageFlash, NovaVisualSettings.particles,
                 NovaVisualSettings.fullbright, NovaVisualSettings.enemyEsp,
-                NovaVisualSettings.eventAutoMarker, NovaVisualSettings.combatExitWarning
+                NovaVisualSettings.eventAutoMarker, NovaVisualSettings.combatExitWarning,
+                NovaVisualSettings.healthVignette
         };
         for (int i = 0; i < labels.length; i++) {
             glassButton(context, leftX, firstY + i * step, 220, 22,

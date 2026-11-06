@@ -138,6 +138,8 @@ public final class NovaVisualEffects {
             context.fill(width - 7, 0, width, height, tint);
         }
 
+        renderLowHealthVignette(context, client);
+
         if (client.options.hudHidden || client.currentScreen != null) return;
         renderCombatWidgets(context, client);
         if (!NovaVisualSettings.compactHud) return;
@@ -209,6 +211,48 @@ public final class NovaVisualEffects {
                     index++;
                 }
             }
+        }
+    }
+
+    private static void renderLowHealthVignette(DrawContext context, MinecraftClient client) {
+        if (!NovaVisualSettings.healthVignette || client.player == null || client.currentScreen != null) {
+            return;
+        }
+
+        float maxHealth = client.player.getMaxHealth();
+        if (maxHealth <= 0.0F) return;
+        float healthRatio = clampRatio(client.player.getHealth() / maxHealth);
+        if (healthRatio >= 0.35F) return;
+
+        float severity = clampRatio((0.35F - healthRatio) / 0.35F);
+        float pulse = 0.78F + 0.22F * (float) Math.sin(System.currentTimeMillis() * 0.008);
+        int maxAlpha = Math.round(132.0F * severity * pulse);
+        if (maxAlpha <= 0) return;
+
+        int width = context.getScaledWindowWidth();
+        int height = context.getScaledWindowHeight();
+        int bandThickness = Math.max(1, Math.min(4, Math.min(width, height) / 160));
+        int layers = 12;
+
+        for (int layer = 0; layer < layers; layer++) {
+            float fade = (float) (layers - layer) / layers;
+            int alpha = Math.round(maxAlpha * fade * fade);
+            if (alpha <= 0) continue;
+
+            int color = (alpha << 24) | 0x00E82442;
+            int inset = layer * bandThickness;
+            int innerWidth = width - inset;
+            int innerHeight = height - inset;
+            if (innerWidth <= inset || innerHeight <= inset) break;
+
+            int bandEnd = Math.min(inset + bandThickness, innerHeight);
+            context.fill(inset, inset, innerWidth, bandEnd, color);
+            context.fill(inset, Math.max(inset, height - inset - bandThickness),
+                    innerWidth, height - inset, color);
+            context.fill(inset, inset, Math.min(inset + bandThickness, innerWidth),
+                    innerHeight, color);
+            context.fill(Math.max(inset, width - inset - bandThickness), inset,
+                    width - inset, innerHeight, color);
         }
     }
 

@@ -44,10 +44,14 @@ public final class NovaHudSettingsScreen extends Screen {
                 () -> NovaVisualSettings.resourceBarsHud,
                 value -> NovaVisualSettings.resourceBarsHud = value));
 
+        addDrawableChild(toggleButton(x, y + 252, "Low-health Vignette",
+                () -> NovaVisualSettings.healthVignette,
+                value -> NovaVisualSettings.healthVignette = value));
+
         addDrawableChild(ButtonWidget.builder(Text.literal("Position: " + anchorName()), button -> {
             NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
             button.setMessage(Text.literal("Position: " + anchorName()));
-        }).dimensions(x, y + 252, 220, 22).build());
+        }).dimensions(x, y + 280, 220, 22).build());
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
                 .dimensions(x, y + 280, 220, 22).build());
