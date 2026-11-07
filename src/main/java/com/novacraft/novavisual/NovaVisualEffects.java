@@ -316,9 +316,12 @@ public final class NovaVisualEffects {
     private static void renderWorldInfoHud(DrawContext context, MinecraftClient client) {
         int screenWidth = context.getScaledWindowWidth();
         int screenHeight = context.getScaledWindowHeight();
-        int panelWidth = Math.max(1, Math.min(300, screenWidth - 8));
+        // Reserve a lane between the lower-left key/armor widgets and the lower-right resource panel.
+        // Hide this wide information card at very narrow GUI widths rather than drawing over other HUDs.
+        if (screenWidth < 400) return;
+        int panelWidth = Math.min(300, screenWidth - 290);
         int panelHeight = 40;
-        int panelX = (screenWidth - panelWidth) / 2;
+        int panelX = screenWidth / 2 - panelWidth / 2 - 55;
         int panelY = Math.max(4, screenHeight - panelHeight - 28);
 
         var playerPos = client.player.getBlockPos();

@@ -3,6 +3,7 @@
 ## 1.9.0 - development
 - Added World Info HUD: current dimension, biome registry key, player light level, chunk coordinates and crosshair-targeted block name/coordinates/light level.
 - Added a persisted World Info HUD toggle; config format advanced to version 5 while retaining defaults for older config keys.
+- Placed the World Info panel in a reserved lower HUD lane and suppress it at very narrow GUI widths (<400 scaled pixels) to avoid covering the key, armor and resource widgets.
 - Reorganized HUD / Layout into Layout, Combat and Status pages so the growing widget set remains usable at smaller GUI scales.
 - Verified the required WorldView.getBiome/getLightLevel, RegistryEntry.getKey and BlockHitResult.getBlockPos mappings against Yarn 1.21.11+build.6 documentation.
 - GitHub Actions build and in-game verification pending for this revision.

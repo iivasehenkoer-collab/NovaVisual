@@ -15,7 +15,7 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - Potion Effects HUD with effect-colored markers, amplifier levels, countdowns and expiry warnings
 - Player Resource Bars HUD for health, armor, hunger/saturation and XP level/progress
 - Low-health Vignette with pulsing red edge tint below 35% health
-- World Info HUD with dimension, biome key, local light level, chunk coordinates, and crosshair-targeted block coordinates/light
+- World Info HUD with dimension, biome key, local light level, chunk coordinates, and crosshair-targeted block coordinates/light; uses a reserved lower HUD lane at GUI widths of 400+ to avoid widget collisions
 - HUD Layout grouped into Layout, Combat and Status pages to fit controls at smaller GUI scales
 - Damage flash, ambient particles, RGB Aura and moving particle trail
 - Nova Blue / Nova Violet accent, animated menu and Fullbright
