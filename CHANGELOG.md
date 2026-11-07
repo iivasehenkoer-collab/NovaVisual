@@ -1,11 +1,18 @@
 # Changelog
 
+## 1.9.0 - development
+- Added World Info HUD: current dimension, biome registry key, player light level, chunk coordinates and crosshair-targeted block name/coordinates/light level.
+- Added a persisted World Info HUD toggle; config format advanced to version 5 while retaining defaults for older config keys.
+- Reorganized HUD / Layout into Layout, Combat and Status pages so the growing widget set remains usable at smaller GUI scales.
+- Verified the required WorldView.getBiome/getLightLevel, RegistryEntry.getKey and BlockHitResult.getBlockPos mappings against Yarn 1.21.11+build.6 documentation.
+- GitHub Actions build and in-game verification pending for this revision.
+
 ## 1.8.0 - development
 - Added a low-health vignette visual warning with a red edge tint that activates below 35% health.
 - Vignette intensity scales with remaining health and uses a subtle pulse; no mixin or server interaction is required.
 - Added a persisted Low-health Vignette toggle to the main settings screen and HUD / Layout; configuration format advanced to version 4 while retaining fallback loading for previous keys.
 - Adjusted HUD Layout vertical spacing and panel bounds so its expanded controls do not overlap the heading or Back button.
-- GitHub Actions build and in-game verification pending for this revision.
+- GitHub Actions Gradle build and JAR/source ZIP packaging succeeded in run #104 on 2026-11-06; in-game verification remains pending.
 
 ## 1.7.0 - development
 - Added a Player Resource Bars HUD for health, armor points, hunger/saturation, and XP level/progress.

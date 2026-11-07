@@ -2,7 +2,7 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.8.0 development
+## Version 1.9.0 development
 
 ### Visual features
 - Spatial-glass settings screen, opened with **Right Shift**
@@ -11,11 +11,12 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - PvP Target HUD with target name, health and health bar
 - Keystrokes HUD with WASD and left/right mouse button indicators
 - Totem Counter showing carried totems
-- Armor Durability HUD with four equipment icons, remaining durability percentages and warning-colored bars
+- Armor Durability HUD with equipment icons, remaining durability percentages and warning-colored bars
 - Potion Effects HUD with effect-colored markers, amplifier levels, countdowns and expiry warnings
 - Player Resource Bars HUD for health, armor, hunger/saturation and XP level/progress
-- Low-health Vignette with pulsing red edge tint below 35% health, intensity scaling toward critical health
-- HUD Layout controls with independently persisted widget toggles, including Armor Durability, Potion Effects, Resource Bars and Low-health Vignette; expanded screen spacing to fit the additional control
+- Low-health Vignette with pulsing red edge tint below 35% health
+- World Info HUD with dimension, biome key, local light level, chunk coordinates, and crosshair-targeted block coordinates/light
+- HUD Layout grouped into Layout, Combat and Status pages to fit controls at smaller GUI scales
 - Damage flash, ambient particles, RGB Aura and moving particle trail
 - Nova Blue / Nova Violet accent, animated menu and Fullbright
 - Hostile-mob outline toggle (players are not targeted)
@@ -37,4 +38,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run `gradle build`; the remapped JAR should be in `build/libs/`.
 
-The 1.7.0 Player Resource Bars source revision was built successfully by GitHub Actions (run #101, 2026-11-05); the JAR and source ZIP were published in the build-101 prerelease. The 1.8.0 low-health vignette revision requires CI build confirmation and in-game testing.
+The final 1.8.0 source revision (commit 53c9bb3) was built by GitHub Actions run #104 on 2026-11-06. Version 1.9.0 introduces World Info HUD and category-based HUD settings; CI build and in-game verification are pending for this revision.

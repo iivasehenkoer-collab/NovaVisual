@@ -8,6 +8,11 @@ import net.minecraft.text.Text;
 public final class NovaHudSettingsScreen extends Screen {
     private static final int WHITE = 0xFFEAF6FF;
     private static final int MUTED = 0xFF9CB2C8;
+    private static Page selectedPage = Page.LAYOUT;
+
+    private enum Page {
+        LAYOUT, COMBAT, STATUS
+    }
 
     public NovaHudSettingsScreen() {
         super(Text.literal("NovaVisual HUD Layout"));
@@ -15,56 +20,89 @@ public final class NovaHudSettingsScreen extends Screen {
 
     @Override
     protected void init() {
-        int x = width / 2 - 110;
-        int y = height / 2 - 112;
+        int centerX = width / 2;
+        int panelTop = panelTop();
+        int buttonX = centerX - 110;
+        int tabY = panelTop + 38;
+        int rowStartY = panelTop + (height < 220 ? 60 : 64);
+        int rowStep = height < 220 ? 20 : 24;
 
-        addDrawableChild(toggleButton(x, y, "Coordinates",
-                () -> NovaVisualSettings.hudCoordinates,
-                value -> NovaVisualSettings.hudCoordinates = value));
-        addDrawableChild(toggleButton(x, y + 28, "Health / Armor",
-                () -> NovaVisualSettings.hudVitals,
-                value -> NovaVisualSettings.hudVitals = value));
-        addDrawableChild(toggleButton(x, y + 56, "Dimension / FPS",
-                () -> NovaVisualSettings.hudStatus,
-                value -> NovaVisualSettings.hudStatus = value));
+        addPageButton(buttonX, tabY, Page.LAYOUT, "Layout");
+        addPageButton(buttonX + 74, tabY, Page.COMBAT, "Combat");
+        addPageButton(buttonX + 148, tabY, Page.STATUS, "Status");
 
-        addDrawableChild(toggleButton(x, y + 84, "Keystrokes",
-                () -> NovaVisualSettings.keystrokesHud, value -> NovaVisualSettings.keystrokesHud = value));
-        addDrawableChild(toggleButton(x, y + 112, "Totem Counter",
-                () -> NovaVisualSettings.totemCounter, value -> NovaVisualSettings.totemCounter = value));
-        addDrawableChild(toggleButton(x, y + 140, "PvP Target HUD",
-                () -> NovaVisualSettings.targetHud, value -> NovaVisualSettings.targetHud = value));
-        addDrawableChild(toggleButton(x, y + 168, "Armor Durability HUD",
-                () -> NovaVisualSettings.armorDurabilityHud,
-                value -> NovaVisualSettings.armorDurabilityHud = value));
-        addDrawableChild(toggleButton(x, y + 196, "Potion Effects HUD",
-                () -> NovaVisualSettings.statusEffectHud,
-                value -> NovaVisualSettings.statusEffectHud = value));
-        addDrawableChild(toggleButton(x, y + 224, "Player Resource Bars",
-                () -> NovaVisualSettings.resourceBarsHud,
-                value -> NovaVisualSettings.resourceBarsHud = value));
+        switch (selectedPage) {
+            case LAYOUT -> {
+                addToggle(buttonX, rowStartY, "Coordinates",
+                        () -> NovaVisualSettings.hudCoordinates,
+                        value -> NovaVisualSettings.hudCoordinates = value);
+                addToggle(buttonX, rowStartY + rowStep, "Health / Armor",
+                        () -> NovaVisualSettings.hudVitals,
+                        value -> NovaVisualSettings.hudVitals = value);
+                addToggle(buttonX, rowStartY + rowStep * 2, "Dimension / FPS",
+                        () -> NovaVisualSettings.hudStatus,
+                        value -> NovaVisualSettings.hudStatus = value);
 
-        addDrawableChild(toggleButton(x, y + 252, "Low-health Vignette",
-                () -> NovaVisualSettings.healthVignette,
-                value -> NovaVisualSettings.healthVignette = value));
-
-        addDrawableChild(ButtonWidget.builder(Text.literal("Position: " + anchorName()), button -> {
-            NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
-            button.setMessage(Text.literal("Position: " + anchorName()));
-        }).dimensions(x, y + 280, 220, 22).build());
-
-        addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
-                .dimensions(x, y + 308, 220, 22).build());
+                addDrawableChild(ButtonWidget.builder(Text.literal("Position: " + anchorName()), button -> {
+                    NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
+                    button.setMessage(Text.literal("Position: " + anchorName()));
+                }).dimensions(buttonX, rowStartY + rowStep * 3, 220, 20).build());
+                addBackButton(buttonX, rowStartY + rowStep * 4);
+            }
+            case COMBAT -> {
+                addToggle(buttonX, rowStartY, "Keystrokes",
+                        () -> NovaVisualSettings.keystrokesHud,
+                        value -> NovaVisualSettings.keystrokesHud = value);
+                addToggle(buttonX, rowStartY + rowStep, "Totem Counter",
+                        () -> NovaVisualSettings.totemCounter,
+                        value -> NovaVisualSettings.totemCounter = value);
+                addToggle(buttonX, rowStartY + rowStep * 2, "PvP Target HUD",
+                        () -> NovaVisualSettings.targetHud,
+                        value -> NovaVisualSettings.targetHud = value);
+                addBackButton(buttonX, rowStartY + rowStep * 3);
+            }
+            case STATUS -> {
+                addToggle(buttonX, rowStartY, "Armor Durability HUD",
+                        () -> NovaVisualSettings.armorDurabilityHud,
+                        value -> NovaVisualSettings.armorDurabilityHud = value);
+                addToggle(buttonX, rowStartY + rowStep, "Potion Effects HUD",
+                        () -> NovaVisualSettings.statusEffectHud,
+                        value -> NovaVisualSettings.statusEffectHud = value);
+                addToggle(buttonX, rowStartY + rowStep * 2, "Player Resource Bars",
+                        () -> NovaVisualSettings.resourceBarsHud,
+                        value -> NovaVisualSettings.resourceBarsHud = value);
+                addToggle(buttonX, rowStartY + rowStep * 3, "Low-health Vignette",
+                        () -> NovaVisualSettings.healthVignette,
+                        value -> NovaVisualSettings.healthVignette = value);
+                addToggle(buttonX, rowStartY + rowStep * 4, "World Info HUD",
+                        () -> NovaVisualSettings.worldInfoHud,
+                        value -> NovaVisualSettings.worldInfoHud = value);
+                addBackButton(buttonX, rowStartY + rowStep * 5);
+            }
+        }
     }
 
-    private ButtonWidget toggleButton(int x, int y, String label,
-                                     java.util.function.BooleanSupplier getter,
-                                     java.util.function.Consumer<Boolean> setter) {
-        return ButtonWidget.builder(toggleText(label, getter.getAsBoolean()), button -> {
+    private void addPageButton(int x, int y, Page page, String label) {
+        String prefix = selectedPage == page ? "● " : "";
+        addDrawableChild(ButtonWidget.builder(Text.literal(prefix + label), button -> {
+            selectedPage = page;
+            if (client != null) client.setScreen(new NovaHudSettingsScreen());
+        }).dimensions(x, y, 72, 20).build());
+    }
+
+    private void addToggle(int x, int y, String label,
+                           java.util.function.BooleanSupplier getter,
+                           java.util.function.Consumer<Boolean> setter) {
+        addDrawableChild(ButtonWidget.builder(toggleText(label, getter.getAsBoolean()), button -> {
             boolean next = !getter.getAsBoolean();
             setter.accept(next);
             button.setMessage(toggleText(label, next));
-        }).dimensions(x, y, 220, 22).build();
+        }).dimensions(x, y, 220, 20).build());
+    }
+
+    private void addBackButton(int x, int y) {
+        addDrawableChild(ButtonWidget.builder(Text.literal("Back"), button -> close())
+                .dimensions(x, y, 220, 20).build());
     }
 
     private Text toggleText(String label, boolean enabled) {
@@ -80,9 +118,17 @@ public final class NovaHudSettingsScreen extends Screen {
         };
     }
 
+    private int panelTop() {
+        return Math.max(4, Math.min(height / 2 - 106, height - 216));
+    }
+
+    private int panelBottom() {
+        return Math.min(panelTop() + 212, height - 4);
+    }
+
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        // Use the custom opaque panel below instead of requesting vanilla blur.
+        // Opaque NovaVisual panel replaces vanilla background blur.
     }
 
     @Override
@@ -90,18 +136,20 @@ public final class NovaHudSettingsScreen extends Screen {
         context.fill(0, 0, width, height, 0xD908101B);
 
         int left = width / 2 - 150;
-        int top = height / 2 - 170;
+        int top = panelTop();
         int right = width / 2 + 150;
-        int bottom = height / 2 + 225;
+        int bottom = panelBottom();
         context.fill(left - 4, top - 4, right + 4, bottom + 4, 0x5039BDF8);
         context.fill(left, top, right, bottom, 0xE8141D2B);
         context.fill(left + 2, top + 2, right - 2, bottom - 2, 0x7A26384D);
         context.fill(left + 1, top + 1, right - 1, top + 2, 0x88FFFFFF);
+
         context.drawText(textRenderer, "N O V A C R A F T   /   HUD CUSTOMIZATION",
-                left + 16, top + 14, MUTED, false);
-        context.drawText(textRenderer, "HUD Layout", left + 16, top + 31, WHITE, false);
-        context.drawText(textRenderer, "Toggle HUD widgets and choose the Compact HUD corner.",
-                left + 16, top + 48, 0xFFB6CBE0, false);
+                left + 16, top + 10, MUTED, false);
+        context.drawText(textRenderer, "HUD Layout  ·  " + selectedPage.name(),
+                left + 16, top + 26, WHITE, false);
+        context.drawText(textRenderer, "Select a category; widget toggles are saved on exit.",
+                left + 16, top + 42, 0xFFB6CBE0, false);
 
         super.render(context, mouseX, mouseY, delta);
     }

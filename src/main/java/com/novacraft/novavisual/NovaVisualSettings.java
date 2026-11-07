@@ -41,6 +41,7 @@ public final class NovaVisualSettings {
     public static boolean statusEffectHud = true;
     public static boolean resourceBarsHud = true;
     public static boolean healthVignette = true;
+    public static boolean worldInfoHud = true;
 
     public static void load() {
         Path file = configPath();
@@ -78,6 +79,7 @@ public final class NovaVisualSettings {
         statusEffectHud = bool(values, "statusEffectHud", statusEffectHud);
         resourceBarsHud = bool(values, "resourceBarsHud", resourceBarsHud);
         healthVignette = bool(values, "healthVignette", healthVignette);
+        worldInfoHud = bool(values, "worldInfoHud", worldInfoHud);
         accent = parseHex(values.getProperty("accent"), accent);
         wingStyle = clamp(integer(values, "wingStyle", wingStyle), 0, 4);
         optimizationPreset = clamp(integer(values, "optimizationPreset", optimizationPreset), 0, 2);
@@ -85,7 +87,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "4");
+        values.setProperty("formatVersion", "5");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -113,6 +115,7 @@ public final class NovaVisualSettings {
         values.setProperty("statusEffectHud", Boolean.toString(statusEffectHud));
         values.setProperty("resourceBarsHud", Boolean.toString(resourceBarsHud));
         values.setProperty("healthVignette", Boolean.toString(healthVignette));
+        values.setProperty("worldInfoHud", Boolean.toString(worldInfoHud));
 
         Path file = configPath();
         try {

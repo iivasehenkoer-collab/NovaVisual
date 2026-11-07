@@ -10,6 +10,8 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
@@ -278,6 +280,9 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.resourceBarsHud) {
             renderResourceBarsHud(context, client);
         }
+        if (NovaVisualSettings.worldInfoHud) {
+            renderWorldInfoHud(context, client);
+        }
 
         if (NovaVisualSettings.totemCounter) {
             int count = client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
@@ -305,6 +310,55 @@ public final class NovaVisualEffects {
             float ratio = target.getMaxHealth() <= 0 ? 0 : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
             context.fill(barLeft, y + 33, barLeft + (int)((barRight - barLeft) * ratio), y + 36, 0xFF55D98B);
         }
+    }
+
+
+    private static void renderWorldInfoHud(DrawContext context, MinecraftClient client) {
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+        int panelWidth = Math.max(1, Math.min(300, screenWidth - 8));
+        int panelHeight = 40;
+        int panelX = (screenWidth - panelWidth) / 2;
+        int panelY = Math.max(4, screenHeight - panelHeight - 28);
+
+        var playerPos = client.player.getBlockPos();
+        String dimension = client.world.getRegistryKey().getValue().getPath()
+                .replace('_', ' ').toUpperCase(Locale.ROOT);
+        String biome = client.world.getBiome(playerPos).getKey()
+                .map(key -> key.getValue().getPath())
+                .orElse("unknown")
+                .replace('_', ' ').toUpperCase(Locale.ROOT);
+        int playerLight = client.world.getLightLevel(playerPos);
+        int chunkX = client.player.getBlockX() >> 4;
+        int chunkZ = client.player.getBlockZ() >> 4;
+
+        String environmentLine = "DIM  " + dimension + "  ·  BIOME  " + biome
+                + "  ·  LIGHT  " + playerLight + "  ·  CHUNK  " + chunkX + ", " + chunkZ;
+        String targetLine = "TARGET  —";
+        if (client.crosshairTarget instanceof BlockHitResult hit
+                && hit.getType() == HitResult.Type.BLOCK) {
+            var targetPos = hit.getBlockPos();
+            String blockName = client.world.getBlockState(targetPos).getBlock()
+                    .getName().getString().toUpperCase(Locale.ROOT);
+            int targetLight = client.world.getLightLevel(targetPos);
+            targetLine = "TARGET  " + blockName + "  ·  XYZ  "
+                    + targetPos.getX() + " " + targetPos.getY() + " " + targetPos.getZ()
+                    + "  ·  LIGHT  " + targetLight;
+        }
+
+        context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
+                panelY + panelHeight + 2, 0x5039BDF8);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaVisualSettings.accent);
+
+        int textMaxWidth = Math.max(1, panelWidth - 16);
+        context.drawText(client.textRenderer,
+                client.textRenderer.trimToWidth(environmentLine, textMaxWidth),
+                panelX + 8, panelY + 7, 0xFFEAF6FF, false);
+        context.drawText(client.textRenderer,
+                client.textRenderer.trimToWidth(targetLine, textMaxWidth),
+                panelX + 8, panelY + 21, 0xFFB6CBE0, false);
     }
 
     private static void renderResourceBarsHud(DrawContext context, MinecraftClient client) {
