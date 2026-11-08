@@ -296,19 +296,48 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.targetHud && client.crosshairTarget instanceof EntityHitResult hit
                 && hit.getEntity() instanceof LivingEntity target && target.isAlive()) {
             String name = target.getDisplayName().getString();
-            String health = String.format(Locale.ROOT, "%.1f / %.1f HP", target.getHealth(), target.getMaxHealth());
-            int panelWidth = Math.max(150, Math.max(client.textRenderer.getWidth(name), client.textRenderer.getWidth(health)) + 20);
+            String health = String.format(Locale.ROOT, "%.1f / %.1f HP",
+                    target.getHealth(), target.getMaxHealth());
+            String range = String.format(Locale.ROOT, "RANGE  %.1f m",
+                    target.getPos().distanceTo(client.player.getPos()));
+
+            int contentWidth = Math.max(client.textRenderer.getWidth(name),
+                    client.textRenderer.getWidth(health));
+            if (NovaVisualSettings.targetRangeHud) {
+                contentWidth = Math.max(contentWidth, client.textRenderer.getWidth(range));
+            }
+            int maxPanelWidth = Math.max(1, width - 16);
+            int minPanelWidth = Math.min(150, maxPanelWidth);
+            int panelWidth = Math.min(maxPanelWidth,
+                    Math.max(minPanelWidth, contentWidth + 20));
+            boolean showRange = NovaVisualSettings.targetRangeHud;
+            int panelHeight = showRange ? 48 : 39;
             int x = (width - panelWidth) / 2;
-            int y = 12;
-            context.fill(x, y, x + panelWidth, y + 39, 0xC9121D2D);
+            int y = showRange ? 8 : 12;
+            int textWidth = Math.max(1, panelWidth - 14);
+
+            context.fill(x, y, x + panelWidth, y + panelHeight, 0xC9121D2D);
             context.fill(x, y, x + panelWidth, y + 2, NovaVisualSettings.accent);
-            context.drawText(client.textRenderer, client.textRenderer.trimToWidth(name, panelWidth - 12), x + 7, y + 7, 0xFFFFFFFF, false);
-            context.drawText(client.textRenderer, health, x + 7, y + 20, 0xFFB6CBE0, false);
+            context.drawText(client.textRenderer,
+                    client.textRenderer.trimToWidth(name, textWidth),
+                    x + 7, y + 7, 0xFFFFFFFF, false);
+            context.drawText(client.textRenderer,
+                    client.textRenderer.trimToWidth(health, textWidth),
+                    x + 7, y + 20, 0xFFB6CBE0, false);
+
+            int barY = showRange ? y + 43 : y + 33;
+            if (showRange) {
+                context.drawText(client.textRenderer,
+                        client.textRenderer.trimToWidth(range, textWidth),
+                        x + 7, y + 31, 0xFF7DD3FC, false);
+            }
             int barLeft = x + 7;
-            int barRight = x + panelWidth - 7;
-            context.fill(barLeft, y + 33, barRight, y + 36, 0xFF35465A);
-            float ratio = target.getMaxHealth() <= 0 ? 0 : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
-            context.fill(barLeft, y + 33, barLeft + (int)((barRight - barLeft) * ratio), y + 36, 0xFF55D98B);
+            int barRight = Math.max(barLeft + 1, x + panelWidth - 7);
+            context.fill(barLeft, barY, barRight, barY + 3, 0xFF35465A);
+            float ratio = target.getMaxHealth() <= 0 ? 0
+                    : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
+            context.fill(barLeft, barY, barLeft + (int) ((barRight - barLeft) * ratio),
+                    barY + 3, 0xFF55D98B);
         }
     }
 
@@ -344,9 +373,18 @@ public final class NovaVisualEffects {
             String blockName = client.world.getBlockState(targetPos).getBlock()
                     .getName().getString().toUpperCase(Locale.ROOT);
             int targetLight = client.world.getLightLevel(targetPos);
-            targetLine = "TARGET  " + blockName + "  ·  XYZ  "
-                    + targetPos.getX() + " " + targetPos.getY() + " " + targetPos.getZ()
-                    + "  ·  LIGHT  " + targetLight;
+            if (NovaVisualSettings.targetRangeHud) {
+                double distance = client.player.getPos().distanceTo(new Vec3d(
+                        targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5));
+                targetLine = String.format(Locale.ROOT,
+                        "TARGET  %s  ·  RANGE  %.1f m  ·  XYZ  %d %d %d  ·  LIGHT  %d",
+                        blockName, distance, targetPos.getX(), targetPos.getY(),
+                        targetPos.getZ(), targetLight);
+            } else {
+                targetLine = "TARGET  " + blockName + "  ·  XYZ  "
+                        + targetPos.getX() + " " + targetPos.getY() + " " + targetPos.getZ()
+                        + "  ·  LIGHT  " + targetLight;
+            }
         }
 
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,

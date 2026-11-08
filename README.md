@@ -2,13 +2,14 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.9.0 development
+## Version 1.10.0 development
 
 ### Visual features
 - Spatial-glass settings screen, opened with **Right Shift**
 - Compact HUD with coordinates, health, armor, dimension, FPS, ping and CPS
 - Compact FPS history graph
 - PvP Target HUD with target name, health and health bar
+- Target Range HUD: live distance to the living entity under the crosshair; block-target distance is also shown in World Info HUD when enabled
 - Keystrokes HUD with WASD and left/right mouse button indicators
 - Totem Counter showing carried totems
 - Armor Durability HUD with equipment icons, remaining durability percentages and warning-colored bars
@@ -38,4 +39,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run `gradle build`; the remapped JAR should be in `build/libs/`.
 
-The final 1.8.0 source revision (commit 53c9bb3) was built by GitHub Actions run #104 on 2026-11-06. Version 1.9.0 introduces World Info HUD and category-based HUD settings; CI build and in-game verification are pending for this revision.
+The final 1.9.0 source revision (commit 52b7119) was built by GitHub Actions run #106 on 2026-11-07. Version 1.10.0 adds optional live target distance to the PvP Target HUD and World Info HUD; CI build and in-game verification are pending for this revision.

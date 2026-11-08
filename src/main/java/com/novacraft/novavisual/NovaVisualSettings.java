@@ -37,6 +37,7 @@ public final class NovaVisualSettings {
     public static boolean keystrokesHud = true;
     public static boolean totemCounter = true;
     public static boolean targetHud = true;
+    public static boolean targetRangeHud = true;
     public static boolean armorDurabilityHud = true;
     public static boolean statusEffectHud = true;
     public static boolean resourceBarsHud = true;
@@ -75,6 +76,7 @@ public final class NovaVisualSettings {
         keystrokesHud = bool(values, "keystrokesHud", keystrokesHud);
         totemCounter = bool(values, "totemCounter", totemCounter);
         targetHud = bool(values, "targetHud", targetHud);
+        targetRangeHud = bool(values, "targetRangeHud", targetRangeHud);
         armorDurabilityHud = bool(values, "armorDurabilityHud", armorDurabilityHud);
         statusEffectHud = bool(values, "statusEffectHud", statusEffectHud);
         resourceBarsHud = bool(values, "resourceBarsHud", resourceBarsHud);
@@ -87,7 +89,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "5");
+        values.setProperty("formatVersion", "6");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -111,6 +113,7 @@ public final class NovaVisualSettings {
         values.setProperty("keystrokesHud", Boolean.toString(keystrokesHud));
         values.setProperty("totemCounter", Boolean.toString(totemCounter));
         values.setProperty("targetHud", Boolean.toString(targetHud));
+        values.setProperty("targetRangeHud", Boolean.toString(targetRangeHud));
         values.setProperty("armorDurabilityHud", Boolean.toString(armorDurabilityHud));
         values.setProperty("statusEffectHud", Boolean.toString(statusEffectHud));
         values.setProperty("resourceBarsHud", Boolean.toString(resourceBarsHud));

@@ -59,7 +59,10 @@ public final class NovaHudSettingsScreen extends Screen {
                 addToggle(buttonX, rowStartY + rowStep * 2, "PvP Target HUD",
                         () -> NovaVisualSettings.targetHud,
                         value -> NovaVisualSettings.targetHud = value);
-                addBackButton(buttonX, rowStartY + rowStep * 3);
+                addToggle(buttonX, rowStartY + rowStep * 3, "Target Range",
+                        () -> NovaVisualSettings.targetRangeHud,
+                        value -> NovaVisualSettings.targetRangeHud = value);
+                addBackButton(buttonX, rowStartY + rowStep * 4);
             }
             case STATUS -> {
                 addToggle(buttonX, rowStartY, "Armor Durability HUD",
