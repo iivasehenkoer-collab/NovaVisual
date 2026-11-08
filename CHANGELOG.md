@@ -5,7 +5,7 @@
 - World Info HUD now shows distance to a crosshair-targeted block (measured to its center) when Target Range is enabled.
 - Added a persisted Target Range toggle to HUD / Layout → Combat; configuration format advanced to version 6 while retaining fallback loading for previous settings.
 - Clamped the target card width to scaled screen dimensions and trimmed its text to reduce overflow at small GUI resolutions.
-- Verified Vec3d.distanceTo(Vec3d) against Yarn 1.21.11+build.6 documentation. Gradle CI and in-game verification pending for this revision.
+- Verified Entity.distanceTo(Entity) and Vec3d.distanceTo(Vec3d) against Yarn 1.21.11+build.6 documentation. Gradle CI and in-game verification pending for this revision.
 
 ## 1.9.0 - development
 - Added World Info HUD: current dimension, biome registry key, player light level, chunk coordinates and crosshair-targeted block name/coordinates/light level.

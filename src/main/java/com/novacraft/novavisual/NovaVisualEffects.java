@@ -299,7 +299,7 @@ public final class NovaVisualEffects {
             String health = String.format(Locale.ROOT, "%.1f / %.1f HP",
                     target.getHealth(), target.getMaxHealth());
             String range = String.format(Locale.ROOT, "RANGE  %.1f m",
-                    target.getPos().distanceTo(client.player.getPos()));
+                    target.distanceTo(client.player));
 
             int contentWidth = Math.max(client.textRenderer.getWidth(name),
                     client.textRenderer.getWidth(health));
@@ -374,8 +374,9 @@ public final class NovaVisualEffects {
                     .getName().getString().toUpperCase(Locale.ROOT);
             int targetLight = client.world.getLightLevel(targetPos);
             if (NovaVisualSettings.targetRangeHud) {
-                double distance = client.player.getPos().distanceTo(new Vec3d(
-                        targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5));
+                double distance = new Vec3d(client.player.getX(), client.player.getY(), client.player.getZ())
+                        .distanceTo(new Vec3d(targetPos.getX() + 0.5,
+                                targetPos.getY() + 0.5, targetPos.getZ() + 0.5));
                 targetLine = String.format(Locale.ROOT,
                         "TARGET  RANGE  %.1f m  ·  %s  ·  XYZ  %d %d %d  ·  LIGHT  %d",
                         distance, blockName, targetPos.getX(), targetPos.getY(),
