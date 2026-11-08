@@ -377,8 +377,8 @@ public final class NovaVisualEffects {
                 double distance = client.player.getPos().distanceTo(new Vec3d(
                         targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5));
                 targetLine = String.format(Locale.ROOT,
-                        "TARGET  %s  ·  RANGE  %.1f m  ·  XYZ  %d %d %d  ·  LIGHT  %d",
-                        blockName, distance, targetPos.getX(), targetPos.getY(),
+                        "TARGET  RANGE  %.1f m  ·  %s  ·  XYZ  %d %d %d  ·  LIGHT  %d",
+                        distance, blockName, targetPos.getX(), targetPos.getY(),
                         targetPos.getZ(), targetLight);
             } else {
                 targetLine = "TARGET  " + blockName + "  ·  XYZ  "
