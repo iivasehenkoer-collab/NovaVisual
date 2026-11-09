@@ -40,4 +40,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run `gradle build`; the remapped JAR should be in `build/libs/`.
 
-GitHub Actions run #109 successfully built the 1.10.0 source revision (commit 1255854) on 2026-11-08. Version 1.11.0 adds a persisted yaw-relative Compass HUD; CI build and in-game verification are pending for this revision.
+GitHub Actions run #110 successfully compiled and packaged the Compass HUD implementation on 2026-11-09, but the Gradle project version was still set to 1.10.0. The version metadata has been corrected to 1.11.0 in a follow-up commit and is being rebuilt; in-game verification remains pending.
