@@ -31,6 +31,7 @@ public final class NovaVisualEffects {
     private static final long CPS_WINDOW_MS = 1000L;
     private static final int GRAPH_SAMPLES = 32;
     private static final String[] ROMAN_LEVELS = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+    private static final String[] COMPASS_DIRECTIONS = {"S", "SW", "W", "NW", "N", "NE", "E", "SE"};
     private static long damageFlashUntil;
     private static float previousHealth = -1.0F;
     private static int ticks;
@@ -283,6 +284,9 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.worldInfoHud) {
             renderWorldInfoHud(context, client);
         }
+        if (NovaVisualSettings.compassHud) {
+            renderCompassHud(context, client);
+        }
 
         if (NovaVisualSettings.totemCounter) {
             int count = client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
@@ -341,6 +345,57 @@ public final class NovaVisualEffects {
         }
     }
 
+
+
+    private static void renderCompassHud(DrawContext context, MinecraftClient client) {
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+        int panelWidth = Math.min(260, Math.max(1, screenWidth - 16));
+        int panelHeight = 40;
+        int panelX = (screenWidth - panelWidth) / 2;
+        int panelY = Math.min(64, Math.max(4, screenHeight - panelHeight - 4));
+        int centerX = screenWidth / 2;
+
+        float yaw = client.player.getYaw();
+        float normalizedYaw = (yaw % 360.0F + 360.0F) % 360.0F;
+        int headingDegrees = Math.round(normalizedYaw) % 360;
+        int nearestDirection = Math.floorMod(Math.round(normalizedYaw / 45.0F), 8);
+        String heading = String.format(Locale.ROOT, "HEADING  %03d°  ·  %s",
+                headingDegrees, COMPASS_DIRECTIONS[nearestDirection]);
+
+        context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
+                panelY + panelHeight + 2, 0x5039BDF8);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+
+        float maxVisibleDegrees = Math.min(60.0F, Math.max(0.0F, panelWidth / 2.0F - 10.0F) / 2.0F);
+        for (int direction = 0; direction < COMPASS_DIRECTIONS.length; direction++) {
+            float markerYaw = direction * 45.0F;
+            float difference = (markerYaw - normalizedYaw + 540.0F) % 360.0F - 180.0F;
+            if (Math.abs(difference) > maxVisibleDegrees) continue;
+
+            int markerX = centerX + Math.round(difference * 2.0F);
+            String label = COMPASS_DIRECTIONS[direction];
+            int labelWidth = client.textRenderer.getWidth(label);
+            int labelX = markerX - labelWidth / 2;
+            int color = Math.abs(difference) < 22.5F ? 0xFF7DD3FC : 0xFFEAF6FF;
+            context.drawText(client.textRenderer, label, labelX, panelY + 5, color, false);
+        }
+
+        for (int offset = -60; offset <= 60; offset += 15) {
+            if (Math.abs(offset) > maxVisibleDegrees) continue;
+            int tickX = centerX + Math.round(offset * 2.0F);
+            int tickHeight = offset % 45 == 0 ? 8 : 4;
+            int tickColor = offset == 0 ? NovaVisualSettings.accent : 0xFF60758B;
+            context.fill(tickX, panelY + 17, tickX + 1, panelY + 17 + tickHeight, tickColor);
+        }
+
+        context.fill(centerX - 1, panelY + 16, centerX + 2, panelY + 27, NovaVisualSettings.accent);
+        String trimmedHeading = client.textRenderer.trimToWidth(heading, Math.max(1, panelWidth - 12));
+        int headingWidth = client.textRenderer.getWidth(trimmedHeading);
+        context.drawText(client.textRenderer, trimmedHeading,
+                centerX - headingWidth / 2, panelY + 28, 0xFFB6CBE0, false);
+    }
 
     private static void renderWorldInfoHud(DrawContext context, MinecraftClient client) {
         int screenWidth = context.getScaledWindowWidth();

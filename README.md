@@ -2,7 +2,7 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
-## Version 1.10.0 development
+## Version 1.11.0 development
 
 ### Visual features
 - Spatial-glass settings screen, opened with **Right Shift**
@@ -17,6 +17,7 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - Player Resource Bars HUD for health, armor, hunger/saturation and XP level/progress
 - Low-health Vignette with pulsing red edge tint below 35% health
 - World Info HUD with dimension, biome key, local light level, chunk coordinates, and crosshair-targeted block coordinates/light; uses a reserved lower HUD lane at GUI widths of 400+ to avoid widget collisions
+- Compass HUD: yaw-relative cardinal/intercardinal tape, heading degrees and center tick, with scaled-screen width handling
 - HUD Layout grouped into Layout, Combat and Status pages to fit controls at smaller GUI scales
 - Damage flash, ambient particles, RGB Aura and moving particle trail
 - Nova Blue / Nova Violet accent, animated menu and Fullbright
@@ -39,4 +40,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run `gradle build`; the remapped JAR should be in `build/libs/`.
 
-The final 1.9.0 source revision (commit 52b7119) was built by GitHub Actions run #106 on 2026-11-07. Version 1.10.0 adds optional live target distance to the PvP Target HUD and World Info HUD; CI build and in-game verification are pending for this revision.
+GitHub Actions run #109 successfully built the 1.10.0 source revision (commit 1255854) on 2026-11-08. Version 1.11.0 adds a persisted yaw-relative Compass HUD; CI build and in-game verification are pending for this revision.
