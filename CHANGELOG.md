@@ -4,7 +4,7 @@
 - Added a yaw-relative Compass HUD with cardinal/intercardinal direction labels, heading degrees and a highlighted center tick.
 - Added a persisted Compass HUD toggle to the main NovaVisual menu; configuration format advanced to version 7 with backward-compatible defaults for earlier keys.
 - Kept the compass in a top-center lane below the PvP Target HUD and adjusted its width/tick visibility for scaled GUI dimensions.
-- GitHub Actions run #110 successfully compiled and packaged the Compass HUD implementation, but its artifact metadata was still 1.10.0; a follow-up version bump to 1.11.0 is being rebuilt. In-game verification remains pending.
+- Run #110 compiled the Compass HUD code but used stale 1.10.0 artifact metadata. The corrected version bump was built and packaged successfully by GitHub Actions run #111 as version 1.11.0; in-game verification remains pending.
 
 ## 1.10.0 - development
 - Added optional Target Range readout to the PvP Target HUD, showing live distance to the living entity under the crosshair in meters.

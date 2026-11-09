@@ -40,4 +40,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run `gradle build`; the remapped JAR should be in `build/libs/`.
 
-GitHub Actions run #110 successfully compiled and packaged the Compass HUD implementation on 2026-11-09, but the Gradle project version was still set to 1.10.0. The version metadata has been corrected to 1.11.0 in a follow-up commit and is being rebuilt; in-game verification remains pending.
+GitHub Actions run #111 successfully built and packaged version 1.11.0 on 2026-11-09 (commit 3c130d6). The real versioned JAR and source archives are available in Release build-111; in-game verification remains pending.
