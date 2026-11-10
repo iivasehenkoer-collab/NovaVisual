@@ -44,6 +44,12 @@ public final class NovaVisualSettings {
     public static boolean healthVignette = true;
     public static boolean worldInfoHud = true;
     public static boolean compassHud = true;
+    public static boolean waypointHud = true;
+    public static boolean waypointSet = false;
+    public static int waypointX = 0;
+    public static int waypointY = 0;
+    public static int waypointZ = 0;
+    public static String waypointDimension = "";
 
     public static void load() {
         Path file = configPath();
@@ -84,6 +90,14 @@ public final class NovaVisualSettings {
         healthVignette = bool(values, "healthVignette", healthVignette);
         worldInfoHud = bool(values, "worldInfoHud", worldInfoHud);
         compassHud = bool(values, "compassHud", compassHud);
+        waypointHud = bool(values, "waypointHud", waypointHud);
+        waypointSet = bool(values, "waypointSet", waypointSet);
+        waypointX = integer(values, "waypointX", waypointX);
+        waypointY = integer(values, "waypointY", waypointY);
+        waypointZ = integer(values, "waypointZ", waypointZ);
+        waypointDimension = values.getProperty("waypointDimension", waypointDimension);
+        if (waypointDimension.length() > 96) waypointDimension = waypointDimension.substring(0, 96);
+        if (waypointDimension.isBlank()) waypointSet = false;
         accent = parseHex(values.getProperty("accent"), accent);
         wingStyle = clamp(integer(values, "wingStyle", wingStyle), 0, 4);
         optimizationPreset = clamp(integer(values, "optimizationPreset", optimizationPreset), 0, 2);
@@ -91,7 +105,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "7");
+        values.setProperty("formatVersion", "8");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -122,6 +136,12 @@ public final class NovaVisualSettings {
         values.setProperty("healthVignette", Boolean.toString(healthVignette));
         values.setProperty("worldInfoHud", Boolean.toString(worldInfoHud));
         values.setProperty("compassHud", Boolean.toString(compassHud));
+        values.setProperty("waypointHud", Boolean.toString(waypointHud));
+        values.setProperty("waypointSet", Boolean.toString(waypointSet));
+        values.setProperty("waypointX", Integer.toString(waypointX));
+        values.setProperty("waypointY", Integer.toString(waypointY));
+        values.setProperty("waypointZ", Integer.toString(waypointZ));
+        values.setProperty("waypointDimension", waypointDimension);
 
         Path file = configPath();
         try {

@@ -1,3 +1,5 @@
 {
-  "key.novavisual.open_menu": "Open NovaVisual menu"
+  "key.novavisual.open_menu": "Open NovaVisual menu",
+  "key.novavisual.set_waypoint": "Save waypoint at current position",
+  "key.novavisual.clear_waypoint": "Clear saved waypoint"
 }

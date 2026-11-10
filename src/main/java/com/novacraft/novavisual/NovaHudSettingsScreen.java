@@ -80,7 +80,10 @@ public final class NovaHudSettingsScreen extends Screen {
                 addToggle(buttonX, rowStartY + rowStep * 4, "World Info HUD",
                         () -> NovaVisualSettings.worldInfoHud,
                         value -> NovaVisualSettings.worldInfoHud = value);
-                addBackButton(buttonX, rowStartY + rowStep * 5);
+                addToggle(buttonX, rowStartY + rowStep * 5, "Waypoint HUD",
+                        () -> NovaVisualSettings.waypointHud,
+                        value -> NovaVisualSettings.waypointHud = value);
+                addBackButton(buttonX, rowStartY + rowStep * 6);
             }
         }
     }
@@ -121,12 +124,17 @@ public final class NovaHudSettingsScreen extends Screen {
         };
     }
 
+    private int panelHeight() {
+        return selectedPage == Page.STATUS ? 236 : 212;
+    }
+
     private int panelTop() {
-        return Math.max(4, Math.min(height / 2 - 106, height - 216));
+        int panelHeight = panelHeight();
+        return Math.max(4, Math.min(height / 2 - panelHeight / 2, height - panelHeight - 4));
     }
 
     private int panelBottom() {
-        return Math.min(panelTop() + 212, height - 4);
+        return Math.min(panelTop() + panelHeight(), height - 4);
     }
 
     @Override
