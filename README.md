@@ -2,6 +2,13 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.13.1 development
+
+### visionOS-inspired interface refresh
+- Added shared rounded glass surfaces, translucent layered panels, subtle edge highlights and cyan/violet ambient glow.
+- Applied the shared glass UI system to the NovaVisual home screen, HUD settings, waypoint manager, Optimization Center, Cosmetics Studio, Modrinth browser and lightweight web browser.
+- The visual treatment uses Minecraft's DrawContext fill pipeline; it does not require shaders, mixins or Apple assets.
+
 ## Version 1.13.0 development
 
 ### Visual features
