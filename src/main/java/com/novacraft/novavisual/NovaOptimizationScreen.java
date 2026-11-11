@@ -78,16 +78,14 @@ public final class NovaOptimizationScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         // Draw an opaque custom backdrop. Screen.renderBackground() can request
         // the vanilla blur pipeline, which may already have run earlier this frame.
-        context.fill(0, 0, width, height, 0xD908101B);
+        NovaGlassUi.drawBackdrop(context, width, height);
 
         int left = width / 2 - 150;
         int top = height / 2 - 112;
         int right = width / 2 + 150;
         int bottom = height / 2 + 100;
-        context.fill(left - 4, top - 4, right + 4, bottom + 4, 0x5039BDF8);
-        context.fill(left, top, right, bottom, 0xE8141D2B);
-        context.fill(left + 2, top + 2, right - 2, bottom - 2, 0x7A26384D);
-        context.fill(left + 1, top + 1, right - 1, top + 2, 0x88FFFFFF);
+        NovaGlassUi.drawPanel(context, left, top, right - left, bottom - top,
+                NovaVisualSettings.accent);
         context.drawText(textRenderer, "N O V A C R A F T   /   PERFORMANCE",
                 left + 16, top + 14, MUTED, false);
         context.drawText(textRenderer, "Optimization Center", left + 16, top + 31, WHITE, false);
