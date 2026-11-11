@@ -120,12 +120,10 @@ public final class NovaBrowserScreen extends Screen {
     @Override public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
         float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
+        NovaGlassUi.drawBackdrop(ctx, width, height);
         int l=12, r=width-12, t=76, b=height-28;
-        ctx.fill(l-4,t-4,r+4,b+4,withAlpha(0x304CAEDC,entrance));
-        ctx.fill(l,t,r,b,withAlpha(0xB9121D2D,entrance));
-        ctx.fill(l+2,t+2,r-2,b-2,withAlpha(0x72283D55,entrance));
-        ctx.fill(l+1,t+1,r-1,t+2,withAlpha(0x88FFFFFF,entrance));
-        ctx.fill(l+12,t+42,r-12,t+43,0x558BD7F5);
+        NovaGlassUi.drawPanel(ctx, l, t, r-l, b-t, NovaVisualSettings.accent);
+        NovaGlassUi.drawDivider(ctx, l+12, t+42, r-l-24, 0x558BD7F5);
         ctx.drawText(textRenderer,"N O V A   /   S P A T I A L   B R O W S E R",l+12,t+10,0xFFB9D0E5,false);
         ctx.drawText(textRenderer,title,l+12,t+17,0xFFFFFFFF,false);
         ctx.drawText(textRenderer,status,l+12,t+30,0xFF83CFF4,false);
@@ -155,10 +153,7 @@ public final class NovaBrowserScreen extends Screen {
     private void glassButton(DrawContext ctx,int x,int y,int w,int h,String label,int mx,int my) {
         boolean hover=mx>=x&&mx<=x+w&&my>=y&&my<=y+h;
         int glow=hover?(0x70+(int)(35*(0.5+0.5*Math.sin(System.currentTimeMillis()/150.0)))):0x55;
-        ctx.fill(x-2,y-2,x+w+2,y+h+2,hover?(glow<<24)|0x72D8FF:0x554B9CC8);
-        ctx.fill(x,y,x+w,y+h,hover?0xE53C5873:0xC51B2B40);
-        ctx.fill(x+2,y+1,x+w-2,y+2,0x66FFFFFF);
-        ctx.fill(x+1,y+1,x+2,y+h-1,hover?0xFFB9EEFF:0x8878CFF2);
+        NovaGlassUi.drawCard(ctx, x, y, w, h, hover);
         ctx.drawText(textRenderer,label,x+(w-textRenderer.getWidth(label))/2,y+6,0xFFFFFFFF,false);
     }
 
