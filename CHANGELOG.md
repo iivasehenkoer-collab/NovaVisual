@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.13.0 - development
+- Replaced the single-waypoint model with a persistent collection of up to 12 named waypoints.
+- Added the Waypoint Manager screen: save the current location under a custom name, select the active destination, delete entries and page through the saved list.
+- Saving an existing name (case-insensitive) updates that entry; F8 updates the active point in place or creates Quick when none is active, and F9 deletes the active point.
+- Moved waypoint persistence to config/novavisual-waypoints.properties so waypoint data remains separate from visual preferences.
+- Migrates the legacy single waypoint from the 1.12.0 settings file on first launch.
+- Updated the Waypoint HUD to display the active waypoint name and preserve dimension-aware navigation.
+- Gradle CI and in-game verification are separate checks for this revision.
+
 ## 1.12.0 - development
 - Added a single persistent client waypoint: F8 saves/replaces the current block position and F9 clears it.
 - Added a dimension-aware Waypoint HUD with a relative forward/left/right/back arrow, horizontal distance, saved XYZ and vertical offset.

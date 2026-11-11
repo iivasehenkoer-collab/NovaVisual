@@ -14,10 +14,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.Locale;
 
-/**
- * A single persistent client-side waypoint. F8 stores the current block position;
- * F9 clears it. Navigation is displayed only in the dimension where it was saved.
- */
+/** Displays the selected entry from the persistent multi-waypoint collection. */
 public final class NovaWaypointHud {
     private static KeyBinding setWaypointKey;
     private static KeyBinding clearWaypointKey;
@@ -50,41 +47,47 @@ public final class NovaWaypointHud {
             if (client.player == null || client.world == null) continue;
 
             var position = client.player.getBlockPos();
-            NovaVisualSettings.waypointX = position.getX();
-            NovaVisualSettings.waypointY = position.getY();
-            NovaVisualSettings.waypointZ = position.getZ();
-            NovaVisualSettings.waypointDimension = client.world.getRegistryKey().getValue().toString();
-            NovaVisualSettings.waypointSet = true;
-            NovaVisualSettings.save();
+            String name = NovaWaypointStore.updateActivePosition(
+                    position.getX(),
+                    position.getY(),
+                    position.getZ(),
+                    client.world.getRegistryKey().getValue().toString()
+            );
 
-            client.player.sendMessage(Text.literal(String.format(Locale.ROOT,
-                    "NovaVisual: waypoint saved at %d %d %d",
-                    position.getX(), position.getY(), position.getZ())), true);
+            String message = name == null
+                    ? "NovaVisual: waypoint list is full"
+                    : String.format(Locale.ROOT, "NovaVisual: updated %s at %d %d %d",
+                    name, position.getX(), position.getY(), position.getZ());
+            client.player.sendMessage(Text.literal(message), true);
         }
 
         while (clearWaypointKey.wasPressed()) {
-            NovaVisualSettings.waypointSet = false;
-            NovaVisualSettings.waypointDimension = "";
-            NovaVisualSettings.save();
+            String removed = NovaWaypointStore.removeActive();
             if (client.player != null) {
-                client.player.sendMessage(Text.literal("NovaVisual: waypoint cleared"), true);
+                String message = removed == null
+                        ? "NovaVisual: no active waypoint"
+                        : "NovaVisual: deleted waypoint " + removed;
+                client.player.sendMessage(Text.literal(message), true);
             }
         }
     }
 
     private static void render(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (!NovaVisualSettings.waypointHud || !NovaVisualSettings.waypointSet
-                || client.player == null || client.world == null
+        if (!NovaVisualSettings.waypointHud || client.player == null || client.world == null
                 || client.options.hudHidden || client.currentScreen != null) {
             return;
         }
+
+        var activeWaypoint = NovaWaypointStore.active();
+        if (activeWaypoint.isEmpty()) return;
+        NovaWaypointStore.Waypoint waypoint = activeWaypoint.get();
 
         int screenWidth = context.getScaledWindowWidth();
         int screenHeight = context.getScaledWindowHeight();
         if (screenWidth < 120 || screenHeight < 90) return;
 
-        int panelWidth = Math.min(260, screenWidth - 16);
+        int panelWidth = Math.min(292, screenWidth - 16);
         int panelHeight = 49;
         int panelX = (screenWidth - panelWidth) / 2;
         int preferredY = NovaVisualSettings.compassHud ? 108 : 64;
@@ -94,14 +97,16 @@ public final class NovaWaypointHud {
         String secondLine;
         int statusColor = 0xFF7DD3FC;
         String currentDimension = client.world.getRegistryKey().getValue().toString();
+        String waypointName = waypoint.name().toUpperCase(Locale.ROOT);
 
-        if (!currentDimension.equals(NovaVisualSettings.waypointDimension)) {
-            firstLine = "WAYPOINT  ·  " + shortDimension(NovaVisualSettings.waypointDimension);
-            secondLine = "Switch to the saved dimension to navigate";
+        if (!currentDimension.equals(waypoint.dimension())) {
+            firstLine = waypointName + "  ·  DIMENSION MISMATCH";
+            secondLine = "Saved in " + shortDimension(waypoint.dimension())
+                    + "  ·  XYZ " + waypoint.x() + " " + waypoint.y() + " " + waypoint.z();
             statusColor = 0xFFFFC857;
         } else {
-            double dx = NovaVisualSettings.waypointX + 0.5 - client.player.getX();
-            double dz = NovaVisualSettings.waypointZ + 0.5 - client.player.getZ();
+            double dx = waypoint.x() + 0.5 - client.player.getX();
+            double dz = waypoint.z() + 0.5 - client.player.getZ();
             int distance = (int) Math.round(Math.sqrt(dx * dx + dz * dz));
             float bearing = (float) Math.toDegrees(Math.atan2(-dx, dz));
             float relative = MathHelper.wrapDegrees(bearing - client.player.getYaw());
@@ -123,15 +128,15 @@ public final class NovaWaypointHud {
             }
 
             firstLine = distance <= 2
-                    ? "WAYPOINT  ·  ARRIVED"
-                    : String.format(Locale.ROOT, "WAYPOINT  %s  %dm  ·  %s", arrow, distance, side);
-            int deltaY = NovaVisualSettings.waypointY - client.player.getBlockY();
+                    ? waypointName + "  ·  ARRIVED"
+                    : String.format(Locale.ROOT, "%s  %s  %dm  ·  %s",
+                    waypointName, arrow, distance, side);
+            int deltaY = waypoint.y() - client.player.getBlockY();
             secondLine = String.format(Locale.ROOT, "XYZ  %d %d %d  ·  ΔY %+d",
-                    NovaVisualSettings.waypointX, NovaVisualSettings.waypointY,
-                    NovaVisualSettings.waypointZ, deltaY);
+                    waypoint.x(), waypoint.y(), waypoint.z(), deltaY);
         }
 
-        String controls = "F8  SET HERE     F9  CLEAR";
+        String controls = "F8  UPDATE ACTIVE     F9  DELETE ACTIVE";
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
                 panelY + panelHeight + 2, 0x5039BDF8);
         context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);

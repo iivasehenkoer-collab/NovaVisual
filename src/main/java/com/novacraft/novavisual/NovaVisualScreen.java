@@ -61,8 +61,9 @@ public final class NovaVisualScreen extends Screen {
                 .dimensions(rightX, firstY + step * 5, 220, 22).build());
         addDrawableChild(toggleButton(rightX, firstY + step * 6, "Compass HUD",
                 () -> NovaVisualSettings.compassHud, value -> NovaVisualSettings.compassHud = value));
-        addDrawableChild(toggleButton(rightX, firstY + step * 7, "Waypoint HUD",
-                () -> NovaVisualSettings.waypointHud, value -> NovaVisualSettings.waypointHud = value));
+        addDrawableChild(ButtonWidget.builder(Text.literal("Waypoint Manager"),
+                button -> { if (client != null) client.setScreen(new NovaWaypointScreen(0)); })
+                .dimensions(rightX, firstY + step * 7, 220, 22).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Done"), button -> close())
                 .dimensions(rightX, firstY + step * 8, 220, 22).build());
     }
@@ -134,7 +135,7 @@ public final class NovaVisualScreen extends Screen {
                 "Accent: " + accentName(), "OPTIMIZATION CENTER", "COSMETICS / SKIN STUDIO",
                 "MODRINTH / MOD LIBRARY", "INTERNET / WEB", "HUD / LAYOUT",
                 "COMPASS HUD  ·  " + (NovaVisualSettings.compassHud ? "ON" : "OFF"),
-                "WAYPOINT HUD  ·  " + (NovaVisualSettings.waypointHud ? "ON" : "OFF"), "DONE"
+                "WAYPOINT MANAGER", "DONE"
         };
         for (int i = 0; i < actions.length; i++) {
             glassButton(context, rightX, firstY + i * step, 220, 22,

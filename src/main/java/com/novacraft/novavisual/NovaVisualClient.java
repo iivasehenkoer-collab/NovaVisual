@@ -27,7 +27,11 @@ public final class NovaVisualClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         NovaVisualSettings.load();
-        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> NovaVisualSettings.save());
+        NovaWaypointStore.load();
+        ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
+            NovaVisualSettings.save();
+            NovaWaypointStore.save();
+        });
 
         openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.novavisual.open_menu",
