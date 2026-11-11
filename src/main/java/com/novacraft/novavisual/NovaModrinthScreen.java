@@ -203,15 +203,13 @@ public final class NovaModrinthScreen extends Screen {
 
     @Override public void render(DrawContext ctx, int mx, int my, float delta) {
         renderBackground(ctx, mx, my, delta);
-        ctx.fill(0, 0, width, height, 0xD908101B);
+        NovaGlassUi.drawBackdrop(ctx, width, height);
         super.render(ctx, mx, my, delta);
         float entrance = NovaVisualSettings.animatedMenu ? easeOut(Math.min(1f, (System.currentTimeMillis()-openedAt)/420f)) : 1f;
         int left = Math.max(12, width / 2 - 210), right = width - left;
         int top = 54, bottom = height - 40;
-        ctx.fill(left - 4, top - 4, right + 4, bottom + 4, withAlpha(0x304CAEDC, entrance));
-        ctx.fill(left, top, right, bottom, withAlpha(0xB9121D2D, entrance));
-        ctx.fill(left + 2, top + 2, right - 2, bottom - 2, withAlpha(0x72283D55, entrance));
-        ctx.fill(left + 1, top + 1, right - 1, top + 2, withAlpha(0x88FFFFFF, entrance));
+        NovaGlassUi.drawPanel(ctx, left, top, right - left, bottom - top,
+                NovaVisualSettings.accent);
         ctx.fill(left + 12, top + 47, right - 12, top + 48, 0x558BD7F5);
         ctx.drawText(textRenderer, "MODRINTH  /  DISCOVER", left + 14, top + 11, 0xFFFFFFFF, false);
         ctx.drawText(textRenderer, "Find your next world-changing mod", left + 14, top + 25, 0xFFB9D0E5, false);
@@ -219,9 +217,7 @@ public final class NovaModrinthScreen extends Screen {
         for (int i = 0; i < projects.size(); i++) {
             Project p = projects.get(i);
             int y = 76 + i * 42;
-            ctx.fill(left + 8, y - 4, right - 8, y + 35, 0x554B9CC8);
-            ctx.fill(left + 10, y - 2, right - 10, y + 33, 0xAA1B2C40);
-            ctx.fill(left + 11, y - 1, right - 11, y, 0x55FFFFFF);
+            NovaGlassUi.drawCard(ctx, left + 8, y - 4, right - left - 16, 39, false);
             ctx.drawText(textRenderer, textRenderer.trimToWidth(p.title, right - left - 112), left + 18, y + 1, 0xFFFFFFFF, false);
             String detail = p.author + "  ·  " + compact(p.downloads) + " downloads";
             ctx.drawText(textRenderer, textRenderer.trimToWidth(detail, right - left - 112), left + 18, y + 15, 0xFFB3C8DC, false);
