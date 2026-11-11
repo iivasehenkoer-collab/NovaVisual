@@ -23,7 +23,7 @@ public final class NovaGlassUi {
         roundedFill(context, x - 2, y - 2, width + 4, height + 4, radius + 2, 0x4A8DDCFF);
         roundedFill(context, x, y, width, height, radius, 0xC91B2B3D);
         roundedFill(context, x + 1, y + 1, width - 2, height - 2, Math.max(1, radius - 1), 0xA92A3D50);
-        roundedFill(context, x + 2, y + 2, width - 4, Math.max(2, height / 3), Math.max(1, radius - 2), 0x182FFFFFF);
+        roundedFill(context, x + 2, y + 2, width - 4, Math.max(2, height / 3), Math.max(1, radius - 2), 0x182FFFFF);
         context.fill(x + radius, y + 1, x + width - radius, y + 2, 0x88FFFFFF);
         context.fill(x + 1, y + radius, x + 2, y + height - radius, 0x557DCFF8);
     }
