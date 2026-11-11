@@ -43,13 +43,13 @@ public final class NovaGlassUi {
 
     private static void drawGlow(DrawContext context, int centerX, int centerY, int radius, int color) {
         int safeRadius = Math.max(1, radius);
-        for (int offset = -safeRadius; offset <= safeRadius; offset += 3) {
+        for (int offset = -safeRadius; offset <= safeRadius; offset += 8) {
             double ratio = offset / (double) safeRadius;
             int halfWidth = (int) (safeRadius * Math.sqrt(Math.max(0.0, 1.0 - ratio * ratio)));
             int alpha = (color >>> 24) & 255;
             int fade = (int) (alpha * (1.0 - Math.abs(ratio)) * 0.16);
             context.fill(centerX - halfWidth, centerY + offset,
-                    centerX + halfWidth, centerY + offset + 3, (fade << 24) | (color & 0x00FFFFFF));
+                    centerX + halfWidth, centerY + offset + 8, (fade << 24) | (color & 0x00FFFFFF));
         }
     }
 
