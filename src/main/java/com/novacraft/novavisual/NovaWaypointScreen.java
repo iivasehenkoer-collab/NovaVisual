@@ -127,7 +127,7 @@ public final class NovaWaypointScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fill(0, 0, width, height, 0xD908101B);
+        NovaGlassUi.drawBackdrop(context, width, height);
 
         int panelWidth = Math.min(380, width - 12);
         int panelHeight = Math.min(312, height - 8);
@@ -136,10 +136,8 @@ public final class NovaWaypointScreen extends Screen {
         int right = left + panelWidth;
         int bottom = top + panelHeight;
 
-        context.fill(left - 4, top - 4, right + 4, bottom + 4, 0x5039BDF8);
-        context.fill(left, top, right, bottom, 0xE8141D2B);
-        context.fill(left + 2, top + 2, right - 2, bottom - 2, 0x7A26384D);
-        context.fill(left + 1, top + 1, right - 1, top + 2, 0x88FFFFFF);
+        NovaGlassUi.drawPanel(context, left, top, panelWidth, panelHeight,
+                NovaVisualSettings.accent);
 
         context.drawText(textRenderer, "N O V A C R A F T   /   NAVIGATION",
                 left + 14, top + 10, MUTED, false);
