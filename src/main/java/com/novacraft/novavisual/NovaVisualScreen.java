@@ -96,12 +96,10 @@ public final class NovaVisualScreen extends Screen {
         int right = center + 250;
         int bottom = height / 2 + 160;
 
-        context.fill(left - 5, top - 5, right + 5, bottom + 5, withAlpha(0x302A9DCE, entrance));
-        context.fill(left, top, right, bottom, withAlpha(0xE8141D2B, entrance));
-        context.fill(left + 2, top + 2, right - 2, bottom - 2, withAlpha(0x7A26384D, entrance));
-        context.fill(left + 1, top + 1, right - 1, top + 2, withAlpha(0x88FFFFFF, entrance));
-        context.fill(left + 1, top + 1, left + 2, bottom - 1, withAlpha(0x5599DFFF, entrance));
-        context.fill(left + 14, top + 48, right - 14, top + 49, 0x5595D9F5);
+        NovaGlassUi.drawBackdrop(context, width, height);
+        NovaGlassUi.drawPanel(context, left, top, right - left, bottom - top,
+                NovaVisualSettings.accent);
+        NovaGlassUi.drawDivider(context, left + 16, top + 48, right - left - 32, 0x6695D9F5);
         context.drawText(textRenderer, "N O V A C R A F T   /   S P A T I A L   U I",
                 left + 18, top + 13, MUTED, false);
         context.drawText(textRenderer, "NovaVisual", left + 18, top + 30, 0xFFFFFFFF, false);
@@ -146,10 +144,7 @@ public final class NovaVisualScreen extends Screen {
     private void glassButton(DrawContext ctx, int x, int y, int w, int h,
                              String label, int mouseX, int mouseY) {
         boolean hover = mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h;
-        ctx.fill(x - 1, y - 1, x + w + 1, y + h + 1, hover ? 0xAA72D8FF : 0x554B9CC8);
-        ctx.fill(x, y, x + w, y + h, hover ? 0xE53C5873 : 0xC51B2B40);
-        ctx.fill(x + 2, y + 1, x + w - 2, y + 2, 0x66FFFFFF);
-        ctx.fill(x + 1, y + 1, x + 2, y + h - 1, hover ? 0xFFB9EEFF : 0x8878CFF2);
+        NovaGlassUi.drawCard(ctx, x, y, w, h, hover);
         ctx.drawText(textRenderer, textRenderer.trimToWidth(label, w - 20),
                 x + 12, y + 7, hover ? 0xFFFFFFFF : 0xFFE4F2FF, false);
     }
