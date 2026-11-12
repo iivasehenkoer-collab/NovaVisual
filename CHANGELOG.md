@@ -1,10 +1,16 @@
 # Changelog
 
+## 1.13.2 - development
+- Fullbright now captures the user's gamma before applying maximum brightness and persists that restore value in `novavisual.properties`.
+- Disabling Fullbright restores the captured gamma even when Minecraft was restarted while Fullbright remained enabled; malformed or out-of-range stored values safely fall back/clamp.
+- Advanced the settings format to version 9 while preserving backward-compatible defaults.
+- GitHub Actions build result is pending for this revision; in-game verification has not been performed.
+
 ## 1.13.1 - development
 - Added shared NovaGlassUi primitives for rounded translucent panels, glass cards, subtle highlights and ambient cyan/violet glow.
 - Refreshed the main menu, HUD Layout, Waypoint Manager, Optimization Center, Cosmetics Studio, Modrinth browser and lightweight browser with a consistent visionOS-inspired visual language.
 - Fixed the glass highlight ARGB color constant; no shaders, mixins or third-party visual assets are required.
-- Gradle CI and in-game verification are pending for this revision.
+- GitHub Actions build succeeded for the glass UI fix in run #43076946094; in-game verification has not been performed.
 
 ## 1.13.0 - development
 - Replaced the single-waypoint model with a persistent collection of up to 12 named waypoints.
