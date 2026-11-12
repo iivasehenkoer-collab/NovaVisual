@@ -19,6 +19,8 @@ public final class NovaVisualSettings {
     public static boolean damageFlash = true;
     public static boolean particles = false;
     public static boolean fullbright = false;
+    public static double fullbrightRestoreGamma = 0.5;
+    public static boolean fullbrightGammaCaptured = false;
     public static boolean enemyEsp = false;
     public static boolean eventAutoMarker = true;
     public static boolean combatExitWarning = true;
@@ -68,6 +70,8 @@ public final class NovaVisualSettings {
         damageFlash = bool(values, "damageFlash", damageFlash);
         particles = bool(values, "particles", particles);
         fullbright = bool(values, "fullbright", fullbright);
+        fullbrightRestoreGamma = clampGamma(decimal(values, "fullbrightRestoreGamma", fullbrightRestoreGamma));
+        fullbrightGammaCaptured = bool(values, "fullbrightGammaCaptured", fullbrightGammaCaptured);
         enemyEsp = bool(values, "enemyEsp", enemyEsp);
         eventAutoMarker = bool(values, "eventAutoMarker", eventAutoMarker);
         combatExitWarning = bool(values, "combatExitWarning", combatExitWarning);
@@ -105,12 +109,14 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "8");
+        values.setProperty("formatVersion", "9");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
         values.setProperty("particles", Boolean.toString(particles));
         values.setProperty("fullbright", Boolean.toString(fullbright));
+        values.setProperty("fullbrightRestoreGamma", Double.toString(fullbrightRestoreGamma));
+        values.setProperty("fullbrightGammaCaptured", Boolean.toString(fullbrightGammaCaptured));
         values.setProperty("enemyEsp", Boolean.toString(enemyEsp));
         values.setProperty("eventAutoMarker", Boolean.toString(eventAutoMarker));
         values.setProperty("combatExitWarning", Boolean.toString(combatExitWarning));
@@ -168,6 +174,19 @@ public final class NovaVisualSettings {
         } catch (RuntimeException ignored) {
             return fallback;
         }
+    }
+
+    private static double decimal(Properties values, String key, double fallback) {
+        try {
+            double parsed = Double.parseDouble(values.getProperty(key, Double.toString(fallback)).trim());
+            return Double.isFinite(parsed) ? parsed : fallback;
+        } catch (RuntimeException ignored) {
+            return fallback;
+        }
+    }
+
+    private static double clampGamma(double gamma) {
+        return Math.max(0.0, Math.min(1.0, gamma));
     }
 
     private static int parseHex(String value, int fallback) {
