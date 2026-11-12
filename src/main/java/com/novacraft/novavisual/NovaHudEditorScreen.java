@@ -1,5 +1,6 @@
 package com.novacraft.novavisual;
 
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -10,8 +11,10 @@ public final class NovaHudEditorScreen extends Screen {
     private static final int MUTED = 0xFF9CB2C8;
     private static NovaHudLayout.Widget selected = NovaHudLayout.Widget.COMPACT;
     private boolean dragging;
-    private int dragOffsetX;
-    private int dragOffsetY;
+    private int dragStartX;
+    private int dragStartY;
+    private double draggedOffsetX;
+    private double draggedOffsetY;
 
     public NovaHudEditorScreen() { super(Text.literal("NovaVisual HUD Editor")); }
 
@@ -83,17 +86,21 @@ public final class NovaHudEditorScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) return true;
-        if (button != 0) return false;
+    public boolean mouseClicked(Click click, boolean doubled) {
+        if (super.mouseClicked(click, doubled)) return true;
+        if (click.button() != 0) return false;
+        double mouseX = click.x();
+        double mouseY = click.y();
         for (NovaHudLayout.Widget widget : NovaHudLayout.Widget.values()) {
             NovaHudLayout.Bounds b = NovaHudLayout.previewBounds(widget, width, height);
             if (mouseX >= b.x() && mouseX <= b.x() + b.width()
                     && mouseY >= b.y() && mouseY <= b.y() + b.height()) {
                 selected = widget;
                 dragging = true;
-                dragOffsetX = (int) mouseX - b.x();
-                dragOffsetY = (int) mouseY - b.y();
+                dragStartX = b.x();
+                dragStartY = b.y();
+                draggedOffsetX = 0.0;
+                draggedOffsetY = 0.0;
                 return true;
             }
         }
@@ -101,25 +108,29 @@ public final class NovaHudEditorScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (dragging && button == 0) {
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
+        if (dragging && click.button() == 0) {
+            draggedOffsetX += offsetX;
+            draggedOffsetY += offsetY;
             NovaHudLayout.Bounds b = NovaHudLayout.previewBounds(selected, width, height);
-            NovaHudLayout.move(selected, (int) mouseX - dragOffsetX, (int) mouseY - dragOffsetY,
+            NovaHudLayout.move(selected,
+                    (int) Math.round(dragStartX + draggedOffsetX),
+                    (int) Math.round(dragStartY + draggedOffsetY),
                     Math.max(1, Math.round(b.width() / b.scale())),
                     Math.max(1, Math.round(b.height() / b.scale())), width, height);
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(click, offsetX, offsetY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
-        if (button == 0 && dragging) {
+    public boolean mouseReleased(Click click) {
+        if (click.button() == 0 && dragging) {
             dragging = false;
             NovaVisualSettings.save();
             return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     @Override
