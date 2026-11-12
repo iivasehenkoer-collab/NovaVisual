@@ -20,7 +20,6 @@ import java.util.Set;
 public final class NovaVisualClient implements ClientModInitializer {
     public static final String MOD_ID = "novavisual";
     private static KeyBinding openMenuKey;
-    private static double previousGamma = 1.0;
     private static boolean fullbrightWasApplied = false;
     private static final Set<Entity> highlightedEntities = new HashSet<>();
 
@@ -75,13 +74,20 @@ public final class NovaVisualClient implements ClientModInitializer {
 
         if (NovaVisualSettings.fullbright) {
             if (!fullbrightWasApplied) {
-                previousGamma = client.options.getGamma().getValue();
+                if (!NovaVisualSettings.fullbrightGammaCaptured) {
+                    NovaVisualSettings.fullbrightRestoreGamma = Math.max(0.0,
+                            Math.min(1.0, client.options.getGamma().getValue()));
+                    NovaVisualSettings.fullbrightGammaCaptured = true;
+                    NovaVisualSettings.save();
+                }
                 fullbrightWasApplied = true;
             }
             client.options.getGamma().setValue(1.0);
-        } else if (fullbrightWasApplied) {
-            client.options.getGamma().setValue(previousGamma);
+        } else if (fullbrightWasApplied || NovaVisualSettings.fullbrightGammaCaptured) {
+            client.options.getGamma().setValue(NovaVisualSettings.fullbrightRestoreGamma);
             fullbrightWasApplied = false;
+            NovaVisualSettings.fullbrightGammaCaptured = false;
+            NovaVisualSettings.save();
         }
     }
 
