@@ -2,6 +2,13 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.13.2 development
+
+### Fullbright persistence fix
+- Fullbright now remembers the gamma value that was active before it was enabled.
+- The saved value is stored in `config/novavisual.properties` and restored when Fullbright is disabled, including after restarting Minecraft while the feature was enabled.
+- Existing configuration files remain compatible; the settings format advances to version 9.
+
 ## Version 1.13.1 development
 
 ### visionOS-inspired interface refresh
