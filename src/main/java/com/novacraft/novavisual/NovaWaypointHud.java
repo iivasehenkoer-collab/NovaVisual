@@ -137,22 +137,26 @@ public final class NovaWaypointHud {
         }
 
         String controls = "F8  UPDATE ACTIVE     F9  DELETE ACTIVE";
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.WAYPOINT,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
-                panelY + panelHeight + 2, 0x5039BDF8);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
-        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaVisualSettings.accent);
+                panelY + panelHeight + 2, NovaHudLayout.color(NovaHudLayout.Widget.WAYPOINT, 0x5039BDF8));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.WAYPOINT, 0xB9121D2D));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaHudLayout.color(NovaHudLayout.Widget.WAYPOINT, NovaVisualSettings.accent));
+        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.WAYPOINT, NovaVisualSettings.accent));
 
         int textWidth = Math.max(1, panelWidth - 16);
         context.drawText(client.textRenderer,
                 client.textRenderer.trimToWidth(firstLine, textWidth),
-                panelX + 8, panelY + 6, statusColor, false);
+                panelX + 8, panelY + 6, NovaHudLayout.color(NovaHudLayout.Widget.WAYPOINT, statusColor), false);
         context.drawText(client.textRenderer,
                 client.textRenderer.trimToWidth(secondLine, textWidth),
-                panelX + 8, panelY + 20, 0xFFEAF6FF, false);
+                panelX + 8, panelY + 20, NovaHudLayout.color(NovaHudLayout.Widget.WAYPOINT, 0xFFEAF6FF), false);
         context.drawText(client.textRenderer,
                 client.textRenderer.trimToWidth(controls, textWidth),
-                panelX + 8, panelY + 35, 0xFF9CB2C8, false);
+                panelX + 8, panelY + 35, NovaHudLayout.color(NovaHudLayout.Widget.WAYPOINT, 0xFF9CB2C8), false);
+        }
+
     }
 
     private static String shortDimension(String dimension) {

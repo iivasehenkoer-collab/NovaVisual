@@ -102,6 +102,7 @@ public final class NovaVisualSettings {
         waypointDimension = values.getProperty("waypointDimension", waypointDimension);
         if (waypointDimension.length() > 96) waypointDimension = waypointDimension.substring(0, 96);
         if (waypointDimension.isBlank()) waypointSet = false;
+        NovaHudLayout.load(values);
         accent = parseHex(values.getProperty("accent"), accent);
         wingStyle = clamp(integer(values, "wingStyle", wingStyle), 0, 4);
         optimizationPreset = clamp(integer(values, "optimizationPreset", optimizationPreset), 0, 2);
@@ -109,7 +110,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "9");
+        values.setProperty("formatVersion", "10");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -148,6 +149,7 @@ public final class NovaVisualSettings {
         values.setProperty("waypointY", Integer.toString(waypointY));
         values.setProperty("waypointZ", Integer.toString(waypointZ));
         values.setProperty("waypointDimension", waypointDimension);
+        NovaHudLayout.save(values);
 
         Path file = configPath();
         try {

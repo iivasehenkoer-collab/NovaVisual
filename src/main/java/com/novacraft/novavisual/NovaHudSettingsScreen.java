@@ -47,7 +47,10 @@ public final class NovaHudSettingsScreen extends Screen {
                     NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
                     button.setMessage(Text.literal("Position: " + anchorName()));
                 }).dimensions(buttonX, rowStartY + rowStep * 3, 220, 20).build());
-                addBackButton(buttonX, rowStartY + rowStep * 4);
+                addDrawableChild(ButtonWidget.builder(Text.literal("Open HUD Editor"), button -> {
+                    if (client != null) client.setScreen(new NovaHudEditorScreen());
+                }).dimensions(buttonX, rowStartY + rowStep * 4, 220, 20).build());
+                addBackButton(buttonX, rowStartY + rowStep * 5);
             }
             case COMBAT -> {
                 addToggle(buttonX, rowStartY, "Keystrokes",
@@ -125,7 +128,7 @@ public final class NovaHudSettingsScreen extends Screen {
     }
 
     private int panelHeight() {
-        return selectedPage == Page.STATUS ? 236 : 212;
+        return selectedPage == Page.STATUS ? 236 : selectedPage == Page.LAYOUT ? 244 : 212;
     }
 
     private int panelTop() {
@@ -157,7 +160,7 @@ public final class NovaHudSettingsScreen extends Screen {
                 left + 16, top + 10, MUTED, false);
         context.drawText(textRenderer, "HUD Layout  ·  " + selectedPage.name(),
                 left + 16, top + 26, WHITE, false);
-        context.drawText(textRenderer, "Select a category; widget toggles are saved on exit.",
+        context.drawText(textRenderer, "Select a category or open the mouse-driven HUD editor.",
                 left + 16, top + 42, 0xFFB6CBE0, false);
 
         super.render(context, mouseX, mouseY, delta);

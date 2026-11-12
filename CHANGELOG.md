@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.13.3 - development
+- Added a mouse-driven HUD editor for Compact HUD, Keystrokes, Armor Durability, Potion Effects, Player Resources, World Info, Compass, Totem Counter, PvP Target and Waypoint widgets.
+- Added independent widget movement, size (50%–200%) and opacity (20%–100%) controls, with a per-widget reset action.
+- Persisted normalized positions and appearance values in novavisual.properties; widgets keep their previous automatic positions until moved.
+- Settings format advances to version 10. The editor uses the Minecraft 1.21.11 DrawContext matrix stack; in-game verification remains pending.
+
 ## 1.13.2 - development
 - Fullbright now captures the user's gamma before applying maximum brightness and persists that restore value in `novavisual.properties`.
 - Disabling Fullbright restores the captured gamma even when Minecraft was restarted while Fullbright remained enabled; malformed or out-of-range stored values safely fall back/clamp.

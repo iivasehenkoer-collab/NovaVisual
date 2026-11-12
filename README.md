@@ -2,6 +2,14 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.13.3 development
+
+### HUD Editor
+- Added a mouse-driven editor for independently moving HUD widgets.
+- Added per-widget size controls (50%–200%), opacity controls (20%–100%) and a reset action.
+- Positions are normalized to the scaled GUI size and saved in config/novavisual.properties.
+- Untouched widgets keep their previous automatic placement; settings format advances to version 10.
+
 ## Version 1.13.2 development
 
 ### Fullbright persistence fix

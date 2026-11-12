@@ -188,13 +188,15 @@ public final class NovaVisualEffects {
         int panelX = right ? screenWidth - panelWidth - 8 : 8;
         int panelY = bottom ? screenHeight - panelHeight - 8 : 8;
 
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
-        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaVisualSettings.accent);
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.COMPACT,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.COMPACT, 0xB9121D2D));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaHudLayout.color(NovaHudLayout.Widget.COMPACT, NovaVisualSettings.accent));
+        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.COMPACT, NovaVisualSettings.accent));
         for (int i = 0; i < lines.size(); i++) {
             String line = client.textRenderer.trimToWidth(lines.get(i), textWidth);
             context.drawText(client.textRenderer, line, panelX + 8, panelY + 6 + i * 13,
-                    colors.get(i), false);
+                    NovaHudLayout.color(NovaHudLayout.Widget.COMPACT, colors.get(i)), false);
         }
 
         if (graphHeight > 0) {
@@ -210,11 +212,13 @@ public final class NovaVisualEffects {
                     int barHeight = Math.max(1, Math.min(graphBottom - graphTop,
                             fps * (graphBottom - graphTop) / 240));
                     context.fill(barX, graphBottom - barHeight, Math.max(barX + 1, nextX - 1),
-                            graphBottom, NovaVisualSettings.accent);
+                            graphBottom, NovaHudLayout.color(NovaHudLayout.Widget.COMPACT, NovaVisualSettings.accent));
                     index++;
                 }
             }
         }
+        }
+
     }
 
     private static void renderLowHealthVignette(DrawContext context, MinecraftClient client) {
@@ -265,12 +269,15 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.keystrokesHud) {
             int x = 10;
             int y = height - 76;
+            try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.KEYSTROKES,
+                    x, y, 74, 70, width, height)) {
             drawKey(context, client, x + 25, y, "W", client.options.forwardKey.isPressed());
             drawKey(context, client, x, y + 25, "A", client.options.leftKey.isPressed());
             drawKey(context, client, x + 25, y + 25, "S", client.options.backKey.isPressed());
             drawKey(context, client, x + 50, y + 25, "D", client.options.rightKey.isPressed());
             drawKey(context, client, x, y + 50, "LMB", GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS);
             drawKey(context, client, x + 50, y + 50, "RMB", GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_RIGHT) == GLFW.GLFW_PRESS);
+            }
         }
         if (NovaVisualSettings.armorDurabilityHud) {
             renderArmorDurability(context, client);
@@ -293,9 +300,12 @@ public final class NovaVisualEffects {
             String label = "TOTEMS  " + count;
             int x = width - client.textRenderer.getWidth(label) - 18;
             int y = height - 22;
-            context.fill(x - 7, y - 5, width - 8, y + 13, 0xB9121D2D);
-            context.fill(x - 7, y - 5, width - 8, y - 3, NovaVisualSettings.accent);
-            context.drawText(client.textRenderer, label, x, y, 0xFFEAF6FF, false);
+            try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.TOTEMS,
+                    x - 7, y - 5, Math.max(28, width - 8 - (x - 7)), 18, width, height)) {
+            context.fill(x - 7, y - 5, width - 8, y + 13, NovaHudLayout.color(NovaHudLayout.Widget.TOTEMS, 0xB9121D2D));
+            context.fill(x - 7, y - 5, width - 8, y - 3, NovaHudLayout.color(NovaHudLayout.Widget.TOTEMS, NovaVisualSettings.accent));
+            context.drawText(client.textRenderer, label, x, y, NovaHudLayout.color(NovaHudLayout.Widget.TOTEMS, 0xFFEAF6FF), false);
+            }
         }
         if (NovaVisualSettings.targetHud && client.crosshairTarget instanceof EntityHitResult hit
                 && hit.getEntity() instanceof LivingEntity target && target.isAlive()) {
@@ -319,29 +329,31 @@ public final class NovaVisualEffects {
             int x = (width - panelWidth) / 2;
             int y = showRange ? 8 : 12;
             int textWidth = Math.max(1, panelWidth - 14);
-
-            context.fill(x, y, x + panelWidth, y + panelHeight, 0xC9121D2D);
-            context.fill(x, y, x + panelWidth, y + 2, NovaVisualSettings.accent);
+            try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.TARGET,
+                    x, y, panelWidth, panelHeight, width, height)) {
+            context.fill(x, y, x + panelWidth, y + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xC9121D2D));
+            context.fill(x, y, x + panelWidth, y + 2, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, NovaVisualSettings.accent));
             context.drawText(client.textRenderer,
                     client.textRenderer.trimToWidth(name, textWidth),
-                    x + 7, y + 7, 0xFFFFFFFF, false);
+                    x + 7, y + 7, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFFFFFFFF), false);
             context.drawText(client.textRenderer,
                     client.textRenderer.trimToWidth(health, textWidth),
-                    x + 7, y + 20, 0xFFB6CBE0, false);
+                    x + 7, y + 20, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFFB6CBE0), false);
 
             int barY = showRange ? y + 43 : y + 33;
             if (showRange) {
                 context.drawText(client.textRenderer,
                         client.textRenderer.trimToWidth(range, textWidth),
-                        x + 7, y + 31, 0xFF7DD3FC, false);
+                        x + 7, y + 31, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF7DD3FC), false);
             }
             int barLeft = x + 7;
             int barRight = Math.max(barLeft + 1, x + panelWidth - 7);
-            context.fill(barLeft, barY, barRight, barY + 3, 0xFF35465A);
+            context.fill(barLeft, barY, barRight, barY + 3, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF35465A));
             float ratio = target.getMaxHealth() <= 0 ? 0
                     : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
             context.fill(barLeft, barY, barLeft + (int) ((barRight - barLeft) * ratio),
-                    barY + 3, 0xFF55D98B);
+                    barY + 3, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF55D98B));
+            }
         }
     }
 
@@ -363,10 +375,12 @@ public final class NovaVisualEffects {
         String heading = String.format(Locale.ROOT, "HEADING  %03d°  ·  %s",
                 headingDegrees, COMPASS_DIRECTIONS[nearestDirection]);
 
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.COMPASS,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
-                panelY + panelHeight + 2, 0x5039BDF8);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+                panelY + panelHeight + 2, NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, 0x5039BDF8));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, 0xB9121D2D));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, NovaVisualSettings.accent));
 
         float maxVisibleDegrees = Math.min(60.0F, Math.max(0.0F, panelWidth / 2.0F - 10.0F) / 2.0F);
         for (int direction = 0; direction < COMPASS_DIRECTIONS.length; direction++) {
@@ -378,7 +392,7 @@ public final class NovaVisualEffects {
             String label = COMPASS_DIRECTIONS[direction];
             int labelWidth = client.textRenderer.getWidth(label);
             int labelX = markerX - labelWidth / 2;
-            int color = Math.abs(difference) < 22.5F ? 0xFF7DD3FC : 0xFFEAF6FF;
+            int color = Math.abs(difference) < 22.5F ? NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, 0xFF7DD3FC) : NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, 0xFFEAF6FF);
             context.drawText(client.textRenderer, label, labelX, panelY + 5, color, false);
         }
 
@@ -386,15 +400,17 @@ public final class NovaVisualEffects {
             if (Math.abs(offset) > maxVisibleDegrees) continue;
             int tickX = centerX + Math.round(offset * 2.0F);
             int tickHeight = offset % 45 == 0 ? 8 : 4;
-            int tickColor = offset == 0 ? NovaVisualSettings.accent : 0xFF60758B;
+            int tickColor = offset == 0 ? NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, NovaVisualSettings.accent) : NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, 0xFF60758B);
             context.fill(tickX, panelY + 17, tickX + 1, panelY + 17 + tickHeight, tickColor);
         }
 
-        context.fill(centerX - 1, panelY + 16, centerX + 2, panelY + 27, NovaVisualSettings.accent);
+        context.fill(centerX - 1, panelY + 16, centerX + 2, panelY + 27, NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, NovaVisualSettings.accent));
         String trimmedHeading = client.textRenderer.trimToWidth(heading, Math.max(1, panelWidth - 12));
         int headingWidth = client.textRenderer.getWidth(trimmedHeading);
         context.drawText(client.textRenderer, trimmedHeading,
-                centerX - headingWidth / 2, panelY + 28, 0xFFB6CBE0, false);
+                centerX - headingWidth / 2, panelY + 28, NovaHudLayout.color(NovaHudLayout.Widget.COMPASS, 0xFFB6CBE0), false);
+        }
+
     }
 
     private static void renderWorldInfoHud(DrawContext context, MinecraftClient client) {
@@ -443,19 +459,23 @@ public final class NovaVisualEffects {
             }
         }
 
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.WORLD_INFO,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
-                panelY + panelHeight + 2, 0x5039BDF8);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
-        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaVisualSettings.accent);
+                panelY + panelHeight + 2, NovaHudLayout.color(NovaHudLayout.Widget.WORLD_INFO, 0x5039BDF8));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.WORLD_INFO, 0xB9121D2D));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaHudLayout.color(NovaHudLayout.Widget.WORLD_INFO, NovaVisualSettings.accent));
+        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.WORLD_INFO, NovaVisualSettings.accent));
 
         int textMaxWidth = Math.max(1, panelWidth - 16);
         context.drawText(client.textRenderer,
                 client.textRenderer.trimToWidth(environmentLine, textMaxWidth),
-                panelX + 8, panelY + 7, 0xFFEAF6FF, false);
+                panelX + 8, panelY + 7, NovaHudLayout.color(NovaHudLayout.Widget.WORLD_INFO, 0xFFEAF6FF), false);
         context.drawText(client.textRenderer,
                 client.textRenderer.trimToWidth(targetLine, textMaxWidth),
-                panelX + 8, panelY + 21, 0xFFB6CBE0, false);
+                panelX + 8, panelY + 21, NovaHudLayout.color(NovaHudLayout.Widget.WORLD_INFO, 0xFFB6CBE0), false);
+        }
+
     }
 
     private static void renderResourceBarsHud(DrawContext context, MinecraftClient client) {
@@ -466,19 +486,21 @@ public final class NovaVisualEffects {
         int panelX = Math.max(4, screenWidth - panelWidth - 8);
         int panelY = Math.max(4, screenHeight - panelHeight - 30);
 
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.RESOURCES,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
-                panelY + panelHeight + 2, 0x5039BDF8);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
-        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaVisualSettings.accent);
+                panelY + panelHeight + 2, NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0x5039BDF8));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xB9121D2D));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, NovaVisualSettings.accent));
+        context.fill(panelX, panelY, panelX + 2, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, NovaVisualSettings.accent));
         context.drawText(client.textRenderer, "PLAYER STATUS", panelX + 8, panelY + 6,
-                0xFF9CB2C8, false);
+                NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFF9CB2C8), false);
 
         float health = client.player.getHealth();
         float maxHealth = client.player.getMaxHealth();
         float healthRatio = maxHealth <= 0.0F ? 0.0F : clampRatio(health / maxHealth);
-        int healthColor = healthRatio <= 0.25F ? 0xFFFF526B
-                : healthRatio <= 0.50F ? 0xFFFFC857 : 0xFF55D98B;
+        int healthColor = healthRatio <= 0.25F ? NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFFFF526B)
+                : healthRatio <= 0.50F ? NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFFFFC857) : NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFF55D98B);
         drawResourceRow(context, client, panelX, panelY + 18, panelWidth,
                 "HEALTH", String.format(Locale.ROOT, "%.1f / %.0f", health, maxHealth),
                 healthRatio, healthColor);
@@ -486,37 +508,39 @@ public final class NovaVisualEffects {
         int armor = Math.max(0, client.player.getArmor());
         drawResourceRow(context, client, panelX, panelY + 34, panelWidth,
                 "ARMOR", armor + " / 20", clampRatio(armor / 20.0F),
-                armor <= 4 ? 0xFFFFC857 : 0xFF39BDF8);
+                armor <= 4 ? NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFFFFC857) : NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFF39BDF8));
 
         int food = client.player.getHungerManager().getFoodLevel();
         float saturation = client.player.getHungerManager().getSaturationLevel();
         drawResourceRow(context, client, panelX, panelY + 50, panelWidth,
                 "FOOD", String.format(Locale.ROOT, "%d / 20  ·  %.1f SAT", food, saturation),
-                clampRatio(food / 20.0F), food <= 6 ? 0xFFFF526B : 0xFFFFC857);
+                clampRatio(food / 20.0F), food <= 6 ? NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFFFF526B) : NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFFFFC857));
 
         float xpProgress = clampRatio(client.player.experienceProgress);
         String xpValue = String.format(Locale.ROOT, "LV %d  ·  %d%%",
                 client.player.experienceLevel, Math.round(xpProgress * 100.0F));
         drawResourceRow(context, client, panelX, panelY + 66, panelWidth,
-                "EXPERIENCE", xpValue, xpProgress, NovaVisualSettings.accent);
+                "EXPERIENCE", xpValue, xpProgress, NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, NovaVisualSettings.accent));
+        }
+
     }
 
     private static void drawResourceRow(DrawContext context, MinecraftClient client,
                                        int panelX, int rowY, int panelWidth,
                                        String label, String value, float ratio, int barColor) {
         context.drawText(client.textRenderer, label, panelX + 8, rowY + 1,
-                0xFF9CB2C8, false);
+                NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFF9CB2C8), false);
         String trimmedValue = client.textRenderer.trimToWidth(value, panelWidth - 66);
         int valueWidth = client.textRenderer.getWidth(trimmedValue);
         context.drawText(client.textRenderer, trimmedValue,
-                panelX + panelWidth - 8 - valueWidth, rowY + 1, 0xFFEAF6FF, false);
+                panelX + panelWidth - 8 - valueWidth, rowY + 1, NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFFEAF6FF), false);
 
         int barLeft = panelX + 8;
         int barRight = panelX + panelWidth - 8;
         int barY = rowY + 11;
         int barWidth = barRight - barLeft;
         int filledWidth = Math.round(barWidth * clampRatio(ratio));
-        context.fill(barLeft, barY, barRight, barY + 3, 0xFF35465A);
+        context.fill(barLeft, barY, barRight, barY + 3, NovaHudLayout.color(NovaHudLayout.Widget.RESOURCES, 0xFF35465A));
         if (filledWidth > 0) {
             context.fill(barLeft, barY, barLeft + filledWidth, barY + 3, barColor);
         }
@@ -533,6 +557,7 @@ public final class NovaVisualEffects {
         effects.sort((first, second) -> Long.compare(effectSortDuration(first), effectSortDuration(second)));
 
         int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
         int panelWidth = 176;
         int visibleRows = Math.min(8, effects.size());
         int overflow = effects.size() - visibleRows;
@@ -542,14 +567,16 @@ public final class NovaVisualEffects {
         int panelX = compactHudOnRight ? 8 : screenWidth - panelWidth - 8;
         int panelY = 58;
 
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.EFFECTS,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
-                panelY + panelHeight + 2, 0x5039BDF8);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+                panelY + panelHeight + 2, NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0x5039BDF8));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xB9121D2D));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, NovaVisualSettings.accent));
 
         String header = "ACTIVE EFFECTS  ·  " + effects.size();
         context.drawText(client.textRenderer, client.textRenderer.trimToWidth(header, panelWidth - 14),
-                panelX + 7, panelY + 7, 0xFF9CB2C8, false);
+                panelX + 7, panelY + 7, NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xFF9CB2C8), false);
 
         for (int i = 0; i < visibleRows; i++) {
             StatusEffectInstance instance = effects.get(i);
@@ -558,7 +585,8 @@ public final class NovaVisualEffects {
             int effectColor = 0xFF000000 | (rgb & 0x00FFFFFF);
 
             context.fill(panelX + 4, rowY + 1, panelX + panelWidth - 4, rowY + 19, 0x321D2B40);
-            context.fill(panelX + 7, rowY + 6, panelX + 13, rowY + 13, effectColor);
+            context.fill(panelX + 7, rowY + 6, panelX + 13, rowY + 13,
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, effectColor));
 
             String name = instance.getEffectType().value().getName().getString()
                     + " " + romanLevel(instance.getAmplifier());
@@ -569,7 +597,7 @@ public final class NovaVisualEffects {
             int durationX = panelX + panelWidth - 8 - durationWidth;
 
             context.drawText(client.textRenderer, trimmedName, panelX + 17, rowY + 5,
-                    0xFFEAF6FF, false);
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xFFEAF6FF), false);
             context.drawText(client.textRenderer, duration, durationX, rowY + 5,
                     effectDurationColor(instance), false);
         }
@@ -577,8 +605,10 @@ public final class NovaVisualEffects {
         if (overflow > 0) {
             int moreY = panelY + 22 + visibleRows * 20;
             context.drawText(client.textRenderer, "+" + overflow + " more effects",
-                    panelX + 8, moreY + 3, 0xFF9CB2C8, false);
+                    panelX + 8, moreY + 3, NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xFF9CB2C8), false);
         }
+        }
+
     }
 
     private static long effectSortDuration(StatusEffectInstance instance) {
@@ -594,10 +624,10 @@ public final class NovaVisualEffects {
     }
 
     private static int effectDurationColor(StatusEffectInstance instance) {
-        if (instance.isInfinite()) return 0xFFB6CBE0;
-        if (instance.getDuration() <= 100) return 0xFFFF526B;
-        if (instance.getDuration() <= 200) return 0xFFFFC857;
-        return 0xFFB6CBE0;
+        if (instance.isInfinite()) return NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xFFB6CBE0);
+        if (instance.getDuration() <= 100) return NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xFFFF526B);
+        if (instance.getDuration() <= 200) return NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xFFFFC857);
+        return NovaHudLayout.color(NovaHudLayout.Widget.EFFECTS, 0xFFB6CBE0);
     }
 
     private static String romanLevel(int amplifier) {
@@ -618,10 +648,12 @@ public final class NovaVisualEffects {
         int panelWidth = 176;
         int panelHeight = 34;
 
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.ARMOR,
+                panelX, panelY, panelWidth, panelHeight, context.getScaledWindowWidth(), context.getScaledWindowHeight())) {
         context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
-                panelY + panelHeight + 2, 0x5039BDF8);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xB9121D2D);
-        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaVisualSettings.accent);
+                panelY + panelHeight + 2, NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, 0x5039BDF8));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, 0xB9121D2D));
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + 2, NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, NovaVisualSettings.accent));
 
         for (int i = 0; i < armor.length; i++) {
             ItemStack stack = armor[i];
@@ -630,7 +662,7 @@ public final class NovaVisualEffects {
                 context.drawItem(stack, slotX + 10, panelY + 3);
             } else {
                 context.drawText(client.textRenderer, slotLabels[i], slotX + 15, panelY + 7,
-                        0xFF8FA6BC, false);
+                        NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, 0xFF8FA6BC), false);
             }
 
             String durability = stack.isDamageable()
@@ -638,7 +670,7 @@ public final class NovaVisualEffects {
                     : "—";
             int textWidth = client.textRenderer.getWidth(durability);
             context.drawText(client.textRenderer, durability, slotX + (34 - textWidth) / 2,
-                    panelY + 20, stack.isDamageable() ? durabilityColor(stack) : 0xFF8FA6BC, false);
+                    panelY + 20, stack.isDamageable() ? NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, durabilityColor(stack)) : NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, 0xFF8FA6BC), false);
 
             if (stack.isDamageable()) {
                 int barX = slotX + 1;
@@ -646,10 +678,12 @@ public final class NovaVisualEffects {
                 int barWidth = 34;
                 int remaining = Math.max(0, stack.getMaxDamage() - stack.getDamage());
                 int filled = (int) Math.round(barWidth * (double) remaining / stack.getMaxDamage());
-                context.fill(barX, barY, barX + barWidth, barY + 2, 0xFF35465A);
-                context.fill(barX, barY, barX + filled, barY + 2, durabilityColor(stack));
+                context.fill(barX, barY, barX + barWidth, barY + 2, NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, 0xFF35465A));
+                context.fill(barX, barY, barX + filled, barY + 2, NovaHudLayout.color(NovaHudLayout.Widget.ARMOR, durabilityColor(stack)));
             }
         }
+        }
+
     }
 
     private static int durabilityColor(ItemStack stack) {
@@ -662,10 +696,11 @@ public final class NovaVisualEffects {
 
     private static void drawKey(DrawContext context, MinecraftClient client, int x, int y, String label, boolean pressed) {
         int boxWidth = label.length() > 1 ? 24 : 22;
-        context.fill(x, y, x + boxWidth, y + 20, pressed ? 0xE539BDF8 : 0xB9121D2D);
-        context.fill(x, y, x + boxWidth, y + 2, pressed ? 0xFFFFFFFF : NovaVisualSettings.accent);
+        context.fill(x, y, x + boxWidth, y + 20, NovaHudLayout.color(NovaHudLayout.Widget.KEYSTROKES, pressed ? 0xE539BDF8 : 0xB9121D2D));
+        context.fill(x, y, x + boxWidth, y + 2, NovaHudLayout.color(NovaHudLayout.Widget.KEYSTROKES, pressed ? 0xFFFFFFFF : NovaVisualSettings.accent));
         int textWidth = client.textRenderer.getWidth(label);
-        context.drawText(client.textRenderer, label, x + (boxWidth - textWidth) / 2, y + 6, 0xFFFFFFFF, false);
+        context.drawText(client.textRenderer, label, x + (boxWidth - textWidth) / 2, y + 6,
+                NovaHudLayout.color(NovaHudLayout.Widget.KEYSTROKES, 0xFFFFFFFF), false);
     }
 
 }
