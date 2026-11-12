@@ -4,7 +4,7 @@
 - Fullbright now captures the user's gamma before applying maximum brightness and persists that restore value in `novavisual.properties`.
 - Disabling Fullbright restores the captured gamma even when Minecraft was restarted while Fullbright remained enabled; malformed or out-of-range stored values safely fall back/clamp.
 - Advanced the settings format to version 9 while preserving backward-compatible defaults.
-- GitHub Actions build result is pending for this revision; in-game verification has not been performed.
+- GitHub Actions run #43199223460 completed successfully: Gradle build, source packaging, artifact upload and prerelease publication all passed. In-game verification has not been performed.
 
 ## 1.13.1 - development
 - Added shared NovaGlassUi primitives for rounded translucent panels, glass cards, subtle highlights and ambient cyan/violet glow.
