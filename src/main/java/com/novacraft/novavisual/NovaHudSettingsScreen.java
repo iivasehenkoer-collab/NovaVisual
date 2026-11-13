@@ -45,6 +45,8 @@ public final class NovaHudSettingsScreen extends Screen {
 
                 addDrawableChild(ButtonWidget.builder(Text.literal("Position: " + anchorName()), button -> {
                     NovaVisualSettings.hudAnchor = (NovaVisualSettings.hudAnchor + 1) % 4;
+                    NovaHudLayout.markCustom();
+                    NovaVisualSettings.save();
                     button.setMessage(Text.literal("Position: " + anchorName()));
                 }).dimensions(buttonX, rowStartY + rowStep * 3, 220, 20).build());
                 addDrawableChild(ButtonWidget.builder(Text.literal("Open HUD Editor"), button -> {
@@ -108,6 +110,8 @@ public final class NovaHudSettingsScreen extends Screen {
         addDrawableChild(ButtonWidget.builder(toggleText(label, getter.getAsBoolean()), button -> {
             boolean next = !getter.getAsBoolean();
             setter.accept(next);
+            NovaHudLayout.markCustom();
+            NovaVisualSettings.save();
             button.setMessage(toggleText(label, next));
         }).dimensions(x, y, 220, 20).build());
     }

@@ -15,6 +15,9 @@ public final class NovaHudEditorScreen extends Screen {
     private int dragStartY;
     private double draggedOffsetX;
     private double draggedOffsetY;
+    private ButtonWidget pvpProfileButton;
+    private ButtonWidget anarchyProfileButton;
+    private ButtonWidget survivalProfileButton;
 
     public NovaHudEditorScreen() { super(Text.literal("NovaVisual HUD Editor")); }
 
@@ -26,22 +29,55 @@ public final class NovaHudEditorScreen extends Screen {
         int startX = Math.max(3, (width - total) / 2);
         int y = Math.max(3, height - 24);
         addAction(startX, y, buttonWidth, "S-", () -> {
-            NovaHudLayout.adjustScale(selected, -0.05F); NovaVisualSettings.save();
+            NovaHudLayout.adjustScale(selected, -0.05F); NovaVisualSettings.save(); updateProfileButtons();
         });
         addAction(startX + buttonWidth + gap, y, buttonWidth, "S+", () -> {
-            NovaHudLayout.adjustScale(selected, 0.05F); NovaVisualSettings.save();
+            NovaHudLayout.adjustScale(selected, 0.05F); NovaVisualSettings.save(); updateProfileButtons();
         });
         addAction(startX + 2 * (buttonWidth + gap), y, buttonWidth, "O-", () -> {
-            NovaHudLayout.adjustOpacity(selected, -0.10F); NovaVisualSettings.save();
+            NovaHudLayout.adjustOpacity(selected, -0.10F); NovaVisualSettings.save(); updateProfileButtons();
         });
         addAction(startX + 3 * (buttonWidth + gap), y, buttonWidth, "O+", () -> {
-            NovaHudLayout.adjustOpacity(selected, 0.10F); NovaVisualSettings.save();
+            NovaHudLayout.adjustOpacity(selected, 0.10F); NovaVisualSettings.save(); updateProfileButtons();
         });
         addAction(startX + 4 * (buttonWidth + gap), y, buttonWidth, "Reset", () -> {
-            NovaHudLayout.reset(selected); NovaVisualSettings.save();
+            NovaHudLayout.reset(selected); NovaVisualSettings.save(); updateProfileButtons();
         });
         addAction(startX + 5 * (buttonWidth + gap), y, buttonWidth, "Done",
                 () -> { if (client != null) client.setScreen(new NovaHudSettingsScreen()); });
+
+        int profileWidth = 94;
+        int profileGap = 5;
+        int profileX = (width - profileWidth * 3 - profileGap * 2) / 2;
+        int profileY = 82;
+        pvpProfileButton = createProfileButton(profileX, profileY, profileWidth, NovaHudLayout.Profile.PVP);
+        anarchyProfileButton = createProfileButton(profileX + profileWidth + profileGap,
+                profileY, profileWidth, NovaHudLayout.Profile.ANARCHY);
+        survivalProfileButton = createProfileButton(profileX + (profileWidth + profileGap) * 2,
+                profileY, profileWidth, NovaHudLayout.Profile.SURVIVAL);
+        addDrawableChild(pvpProfileButton);
+        addDrawableChild(anarchyProfileButton);
+        addDrawableChild(survivalProfileButton);
+        updateProfileButtons();
+    }
+
+    private ButtonWidget createProfileButton(int x, int y, int buttonWidth, NovaHudLayout.Profile profile) {
+        return ButtonWidget.builder(profileText(profile), button -> {
+            NovaHudLayout.applyProfile(profile);
+            NovaVisualSettings.save();
+            updateProfileButtons();
+        }).dimensions(x, y, buttonWidth, 20).build();
+    }
+
+    private Text profileText(NovaHudLayout.Profile profile) {
+        String prefix = NovaHudLayout.activeProfile() == profile ? "✓ " : "";
+        return Text.literal(prefix + profile.label());
+    }
+
+    private void updateProfileButtons() {
+        if (pvpProfileButton != null) pvpProfileButton.setMessage(profileText(NovaHudLayout.Profile.PVP));
+        if (anarchyProfileButton != null) anarchyProfileButton.setMessage(profileText(NovaHudLayout.Profile.ANARCHY));
+        if (survivalProfileButton != null) survivalProfileButton.setMessage(profileText(NovaHudLayout.Profile.SURVIVAL));
     }
 
     private void addAction(int x, int y, int buttonWidth, String label, Runnable action) {
@@ -63,9 +99,9 @@ public final class NovaHudEditorScreen extends Screen {
                 NovaVisualSettings.accent);
         int left = (width - panelWidth) / 2 + 14;
         context.drawText(textRenderer, "N O V A C R A F T  /  HUD EDITOR", left, 16, MUTED, false);
-        context.drawText(textRenderer, "Drag a widget to move it  ·  S-/S+ size  ·  O-/O+ opacity",
+        context.drawText(textRenderer, "Drag widgets  ·  Presets: PvP / Anarchy / Survival",
                 left, 32, 0xFFEAF6FF, false);
-        String info = selected.label() + "   " + Math.round(NovaHudLayout.scale(selected) * 100)
+        String info = NovaHudLayout.activeProfile().label() + "  /  " + selected.label() + "   " + Math.round(NovaHudLayout.scale(selected) * 100)
                 + "% size   " + Math.round(NovaHudLayout.opacity(selected) * 100) + "% opacity";
         context.drawText(textRenderer, textRenderer.trimToWidth(info, panelWidth - 28),
                 left, 49, NovaVisualSettings.accent, false);
@@ -128,6 +164,7 @@ public final class NovaHudEditorScreen extends Screen {
         if (click.button() == 0 && dragging) {
             dragging = false;
             NovaVisualSettings.save();
+            updateProfileButtons();
             return true;
         }
         return super.mouseReleased(click);

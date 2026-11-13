@@ -112,7 +112,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "11");
+        values.setProperty("formatVersion", "12");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));

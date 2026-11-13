@@ -42,6 +42,8 @@ public final class NovaVisualScreen extends Screen {
 
         addDrawableChild(ButtonWidget.builder(Text.literal("Accent: " + accentName()), button -> {
             NovaVisualSettings.accent = NovaVisualSettings.accent == CYAN ? 0xFF9B7BFF : CYAN;
+            NovaHudLayout.markCustom();
+            NovaVisualSettings.save();
             button.setMessage(Text.literal("Accent: " + accentName()));
         }).dimensions(rightX, firstY, 220, 22).build());
         addDrawableChild(ButtonWidget.builder(Text.literal("Optimization Center"),
@@ -74,6 +76,11 @@ public final class NovaVisualScreen extends Screen {
         return ButtonWidget.builder(toggleText(label, getter.getAsBoolean()), button -> {
             boolean next = !getter.getAsBoolean();
             setter.accept(next);
+            if (label.equals("Compact HUD") || label.equals("Low-health vignette")
+                    || label.equals("Compass HUD")) {
+                NovaHudLayout.markCustom();
+            }
+            NovaVisualSettings.save();
             button.setMessage(toggleText(label, next));
         }).dimensions(x, y, 220, 22).build();
     }

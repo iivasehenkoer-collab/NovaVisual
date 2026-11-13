@@ -2,6 +2,15 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.15.0 development
+
+### HUD Profiles
+- Added ready-made PvP, Anarchy and Survival layouts directly to the HUD Editor.
+- Each profile configures widget visibility, screen placement, size, opacity and accent color.
+- PvP focuses on target/keystrokes/armor; Anarchy adds compass, waypoint, world information and resource panels; Survival emphasizes resources, navigation and player status.
+- The selected profile is persisted. Any manual HUD position, scale, opacity or HUD visibility change switches the indicator to Custom.
+- Existing custom layouts are kept as Custom on upgrade; presets are applied only when selected.
+
 ## Version 1.14.0 development
 
 ### Totem Pop Alert

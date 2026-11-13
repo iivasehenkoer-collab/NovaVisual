@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.15.0 - development
+- Added ready-made PvP, Anarchy and Survival HUD profiles to the HUD Editor.
+- Each preset applies widget visibility, normalized position, scale, opacity and an accent color.
+- PvP prioritizes target HUD, range, keystrokes, armor and totem feedback; Anarchy enables navigation, world info and resource widgets; Survival focuses on player resources, effects and waypoints.
+- Persisted the active profile name and marked manual layout/visibility edits as Custom; existing custom layouts are not overwritten on upgrade.
+- Advanced settings format to version 12; older settings remain compatible.
+
 ## 1.14.0 - development
 - Added a Totem Pop Alert that correlates a local totem inventory-count decrease with recent damage and the vanilla 1 HP totem recovery state to reduce false positives.
 - Added a timed visual alert with session pop count, remaining totem count and a fading progress bar.

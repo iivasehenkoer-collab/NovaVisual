@@ -19,6 +19,13 @@ public final class NovaHudLayout {
         public String label() { return label; }
     }
 
+    public enum Profile {
+        CUSTOM("Custom"), PVP("PvP"), ANARCHY("Anarchy"), SURVIVAL("Survival");
+        private final String label;
+        Profile(String label) { this.label = label; }
+        public String label() { return label; }
+    }
+
     public record Bounds(int x, int y, int width, int height, float scale, float opacity) {}
 
     private static final class Slot {
@@ -29,6 +36,7 @@ public final class NovaHudLayout {
     }
 
     private static final EnumMap<Widget, Slot> SLOTS = new EnumMap<>(Widget.class);
+    private static Profile activeProfile = Profile.CUSTOM;
 
     static {
         for (Widget widget : Widget.values()) SLOTS.put(widget, new Slot());
@@ -105,6 +113,102 @@ public final class NovaHudLayout {
         return bounds(widget, x, y, itemWidth, itemHeight, w, h);
     }
 
+    public static Profile activeProfile() {
+        return activeProfile;
+    }
+
+    /** Apply a complete ready-made widget and visibility setup. */
+    public static void applyProfile(Profile profile) {
+        if (profile == null || profile == Profile.CUSTOM) return;
+        resetAll();
+
+        NovaVisualSettings.compactHud = true;
+        NovaVisualSettings.hudCoordinates = true;
+        NovaVisualSettings.hudVitals = true;
+        NovaVisualSettings.hudStatus = true;
+        NovaVisualSettings.keystrokesHud = false;
+        NovaVisualSettings.totemCounter = true;
+        NovaVisualSettings.totemPopAlert = true;
+        NovaVisualSettings.targetHud = false;
+        NovaVisualSettings.targetRangeHud = false;
+        NovaVisualSettings.armorDurabilityHud = true;
+        NovaVisualSettings.statusEffectHud = true;
+        NovaVisualSettings.resourceBarsHud = false;
+        NovaVisualSettings.healthVignette = true;
+        NovaVisualSettings.worldInfoHud = false;
+        NovaVisualSettings.compassHud = false;
+        NovaVisualSettings.waypointHud = false;
+
+        switch (profile) {
+            case PVP -> {
+                NovaVisualSettings.keystrokesHud = true;
+                NovaVisualSettings.targetHud = true;
+                NovaVisualSettings.targetRangeHud = true;
+                setSlot(Widget.COMPACT, 0.02F, 0.02F, 0.90F, 0.95F);
+                setSlot(Widget.TARGET, 0.50F, 0.02F, 0.90F, 0.95F);
+                setSlot(Widget.EFFECTS, 0.80F, 0.12F, 0.86F, 0.92F);
+                setSlot(Widget.KEYSTROKES, 0.02F, 0.68F, 0.92F, 0.95F);
+                setSlot(Widget.ARMOR, 0.02F, 0.86F, 0.90F, 0.92F);
+                setSlot(Widget.TOTEMS, 0.84F, 0.92F, 0.92F, 1.00F);
+                setSlot(Widget.TOTEM_ALERT, 0.50F, 0.46F, 0.95F, 1.00F);
+                NovaVisualSettings.accent = 0xFF39BDF8;
+            }
+            case ANARCHY -> {
+                NovaVisualSettings.keystrokesHud = true;
+                NovaVisualSettings.targetHud = true;
+                NovaVisualSettings.targetRangeHud = true;
+                NovaVisualSettings.resourceBarsHud = true;
+                NovaVisualSettings.worldInfoHud = true;
+                NovaVisualSettings.compassHud = true;
+                NovaVisualSettings.waypointHud = true;
+                setSlot(Widget.COMPACT, 0.02F, 0.02F, 0.86F, 0.94F);
+                setSlot(Widget.TARGET, 0.50F, 0.02F, 0.90F, 0.94F);
+                setSlot(Widget.COMPASS, 0.50F, 0.10F, 0.95F, 0.94F);
+                setSlot(Widget.WAYPOINT, 0.50F, 0.21F, 0.90F, 0.94F);
+                setSlot(Widget.EFFECTS, 0.80F, 0.17F, 0.86F, 0.92F);
+                setSlot(Widget.KEYSTROKES, 0.02F, 0.68F, 0.86F, 0.94F);
+                setSlot(Widget.ARMOR, 0.02F, 0.86F, 0.86F, 0.92F);
+                setSlot(Widget.RESOURCES, 0.80F, 0.66F, 0.82F, 0.92F);
+                setSlot(Widget.WORLD_INFO, 0.28F, 0.84F, 0.86F, 0.90F);
+                setSlot(Widget.TOTEMS, 0.84F, 0.93F, 0.90F, 1.00F);
+                setSlot(Widget.TOTEM_ALERT, 0.50F, 0.46F, 0.95F, 1.00F);
+                NovaVisualSettings.accent = 0xFF9B7BFF;
+            }
+            case SURVIVAL -> {
+                NovaVisualSettings.resourceBarsHud = true;
+                NovaVisualSettings.worldInfoHud = true;
+                NovaVisualSettings.compassHud = true;
+                NovaVisualSettings.waypointHud = true;
+                setSlot(Widget.COMPACT, 0.02F, 0.02F, 0.90F, 0.95F);
+                setSlot(Widget.COMPASS, 0.50F, 0.10F, 0.96F, 0.95F);
+                setSlot(Widget.WAYPOINT, 0.50F, 0.21F, 0.90F, 0.95F);
+                setSlot(Widget.EFFECTS, 0.80F, 0.12F, 0.86F, 0.92F);
+                setSlot(Widget.ARMOR, 0.02F, 0.86F, 0.90F, 0.92F);
+                setSlot(Widget.RESOURCES, 0.80F, 0.66F, 0.86F, 0.94F);
+                setSlot(Widget.WORLD_INFO, 0.18F, 0.84F, 0.86F, 0.92F);
+                setSlot(Widget.TOTEMS, 0.84F, 0.93F, 0.92F, 1.00F);
+                setSlot(Widget.TOTEM_ALERT, 0.50F, 0.46F, 0.95F, 1.00F);
+                NovaVisualSettings.accent = 0xFF55D98B;
+            }
+            case CUSTOM -> { }
+        }
+
+        activeProfile = profile;
+    }
+
+    /** Manual widget changes switch the active preset indicator to Custom. */
+    public static void markCustom() {
+        activeProfile = Profile.CUSTOM;
+    }
+
+    public static void setSlot(Widget widget, float x, float y, float scale, float opacity) {
+        Slot slot = SLOTS.get(widget);
+        slot.x = clamp(x, 0.0F, 1.0F);
+        slot.y = clamp(y, 0.0F, 1.0F);
+        slot.scale = clamp(scale, 0.50F, 2.00F);
+        slot.opacity = clamp(opacity, 0.20F, 1.00F);
+    }
+
     public static void move(Widget widget, int x, int y, int width, int height,
                             int screenWidth, int screenHeight) {
         Slot slot = SLOTS.get(widget);
@@ -114,16 +218,19 @@ public final class NovaHudLayout {
         int maxY = Math.max(0, screenHeight - scaledHeight);
         slot.x = maxX == 0 ? 0.0F : clamp(x, 0, maxX) / (float) maxX;
         slot.y = maxY == 0 ? 0.0F : clamp(y, 0, maxY) / (float) maxY;
+        markCustom();
     }
 
     public static void adjustScale(Widget widget, float amount) {
         Slot slot = SLOTS.get(widget);
         slot.scale = clamp(slot.scale + amount, 0.50F, 2.00F);
+        markCustom();
     }
 
     public static void adjustOpacity(Widget widget, float amount) {
         Slot slot = SLOTS.get(widget);
         slot.opacity = clamp(slot.opacity + amount, 0.20F, 1.00F);
+        markCustom();
     }
 
     public static void reset(Widget widget) {
@@ -132,6 +239,18 @@ public final class NovaHudLayout {
         slot.y = -1.0F;
         slot.scale = 1.0F;
         slot.opacity = 1.0F;
+        markCustom();
+    }
+
+    public static void resetAll() {
+        for (Widget widget : Widget.values()) {
+            Slot slot = SLOTS.get(widget);
+            slot.x = -1.0F;
+            slot.y = -1.0F;
+            slot.scale = 1.0F;
+            slot.opacity = 1.0F;
+        }
+        markCustom();
     }
 
     public static float scale(Widget widget) { return SLOTS.get(widget).scale; }
@@ -144,6 +263,11 @@ public final class NovaHudLayout {
     }
 
     public static void load(Properties values) {
+        try {
+            activeProfile = Profile.valueOf(values.getProperty("hudProfile", "CUSTOM").trim().toUpperCase(Locale.ROOT));
+        } catch (RuntimeException ignored) {
+            activeProfile = Profile.CUSTOM;
+        }
         for (Widget widget : Widget.values()) {
             Slot slot = SLOTS.get(widget);
             String prefix = "hud." + widget.name().toLowerCase(Locale.ROOT) + ".";
@@ -155,6 +279,7 @@ public final class NovaHudLayout {
     }
 
     public static void save(Properties values) {
+        values.setProperty("hudProfile", activeProfile.name());
         for (Widget widget : Widget.values()) {
             Slot slot = SLOTS.get(widget);
             String prefix = "hud." + widget.name().toLowerCase(Locale.ROOT) + ".";
