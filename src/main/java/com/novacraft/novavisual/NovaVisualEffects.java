@@ -30,6 +30,8 @@ public final class NovaVisualEffects {
     private static final int AURA_PARTICLE_COUNT = 10;
     private static final long CPS_WINDOW_MS = 1000L;
     private static final int GRAPH_SAMPLES = 32;
+    private static final long TOTEM_ALERT_MS = 2400L;
+    private static final long TOTEM_DAMAGE_WINDOW_MS = 900L;
     private static final String[] ROMAN_LEVELS = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
     private static final String[] COMPASS_DIRECTIONS = {"S", "SW", "W", "NW", "N", "NE", "E", "SE"};
     private static long damageFlashUntil;
@@ -38,6 +40,11 @@ public final class NovaVisualEffects {
     private static boolean leftMouseWasDown;
     private static final Deque<Long> leftClicks = new ArrayDeque<>();
     private static final Deque<Integer> fpsSamples = new ArrayDeque<>();
+    private static int previousTotemCount = -1;
+    private static int previousPlayerHurtTime;
+    private static long recentDamageUntil;
+    private static long totemAlertUntil;
+    private static int sessionTotemPops;
 
     private NovaVisualEffects() {}
 
@@ -55,16 +62,46 @@ public final class NovaVisualEffects {
             leftMouseWasDown = false;
             leftClicks.clear();
             fpsSamples.clear();
+            previousTotemCount = -1;
+            previousPlayerHurtTime = 0;
+            recentDamageUntil = 0L;
+            totemAlertUntil = 0L;
+            sessionTotemPops = 0;
             return;
         }
 
+        long now = System.currentTimeMillis();
         float health = client.player.getHealth();
-        if (NovaVisualSettings.damageFlash && previousHealth >= 0.0F && health < previousHealth) {
-            damageFlashUntil = System.currentTimeMillis() + DAMAGE_FLASH_MS;
+        boolean healthDropped = previousHealth >= 0.0F && health < previousHealth;
+        if (healthDropped) {
+            if (NovaVisualSettings.damageFlash) {
+                damageFlashUntil = now + DAMAGE_FLASH_MS;
+            }
+            recentDamageUntil = now + TOTEM_DAMAGE_WINDOW_MS;
         }
         previousHealth = health;
 
-        long now = System.currentTimeMillis();
+        int hurtTime = client.player.hurtTime;
+        if (hurtTime > previousPlayerHurtTime) {
+            recentDamageUntil = now + TOTEM_DAMAGE_WINDOW_MS;
+        }
+        previousPlayerHurtTime = hurtTime;
+
+        int totemCount = client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
+        if (previousTotemCount < 0) {
+            previousTotemCount = totemCount;
+        } else {
+            if (totemCount < previousTotemCount
+                    && now <= recentDamageUntil
+                    && health <= 1.05F) {
+                sessionTotemPops += previousTotemCount - totemCount;
+                if (NovaVisualSettings.totemPopAlert) {
+                    totemAlertUntil = now + TOTEM_ALERT_MS;
+                }
+                recentDamageUntil = 0L;
+            }
+            previousTotemCount = totemCount;
+        }
         boolean leftMouseDown = client.currentScreen == null
                 && GLFW.glfwGetMouseButton(client.getWindow().getHandle(), GLFW.GLFW_MOUSE_BUTTON_LEFT)
                 == GLFW.GLFW_PRESS;
@@ -145,6 +182,7 @@ public final class NovaVisualEffects {
 
         if (client.options.hudHidden || client.currentScreen != null) return;
         renderCombatWidgets(context, client);
+        renderTotemPopAlert(context, client);
         if (!NovaVisualSettings.compactHud) return;
 
         List<String> lines = new ArrayList<>(3);
@@ -219,6 +257,64 @@ public final class NovaVisualEffects {
         }
         }
 
+    }
+
+    private static void renderTotemPopAlert(DrawContext context, MinecraftClient client) {
+        if (!NovaVisualSettings.totemPopAlert) return;
+
+        long remaining = totemAlertUntil - System.currentTimeMillis();
+        if (remaining <= 0L) return;
+
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+        if (screenWidth < 120 || screenHeight < 100) return;
+
+        int panelWidth = Math.min(214, screenWidth - 16);
+        int panelHeight = 42;
+        int panelX = (screenWidth - panelWidth) / 2;
+        int panelY = Math.max(4, Math.min(screenHeight - panelHeight - 4,
+                screenHeight / 2 + 32));
+        float fade = Math.min(1.0F, remaining / 450.0F);
+        int alpha = Math.max(0, Math.min(220, Math.round(220.0F * fade)));
+        int background = (alpha << 24) | 0x00121D2D;
+        int accent = (alpha << 24) | 0x00FF526B;
+        int titleColor = (alpha << 24) | 0x00FFDCE2;
+        int detailColor = (alpha << 24) | 0x00B6CBE0;
+
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.TOTEM_ALERT,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
+            context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
+                    panelY + panelHeight + 2, NovaHudLayout.color(NovaHudLayout.Widget.TOTEM_ALERT, accent));
+            context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight,
+                    NovaHudLayout.color(NovaHudLayout.Widget.TOTEM_ALERT, background));
+            context.fill(panelX, panelY, panelX + panelWidth, panelY + 2,
+                    NovaHudLayout.color(NovaHudLayout.Widget.TOTEM_ALERT, accent));
+
+            String title = "TOTEM POP  ·  SESSION " + sessionTotemPops;
+            String detail = "TOTEMS LEFT  "
+                    + client.player.getInventory().count(Items.TOTEM_OF_UNDYING);
+            context.drawText(client.textRenderer,
+                    client.textRenderer.trimToWidth(title, panelWidth - 16),
+                    panelX + 8, panelY + 6,
+                    NovaHudLayout.color(NovaHudLayout.Widget.TOTEM_ALERT, titleColor), false);
+            context.drawText(client.textRenderer,
+                    client.textRenderer.trimToWidth(detail, panelWidth - 16),
+                    panelX + 8, panelY + 19,
+                    NovaHudLayout.color(NovaHudLayout.Widget.TOTEM_ALERT, detailColor), false);
+
+            int barLeft = panelX + 8;
+            int barRight = panelX + panelWidth - 8;
+            int barY = panelY + 34;
+            int barWidth = Math.max(1, barRight - barLeft);
+            int filledWidth = Math.round(barWidth * remaining / (float) TOTEM_ALERT_MS);
+            context.fill(barLeft, barY, barRight, barY + 3,
+                    NovaHudLayout.color(NovaHudLayout.Widget.TOTEM_ALERT,
+                            (alpha << 24) | 0x0035465A));
+            if (filledWidth > 0) {
+                context.fill(barLeft, barY, barLeft + Math.min(barWidth, filledWidth), barY + 3,
+                        NovaHudLayout.color(NovaHudLayout.Widget.TOTEM_ALERT, accent));
+            }
+        }
     }
 
     private static void renderLowHealthVignette(DrawContext context, MinecraftClient client) {

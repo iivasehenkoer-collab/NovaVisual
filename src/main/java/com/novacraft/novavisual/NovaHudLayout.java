@@ -11,7 +11,8 @@ public final class NovaHudLayout {
     public enum Widget {
         COMPACT("Compact HUD"), KEYSTROKES("Keystrokes"), ARMOR("Armor durability"),
         EFFECTS("Potion effects"), RESOURCES("Player resources"), WORLD_INFO("World info"),
-        COMPASS("Compass"), TOTEMS("Totem counter"), TARGET("PvP target"), WAYPOINT("Waypoint");
+        COMPASS("Compass"), TOTEMS("Totem counter"), TARGET("PvP target"), WAYPOINT("Waypoint"),
+        TOTEM_ALERT("Totem pop alert");
 
         private final String label;
         Widget(String label) { this.label = label; }
@@ -98,6 +99,7 @@ public final class NovaHudLayout {
             case TOTEMS -> { x = w - 100; y = h - 27; itemWidth = 92; itemHeight = 18; }
             case TARGET -> { itemWidth = Math.min(220, w - 16); x = (w - itemWidth) / 2; y = 8; itemHeight = 48; }
             case WAYPOINT -> { itemWidth = Math.min(292, w - 16); x = (w - itemWidth) / 2; y = Math.max(4, Math.min(108, h - 53)); itemHeight = 49; }
+            case TOTEM_ALERT -> { itemWidth = Math.min(214, Math.max(1, w - 16)); x = (w - itemWidth) / 2; y = Math.max(4, Math.min(h - 46, h / 2 + 32)); itemHeight = 42; }
             default -> throw new IllegalStateException("Unknown HUD widget " + widget);
         }
         return bounds(widget, x, y, itemWidth, itemHeight, w, h);

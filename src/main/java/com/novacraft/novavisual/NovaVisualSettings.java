@@ -38,6 +38,7 @@ public final class NovaVisualSettings {
     public static int hudAnchor = 0;
     public static boolean keystrokesHud = true;
     public static boolean totemCounter = true;
+    public static boolean totemPopAlert = true;
     public static boolean targetHud = true;
     public static boolean targetRangeHud = true;
     public static boolean armorDurabilityHud = true;
@@ -86,6 +87,7 @@ public final class NovaVisualSettings {
         hudAnchor = clamp(integer(values, "hudAnchor", hudAnchor), 0, 3);
         keystrokesHud = bool(values, "keystrokesHud", keystrokesHud);
         totemCounter = bool(values, "totemCounter", totemCounter);
+        totemPopAlert = bool(values, "totemPopAlert", totemPopAlert);
         targetHud = bool(values, "targetHud", targetHud);
         targetRangeHud = bool(values, "targetRangeHud", targetRangeHud);
         armorDurabilityHud = bool(values, "armorDurabilityHud", armorDurabilityHud);
@@ -110,7 +112,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "10");
+        values.setProperty("formatVersion", "11");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -135,6 +137,7 @@ public final class NovaVisualSettings {
         values.setProperty("hudAnchor", Integer.toString(hudAnchor));
         values.setProperty("keystrokesHud", Boolean.toString(keystrokesHud));
         values.setProperty("totemCounter", Boolean.toString(totemCounter));
+        values.setProperty("totemPopAlert", Boolean.toString(totemPopAlert));
         values.setProperty("targetHud", Boolean.toString(targetHud));
         values.setProperty("targetRangeHud", Boolean.toString(targetRangeHud));
         values.setProperty("armorDurabilityHud", Boolean.toString(armorDurabilityHud));

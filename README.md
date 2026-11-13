@@ -2,6 +2,14 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.14.0 development
+
+### Totem Pop Alert
+- Detects a local totem consumption by correlating a totem-count decrease with recent player damage and the vanilla 1 HP totem recovery state.
+- Shows a short animated alert with the session pop count and remaining totems.
+- Added the alert as a draggable, scalable and opacity-adjustable HUD Editor widget; toggle it under **HUD / Layout → Combat**.
+- The session counter resets when leaving the world; the alert is client-side and does not claim to read server combat-tag state.
+
 ## Version 1.13.3 development
 
 ### HUD Editor

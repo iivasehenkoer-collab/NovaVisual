@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.14.0 - development
+- Added a Totem Pop Alert that correlates a local totem inventory-count decrease with recent damage and the vanilla 1 HP totem recovery state to reduce false positives.
+- Added a timed visual alert with session pop count, remaining totem count and a fading progress bar.
+- Added Totem Pop Alert to HUD Layout → Combat and to the draggable HUD Editor with persisted position, scale and opacity.
+- Advanced the settings format to version 11 while keeping earlier configuration keys backward-compatible. In-game verification remains pending.
+
 ## 1.13.3 - development
 - Added a mouse-driven HUD editor for Compact HUD, Keystrokes, Armor Durability, Potion Effects, Player Resources, World Info, Compass, Totem Counter, PvP Target and Waypoint widgets.
 - Added independent widget movement, size (50%–200%) and opacity (20%–100%) controls, with a per-widget reset action.

@@ -59,13 +59,16 @@ public final class NovaHudSettingsScreen extends Screen {
                 addToggle(buttonX, rowStartY + rowStep, "Totem Counter",
                         () -> NovaVisualSettings.totemCounter,
                         value -> NovaVisualSettings.totemCounter = value);
-                addToggle(buttonX, rowStartY + rowStep * 2, "PvP Target HUD",
+                addToggle(buttonX, rowStartY + rowStep * 2, "Totem Pop Alert",
+                        () -> NovaVisualSettings.totemPopAlert,
+                        value -> NovaVisualSettings.totemPopAlert = value);
+                addToggle(buttonX, rowStartY + rowStep * 3, "PvP Target HUD",
                         () -> NovaVisualSettings.targetHud,
                         value -> NovaVisualSettings.targetHud = value);
-                addToggle(buttonX, rowStartY + rowStep * 3, "Target Range",
+                addToggle(buttonX, rowStartY + rowStep * 4, "Target Range",
                         () -> NovaVisualSettings.targetRangeHud,
                         value -> NovaVisualSettings.targetRangeHud = value);
-                addBackButton(buttonX, rowStartY + rowStep * 4);
+                addBackButton(buttonX, rowStartY + rowStep * 5);
             }
             case STATUS -> {
                 addToggle(buttonX, rowStartY, "Armor Durability HUD",
@@ -128,7 +131,7 @@ public final class NovaHudSettingsScreen extends Screen {
     }
 
     private int panelHeight() {
-        return selectedPage == Page.STATUS ? 236 : selectedPage == Page.LAYOUT ? 244 : 212;
+        return selectedPage == Page.STATUS ? 236 : selectedPage == Page.LAYOUT ? 244 : 236;
     }
 
     private int panelTop() {
