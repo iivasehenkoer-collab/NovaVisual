@@ -36,7 +36,7 @@ public final class NovaArmorDurabilityAlert {
             ItemStack stack = client.player.getEquippedStack(SLOTS[index]);
             if (stack.isEmpty() || !stack.isDamageable() || stack.getMaxDamage() <= 0) {
                 previousStacks[index] = null;
-            previousItems[index] = null;
+                previousItems[index] = null;
                 previousDamage[index] = 0;
                 previousMaxDamage[index] = 0;
                 initialized[index] = false;
