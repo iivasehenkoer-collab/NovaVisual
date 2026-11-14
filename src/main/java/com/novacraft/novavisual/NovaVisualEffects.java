@@ -55,6 +55,7 @@ public final class NovaVisualEffects {
     }
 
     private static void tick(MinecraftClient client) {
+        NovaArmorDurabilityAlert.tick(client);
         if (client.player == null || client.world == null) {
             previousHealth = -1.0F;
             damageFlashUntil = 0L;
@@ -70,7 +71,6 @@ public final class NovaVisualEffects {
             return;
         }
 
-        NovaArmorDurabilityAlert.tick(client);
         long now = System.currentTimeMillis();
         float health = client.player.getHealth();
         boolean healthDropped = previousHealth >= 0.0F && health < previousHealth;

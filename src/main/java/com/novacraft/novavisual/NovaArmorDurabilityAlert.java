@@ -14,6 +14,7 @@ public final class NovaArmorDurabilityAlert {
     private static final String[] SLOT_NAMES = {"HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"};
     private static final int ALERT_THRESHOLD_PERCENT = 20;
     private static final long ALERT_DURATION_MS = 3200L;
+    private static final ItemStack[] previousStacks = new ItemStack[SLOTS.length];
     private static final Item[] previousItems = new Item[SLOTS.length];
     private static final int[] previousDamage = new int[SLOTS.length];
     private static final int[] previousMaxDamage = new int[SLOTS.length];
@@ -34,7 +35,8 @@ public final class NovaArmorDurabilityAlert {
         for (int index = 0; index < SLOTS.length; index++) {
             ItemStack stack = client.player.getEquippedStack(SLOTS[index]);
             if (stack.isEmpty() || !stack.isDamageable() || stack.getMaxDamage() <= 0) {
-                previousItems[index] = null;
+                previousStacks[index] = null;
+            previousItems[index] = null;
                 previousDamage[index] = 0;
                 previousMaxDamage[index] = 0;
                 initialized[index] = false;
@@ -44,8 +46,9 @@ public final class NovaArmorDurabilityAlert {
             Item item = stack.getItem();
             int damage = stack.getDamage();
             int maxDamage = stack.getMaxDamage();
-            if (!initialized[index] || previousItems[index] != item
+            if (!initialized[index] || previousStacks[index] != stack || previousItems[index] != item
                     || previousMaxDamage[index] != maxDamage || damage < previousDamage[index]) {
+                previousStacks[index] = stack;
                 previousItems[index] = item;
                 previousDamage[index] = damage;
                 previousMaxDamage[index] = maxDamage;
@@ -134,6 +137,7 @@ public final class NovaArmorDurabilityAlert {
 
     private static void reset() {
         for (int index = 0; index < SLOTS.length; index++) {
+            previousStacks[index] = null;
             previousItems[index] = null;
             previousDamage[index] = 0;
             previousMaxDamage[index] = 0;
