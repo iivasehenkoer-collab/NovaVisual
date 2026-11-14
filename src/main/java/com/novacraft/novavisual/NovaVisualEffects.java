@@ -70,6 +70,7 @@ public final class NovaVisualEffects {
             return;
         }
 
+        NovaArmorDurabilityAlert.tick(client);
         long now = System.currentTimeMillis();
         float health = client.player.getHealth();
         boolean healthDropped = previousHealth >= 0.0F && health < previousHealth;
@@ -183,6 +184,7 @@ public final class NovaVisualEffects {
         if (client.options.hudHidden || client.currentScreen != null) return;
         renderCombatWidgets(context, client);
         renderTotemPopAlert(context, client);
+        NovaArmorDurabilityAlert.render(context, client);
         if (!NovaVisualSettings.compactHud) return;
 
         List<String> lines = new ArrayList<>(3);

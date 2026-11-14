@@ -42,6 +42,7 @@ public final class NovaVisualSettings {
     public static boolean targetHud = true;
     public static boolean targetRangeHud = true;
     public static boolean armorDurabilityHud = true;
+    public static boolean armorDurabilityAlert = true;
     public static boolean statusEffectHud = true;
     public static boolean resourceBarsHud = true;
     public static boolean healthVignette = true;
@@ -91,6 +92,7 @@ public final class NovaVisualSettings {
         targetHud = bool(values, "targetHud", targetHud);
         targetRangeHud = bool(values, "targetRangeHud", targetRangeHud);
         armorDurabilityHud = bool(values, "armorDurabilityHud", armorDurabilityHud);
+        armorDurabilityAlert = bool(values, "armorDurabilityAlert", armorDurabilityAlert);
         statusEffectHud = bool(values, "statusEffectHud", statusEffectHud);
         resourceBarsHud = bool(values, "resourceBarsHud", resourceBarsHud);
         healthVignette = bool(values, "healthVignette", healthVignette);
@@ -112,7 +114,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "12");
+        values.setProperty("formatVersion", "13");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -141,6 +143,7 @@ public final class NovaVisualSettings {
         values.setProperty("targetHud", Boolean.toString(targetHud));
         values.setProperty("targetRangeHud", Boolean.toString(targetRangeHud));
         values.setProperty("armorDurabilityHud", Boolean.toString(armorDurabilityHud));
+        values.setProperty("armorDurabilityAlert", Boolean.toString(armorDurabilityAlert));
         values.setProperty("statusEffectHud", Boolean.toString(statusEffectHud));
         values.setProperty("resourceBarsHud", Boolean.toString(resourceBarsHud));
         values.setProperty("healthVignette", Boolean.toString(healthVignette));

@@ -12,7 +12,7 @@ public final class NovaHudLayout {
         COMPACT("Compact HUD"), KEYSTROKES("Keystrokes"), ARMOR("Armor durability"),
         EFFECTS("Potion effects"), RESOURCES("Player resources"), WORLD_INFO("World info"),
         COMPASS("Compass"), TOTEMS("Totem counter"), TARGET("PvP target"), WAYPOINT("Waypoint"),
-        TOTEM_ALERT("Totem pop alert");
+        TOTEM_ALERT("Totem pop alert"), ARMOR_ALERT("Armor warning");
 
         private final String label;
         Widget(String label) { this.label = label; }
@@ -108,6 +108,7 @@ public final class NovaHudLayout {
             case TARGET -> { itemWidth = Math.min(220, w - 16); x = (w - itemWidth) / 2; y = 8; itemHeight = 48; }
             case WAYPOINT -> { itemWidth = Math.min(292, w - 16); x = (w - itemWidth) / 2; y = Math.max(4, Math.min(108, h - 53)); itemHeight = 49; }
             case TOTEM_ALERT -> { itemWidth = Math.min(214, Math.max(1, w - 16)); x = (w - itemWidth) / 2; y = Math.max(4, Math.min(h - 46, h / 2 + 32)); itemHeight = 42; }
+            case ARMOR_ALERT -> { itemWidth = Math.min(230, Math.max(1, w - 16)); x = (w - itemWidth) / 2; y = Math.max(4, Math.min(h - 42, h / 2 + 78)); itemHeight = 38; }
             default -> throw new IllegalStateException("Unknown HUD widget " + widget);
         }
         return bounds(widget, x, y, itemWidth, itemHeight, w, h);
@@ -132,6 +133,7 @@ public final class NovaHudLayout {
         NovaVisualSettings.targetHud = false;
         NovaVisualSettings.targetRangeHud = false;
         NovaVisualSettings.armorDurabilityHud = true;
+        NovaVisualSettings.armorDurabilityAlert = true;
         NovaVisualSettings.statusEffectHud = true;
         NovaVisualSettings.resourceBarsHud = false;
         NovaVisualSettings.healthVignette = true;
@@ -151,6 +153,7 @@ public final class NovaHudLayout {
                 setSlot(Widget.ARMOR, 0.02F, 0.86F, 0.90F, 0.92F);
                 setSlot(Widget.TOTEMS, 0.84F, 0.92F, 0.92F, 1.00F);
                 setSlot(Widget.TOTEM_ALERT, 0.50F, 0.46F, 0.95F, 1.00F);
+                setSlot(Widget.ARMOR_ALERT, 0.50F, 0.60F, 0.95F, 1.00F);
                 NovaVisualSettings.accent = 0xFF39BDF8;
             }
             case ANARCHY -> {
@@ -172,6 +175,7 @@ public final class NovaHudLayout {
                 setSlot(Widget.WORLD_INFO, 0.28F, 0.84F, 0.86F, 0.90F);
                 setSlot(Widget.TOTEMS, 0.84F, 0.93F, 0.90F, 1.00F);
                 setSlot(Widget.TOTEM_ALERT, 0.50F, 0.46F, 0.95F, 1.00F);
+                setSlot(Widget.ARMOR_ALERT, 0.50F, 0.60F, 0.95F, 1.00F);
                 NovaVisualSettings.accent = 0xFF9B7BFF;
             }
             case SURVIVAL -> {
@@ -188,6 +192,7 @@ public final class NovaHudLayout {
                 setSlot(Widget.WORLD_INFO, 0.18F, 0.84F, 0.86F, 0.92F);
                 setSlot(Widget.TOTEMS, 0.84F, 0.93F, 0.92F, 1.00F);
                 setSlot(Widget.TOTEM_ALERT, 0.50F, 0.46F, 0.95F, 1.00F);
+                setSlot(Widget.ARMOR_ALERT, 0.50F, 0.60F, 0.95F, 1.00F);
                 NovaVisualSettings.accent = 0xFF55D98B;
             }
             case CUSTOM -> { }

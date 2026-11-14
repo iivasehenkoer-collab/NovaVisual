@@ -24,8 +24,8 @@ public final class NovaHudSettingsScreen extends Screen {
         int panelTop = panelTop();
         int buttonX = centerX - 110;
         int tabY = panelTop + 38;
-        int rowStartY = panelTop + (height < 220 ? 60 : 64);
-        int rowStep = height < 220 ? 20 : 24;
+        int rowStartY = panelTop + (height < 300 ? 56 : 64);
+        int rowStep = height < 300 ? 19 : 24;
 
         addPageButton(buttonX, tabY, Page.LAYOUT, "Layout");
         addPageButton(buttonX + 74, tabY, Page.COMBAT, "Combat");
@@ -76,6 +76,9 @@ public final class NovaHudSettingsScreen extends Screen {
                 addToggle(buttonX, rowStartY, "Armor Durability HUD",
                         () -> NovaVisualSettings.armorDurabilityHud,
                         value -> NovaVisualSettings.armorDurabilityHud = value);
+                addToggle(buttonX, rowStartY + rowStep, "Low Durability Alert",
+                        () -> NovaVisualSettings.armorDurabilityAlert,
+                        value -> NovaVisualSettings.armorDurabilityAlert = value);
                 addToggle(buttonX, rowStartY + rowStep, "Potion Effects HUD",
                         () -> NovaVisualSettings.statusEffectHud,
                         value -> NovaVisualSettings.statusEffectHud = value);
@@ -135,7 +138,7 @@ public final class NovaHudSettingsScreen extends Screen {
     }
 
     private int panelHeight() {
-        return selectedPage == Page.STATUS ? 236 : selectedPage == Page.LAYOUT ? 244 : 236;
+        return selectedPage == Page.STATUS ? 260 : selectedPage == Page.LAYOUT ? 244 : 236;
     }
 
     private int panelTop() {

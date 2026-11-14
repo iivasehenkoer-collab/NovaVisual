@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.16.0 - development
+- Added a low armor durability alert when a worn, damageable armor piece crosses below 20% remaining durability.
+- The warning identifies the armor slot and item, fades after 3.2 seconds, and is a movable/scalable/opacity-adjustable HUD Editor widget.
+- Added a persistent HUD / Layout → Status toggle and included the alert widget in PvP, Anarchy and Survival HUD profile layouts.
+- Advanced settings format to version 13 while retaining backward-compatible defaults. In-game verification remains pending.
+
 ## 1.15.0 - development
 - Added ready-made PvP, Anarchy and Survival HUD profiles to the HUD Editor.
 - Each preset applies widget visibility, normalized position, scale, opacity and an accent color.

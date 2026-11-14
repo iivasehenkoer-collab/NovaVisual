@@ -2,6 +2,14 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.16.0 development
+
+### Low armor durability alert
+- Detects when equipped damageable armor crosses below 20% remaining durability and shows a short warning card.
+- Identifies the affected equipment slot and item; the warning fades automatically and can be moved, resized and made transparent in the HUD Editor.
+- Added a persistent **Low Durability Alert** toggle to HUD / Layout → Status. The detector initializes from the currently equipped gear and does not warn just because a low-durability item was already equipped when joining a world.
+- Settings format advances to version 13; existing settings remain backward-compatible.
+
 ## Version 1.15.0 development
 
 ### HUD Profiles
