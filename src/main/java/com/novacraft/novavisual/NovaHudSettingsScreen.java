@@ -79,22 +79,22 @@ public final class NovaHudSettingsScreen extends Screen {
                 addToggle(buttonX, rowStartY + rowStep, "Low Durability Alert",
                         () -> NovaVisualSettings.armorDurabilityAlert,
                         value -> NovaVisualSettings.armorDurabilityAlert = value);
-                addToggle(buttonX, rowStartY + rowStep, "Potion Effects HUD",
+                addToggle(buttonX, rowStartY + rowStep * 2, "Potion Effects HUD",
                         () -> NovaVisualSettings.statusEffectHud,
                         value -> NovaVisualSettings.statusEffectHud = value);
-                addToggle(buttonX, rowStartY + rowStep * 2, "Player Resource Bars",
+                addToggle(buttonX, rowStartY + rowStep * 3, "Player Resource Bars",
                         () -> NovaVisualSettings.resourceBarsHud,
                         value -> NovaVisualSettings.resourceBarsHud = value);
-                addToggle(buttonX, rowStartY + rowStep * 3, "Low-health Vignette",
+                addToggle(buttonX, rowStartY + rowStep * 4, "Low-health Vignette",
                         () -> NovaVisualSettings.healthVignette,
                         value -> NovaVisualSettings.healthVignette = value);
-                addToggle(buttonX, rowStartY + rowStep * 4, "World Info HUD",
+                addToggle(buttonX, rowStartY + rowStep * 5, "World Info HUD",
                         () -> NovaVisualSettings.worldInfoHud,
                         value -> NovaVisualSettings.worldInfoHud = value);
-                addToggle(buttonX, rowStartY + rowStep * 5, "Waypoint HUD",
+                addToggle(buttonX, rowStartY + rowStep * 6, "Waypoint HUD",
                         () -> NovaVisualSettings.waypointHud,
                         value -> NovaVisualSettings.waypointHud = value);
-                addBackButton(buttonX, rowStartY + rowStep * 6);
+                addBackButton(buttonX, rowStartY + rowStep * 7);
             }
         }
     }
