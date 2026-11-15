@@ -14,14 +14,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.HostileEntity;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public final class NovaVisualClient implements ClientModInitializer {
     public static final String MOD_ID = "novavisual";
     private static KeyBinding openMenuKey;
     private static boolean fullbrightWasApplied = false;
-    private static final Set<Entity> highlightedEntities = new HashSet<>();
+    private static final Map<Entity, Boolean> highlightedEntities = new HashMap<>();
 
     @Override
     public void onInitializeClient() {
@@ -100,24 +102,25 @@ public final class NovaVisualClient implements ClientModInitializer {
         Set<Entity> currentlyHighlighted = new HashSet<>();
         for (Entity entity : client.world.getEntities()) {
             if (entity instanceof HostileEntity && entity.isAlive()) {
+                highlightedEntities.putIfAbsent(entity, entity.isGlowing());
                 entity.setGlowing(true);
                 currentlyHighlighted.add(entity);
             }
         }
 
-        for (Entity previous : highlightedEntities) {
-            if (!currentlyHighlighted.contains(previous)) {
-                previous.setGlowing(false);
+        var iterator = highlightedEntities.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Entity, Boolean> previous = iterator.next();
+            if (!currentlyHighlighted.contains(previous.getKey())) {
+                previous.getKey().setGlowing(previous.getValue());
+                iterator.remove();
             }
         }
-
-        highlightedEntities.clear();
-        highlightedEntities.addAll(currentlyHighlighted);
     }
 
     private static void clearEnemyHighlights() {
-        for (Entity entity : highlightedEntities) {
-            entity.setGlowing(false);
+        for (Map.Entry<Entity, Boolean> previous : highlightedEntities.entrySet()) {
+            previous.getKey().setGlowing(previous.getValue());
         }
         highlightedEntities.clear();
     }

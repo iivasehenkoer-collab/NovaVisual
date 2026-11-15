@@ -2,6 +2,17 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.17.0 development
+
+### Potion effect change alert
+- Tracks active potion effects by registry ID and shows a short HUD notification when an effect is applied, its amplifier changes, or it ends.
+- Takes an initial snapshot on world entry, so existing effects do not generate a burst of false notifications.
+- Added a persistent **Potion Effect Alerts** toggle to HUD / Layout → Status and an independently movable, scalable and opacity-adjustable HUD Editor widget.
+- Settings format advances to version 14; older settings keep the enabled-by-default behavior.
+
+### Enemy ESP state restoration
+- Enemy ESP now remembers each hostile mob's previous glowing state and restores it when the mob leaves the active set or the feature is disabled, instead of blindly forcing glowing off.
+
 ## Version 1.16.0 development
 
 ### Low armor durability alert

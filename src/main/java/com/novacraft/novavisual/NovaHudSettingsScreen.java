@@ -94,7 +94,10 @@ public final class NovaHudSettingsScreen extends Screen {
                 addToggle(buttonX, rowStartY + rowStep * 6, "Waypoint HUD",
                         () -> NovaVisualSettings.waypointHud,
                         value -> NovaVisualSettings.waypointHud = value);
-                addBackButton(buttonX, rowStartY + rowStep * 7);
+                addToggle(buttonX, rowStartY + rowStep * 7, "Potion Effect Alerts",
+                        () -> NovaVisualSettings.effectChangeAlert,
+                        value -> NovaVisualSettings.effectChangeAlert = value);
+                addBackButton(buttonX, rowStartY + rowStep * 8);
             }
         }
     }
@@ -138,7 +141,7 @@ public final class NovaHudSettingsScreen extends Screen {
     }
 
     private int panelHeight() {
-        return selectedPage == Page.STATUS ? 260 : selectedPage == Page.LAYOUT ? 244 : 236;
+        return selectedPage == Page.STATUS ? 284 : selectedPage == Page.LAYOUT ? 244 : 236;
     }
 
     private int panelTop() {

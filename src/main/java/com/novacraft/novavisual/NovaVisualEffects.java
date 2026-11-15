@@ -22,8 +22,10 @@ import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public final class NovaVisualEffects {
     private static final long DAMAGE_FLASH_MS = 360L;
@@ -31,6 +33,7 @@ public final class NovaVisualEffects {
     private static final long CPS_WINDOW_MS = 1000L;
     private static final int GRAPH_SAMPLES = 32;
     private static final long TOTEM_ALERT_MS = 2400L;
+    private static final long EFFECT_ALERT_MS = 2800L;
     private static final long TOTEM_DAMAGE_WINDOW_MS = 900L;
     private static final String[] ROMAN_LEVELS = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
     private static final String[] COMPASS_DIRECTIONS = {"S", "SW", "W", "NW", "N", "NE", "E", "SE"};
@@ -45,6 +48,15 @@ public final class NovaVisualEffects {
     private static long recentDamageUntil;
     private static long totemAlertUntil;
     private static int sessionTotemPops;
+    private static final Map<String, EffectSnapshot> trackedEffects = new HashMap<>();
+    private static boolean effectTrackingInitialized;
+    private static long effectAlertUntil;
+    private static String effectAlertTitle = "";
+    private static String effectAlertDetail = "";
+    private static int effectAlertColor = 0xFF39BDF8;
+    private static boolean effectAlertPositive;
+
+    private record EffectSnapshot(String name, int amplifier, int color) {}
 
     private NovaVisualEffects() {}
 
@@ -68,10 +80,16 @@ public final class NovaVisualEffects {
             recentDamageUntil = 0L;
             totemAlertUntil = 0L;
             sessionTotemPops = 0;
+            trackedEffects.clear();
+            effectTrackingInitialized = false;
+            effectAlertUntil = 0L;
+            effectAlertTitle = "";
+            effectAlertDetail = "";
             return;
         }
 
         long now = System.currentTimeMillis();
+        updateEffectTracking(client, now);
         float health = client.player.getHealth();
         boolean healthDropped = previousHealth >= 0.0F && health < previousHealth;
         if (healthDropped) {
@@ -185,6 +203,7 @@ public final class NovaVisualEffects {
         renderCombatWidgets(context, client);
         renderTotemPopAlert(context, client);
         NovaArmorDurabilityAlert.render(context, client);
+        renderEffectAlert(context, client);
         if (!NovaVisualSettings.compactHud) return;
 
         List<String> lines = new ArrayList<>(3);
@@ -259,6 +278,110 @@ public final class NovaVisualEffects {
         }
         }
 
+    }
+
+    private static void updateEffectTracking(MinecraftClient client, long now) {
+        Map<String, EffectSnapshot> current = new HashMap<>();
+        boolean notified = false;
+
+        for (StatusEffectInstance instance : client.player.getStatusEffects()) {
+            String key = instance.getEffectType().getKey()
+                    .map(registryKey -> registryKey.getValue().toString())
+                    .orElseGet(() -> instance.getEffectType().value().getName().getString());
+            String name = instance.getEffectType().value().getName().getString();
+            int color = 0xFF000000 | (instance.getEffectType().value().getColor() & 0x00FFFFFF);
+            EffectSnapshot snapshot = new EffectSnapshot(name, instance.getAmplifier(), color);
+            EffectSnapshot previous = trackedEffects.get(key);
+
+            if (effectTrackingInitialized && NovaVisualSettings.effectChangeAlert) {
+                String detail = name + " " + romanLevel(instance.getAmplifier())
+                        + "  ·  " + formatEffectDuration(instance);
+                if (previous == null) {
+                    showEffectAlert("EFFECT APPLIED", detail, color, true, now);
+                    notified = true;
+                } else if (previous.amplifier() != instance.getAmplifier()) {
+                    showEffectAlert("EFFECT LEVEL CHANGED", detail, color, true, now);
+                    notified = true;
+                }
+            }
+            current.put(key, snapshot);
+        }
+
+        if (effectTrackingInitialized && !notified && NovaVisualSettings.effectChangeAlert) {
+            for (Map.Entry<String, EffectSnapshot> previous : trackedEffects.entrySet()) {
+                if (!current.containsKey(previous.getKey())) {
+                    showEffectAlert("EFFECT ENDED", previous.getValue().name() + " has ended",
+                            0xFFFFC857, false, now);
+                    break;
+                }
+            }
+        }
+
+        trackedEffects.clear();
+        trackedEffects.putAll(current);
+        effectTrackingInitialized = true;
+    }
+
+    private static void showEffectAlert(String title, String detail, int color,
+                                        boolean positive, long now) {
+        effectAlertTitle = title;
+        effectAlertDetail = detail;
+        effectAlertColor = color;
+        effectAlertPositive = positive;
+        effectAlertUntil = now + EFFECT_ALERT_MS;
+    }
+
+    private static void renderEffectAlert(DrawContext context, MinecraftClient client) {
+        if (!NovaVisualSettings.effectChangeAlert) return;
+        long remaining = effectAlertUntil - System.currentTimeMillis();
+        if (remaining <= 0L) return;
+
+        int screenWidth = context.getScaledWindowWidth();
+        int screenHeight = context.getScaledWindowHeight();
+        if (screenWidth < 120 || screenHeight < 100) return;
+
+        int panelWidth = Math.min(240, screenWidth - 16);
+        int panelHeight = 42;
+        int panelX = (screenWidth - panelWidth) / 2;
+        int panelY = Math.max(4, Math.min(screenHeight - panelHeight - 4,
+                screenHeight / 2 - 28));
+        float fade = Math.min(1.0F, remaining / 500.0F);
+        int alpha = Math.max(0, Math.min(224, Math.round(224.0F * fade)));
+        int accent = (alpha << 24) | (effectAlertColor & 0x00FFFFFF);
+        int background = (alpha << 24) | 0x00121D2D;
+        int titleColor = (alpha << 24) | (effectAlertPositive ? 0x009FE6B8 : 0x00FFD58A);
+        int detailColor = (alpha << 24) | 0x00EAF6FF;
+
+        try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.EFFECT_ALERT,
+                panelX, panelY, panelWidth, panelHeight, screenWidth, screenHeight)) {
+            context.fill(panelX - 2, panelY - 2, panelX + panelWidth + 2,
+                    panelY + panelHeight + 2,
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECT_ALERT, accent));
+            context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight,
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECT_ALERT, background));
+            context.fill(panelX, panelY, panelX + panelWidth, panelY + 2,
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECT_ALERT, accent));
+            context.drawText(client.textRenderer, effectAlertTitle,
+                    panelX + 8, panelY + 6,
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECT_ALERT, titleColor), false);
+            context.drawText(client.textRenderer,
+                    client.textRenderer.trimToWidth(effectAlertDetail, panelWidth - 16),
+                    panelX + 8, panelY + 20,
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECT_ALERT, detailColor), false);
+
+            int barLeft = panelX + 8;
+            int barRight = panelX + panelWidth - 8;
+            int barY = panelY + 34;
+            int barWidth = Math.max(1, barRight - barLeft);
+            int filledWidth = Math.round(barWidth * remaining / (float) EFFECT_ALERT_MS);
+            context.fill(barLeft, barY, barRight, barY + 3,
+                    NovaHudLayout.color(NovaHudLayout.Widget.EFFECT_ALERT,
+                            (alpha << 24) | 0x0035465A));
+            if (filledWidth > 0) {
+                context.fill(barLeft, barY, barLeft + Math.min(barWidth, filledWidth), barY + 3,
+                        NovaHudLayout.color(NovaHudLayout.Widget.EFFECT_ALERT, accent));
+            }
+        }
     }
 
     private static void renderTotemPopAlert(DrawContext context, MinecraftClient client) {

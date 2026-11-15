@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.17.0 - development
+- Added Potion Effect Alerts for newly applied effects, amplifier changes and effects ending; the first world snapshot is silent to avoid join-time noise.
+- Added a persistent HUD / Layout → Status toggle and a movable/scalable/opacity-adjustable HUD Editor widget for effect notifications.
+- Advanced settings format to version 14 while preserving the enabled-by-default behavior for existing configuration files.
+- Enemy ESP now restores each hostile mob's previous glowing state when it stops highlighting that entity or the feature is disabled.
+- Minecraft in-game behavior still requires manual verification.
+
 ## 1.16.0 - development
 - Added a low armor durability alert when a worn, damageable armor piece crosses below 20% remaining durability.
 - The warning identifies the armor slot and item, fades after 3.2 seconds, and is a movable/scalable/opacity-adjustable HUD Editor widget.
