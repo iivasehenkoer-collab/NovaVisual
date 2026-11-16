@@ -531,8 +531,15 @@ public final class NovaVisualEffects {
         if (NovaVisualSettings.targetHud && client.crosshairTarget instanceof EntityHitResult hit
                 && hit.getEntity() instanceof LivingEntity target && target.isAlive()) {
             String name = target.getDisplayName().getString();
-            String health = String.format(Locale.ROOT, "%.1f / %.1f HP",
-                    target.getHealth(), target.getMaxHealth());
+            float targetHealth = target.getHealth();
+            float maxHealth = target.getMaxHealth();
+            float absorption = Math.max(0.0F, target.getAbsorptionAmount());
+            int armor = Math.max(0, target.getArmor());
+            String health = String.format(Locale.ROOT, "HP %.1f / %.1f  ·  ARMOR %d",
+                    targetHealth, maxHealth, armor);
+            if (absorption > 0.05F) {
+                health += String.format(Locale.ROOT, "  ·  ABS %.1f", absorption);
+            }
             String range = String.format(Locale.ROOT, "RANGE  %.1f m",
                     target.distanceTo(client.player));
 
@@ -552,32 +559,51 @@ public final class NovaVisualEffects {
             int textWidth = Math.max(1, panelWidth - 14);
             try (var hudTransform = NovaHudLayout.begin(context, NovaHudLayout.Widget.TARGET,
                     x, y, panelWidth, panelHeight, width, height)) {
-            context.fill(x, y, x + panelWidth, y + panelHeight, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xC9121D2D));
-            context.fill(x, y, x + panelWidth, y + 2, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, NovaVisualSettings.accent));
-            context.drawText(client.textRenderer,
-                    client.textRenderer.trimToWidth(name, textWidth),
-                    x + 7, y + 7, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFFFFFFFF), false);
-            context.drawText(client.textRenderer,
-                    client.textRenderer.trimToWidth(health, textWidth),
-                    x + 7, y + 20, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFFB6CBE0), false);
-
-            int barY = showRange ? y + 43 : y + 33;
-            if (showRange) {
+                int accent = target.hurtTime > 0 ? 0xFFFF805A : NovaVisualSettings.accent;
+                context.fill(x, y, x + panelWidth, y + panelHeight,
+                        NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xC9121D2D));
+                context.fill(x, y, x + panelWidth, y + 2,
+                        NovaHudLayout.color(NovaHudLayout.Widget.TARGET, accent));
                 context.drawText(client.textRenderer,
-                        client.textRenderer.trimToWidth(range, textWidth),
-                        x + 7, y + 31, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF7DD3FC), false);
-            }
-            int barLeft = x + 7;
-            int barRight = Math.max(barLeft + 1, x + panelWidth - 7);
-            context.fill(barLeft, barY, barRight, barY + 3, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF35465A));
-            float ratio = target.getMaxHealth() <= 0 ? 0
-                    : Math.max(0, Math.min(1, target.getHealth() / target.getMaxHealth()));
-            context.fill(barLeft, barY, barLeft + (int) ((barRight - barLeft) * ratio),
-                    barY + 3, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF55D98B));
+                        client.textRenderer.trimToWidth(name, textWidth),
+                        x + 7, y + 7, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFFFFFFFF), false);
+                context.drawText(client.textRenderer,
+                        client.textRenderer.trimToWidth(health, textWidth),
+                        x + 7, y + 20, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFFB6CBE0), false);
+
+                int barY = showRange ? y + 43 : y + 33;
+                if (showRange) {
+                    context.drawText(client.textRenderer,
+                            client.textRenderer.trimToWidth(range, textWidth),
+                            x + 7, y + 31, NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF7DD3FC), false);
+                }
+                int barLeft = x + 7;
+                int barRight = Math.max(barLeft + 1, x + panelWidth - 7);
+                int barWidth = barRight - barLeft;
+                context.fill(barLeft, barY, barRight, barY + 3,
+                        NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFF35465A));
+
+                float healthRatio = maxHealth <= 0.0F ? 0.0F
+                        : Math.max(0.0F, Math.min(1.0F, targetHealth / maxHealth));
+                int healthEnd = barLeft + Math.round(barWidth * healthRatio);
+                int healthColor = healthRatio <= 0.25F ? 0xFFFF526B
+                        : healthRatio <= 0.50F ? 0xFFFFC857 : 0xFF55D98B;
+                if (healthEnd > barLeft) {
+                    context.fill(barLeft, barY, healthEnd, barY + 3,
+                            NovaHudLayout.color(NovaHudLayout.Widget.TARGET, healthColor));
+                }
+
+                float absorptionRatio = maxHealth <= 0.0F ? 0.0F
+                        : Math.max(0.0F, Math.min(1.0F, absorption / maxHealth));
+                int absorptionEnd = Math.min(barRight,
+                        healthEnd + Math.round(barWidth * absorptionRatio));
+                if (absorptionEnd > healthEnd) {
+                    context.fill(healthEnd, barY, absorptionEnd, barY + 3,
+                            NovaHudLayout.color(NovaHudLayout.Widget.TARGET, 0xFFFFC857));
+                }
             }
         }
     }
-
 
 
     private static void renderCompassHud(DrawContext context, MinecraftClient client) {

@@ -96,64 +96,38 @@ public final class NovaVisualScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         float entrance = NovaVisualSettings.animatedMenu
-                ? easeOut(Math.min(1f, (System.currentTimeMillis() - openedAt) / 420f)) : 1f;
+                ? easeOut(Math.min(1.0F, (System.currentTimeMillis() - openedAt) / 260.0F)) : 1.0F;
+        float scale = 0.985F + 0.015F * entrance;
         int center = width / 2;
-        int left = center - 250;
-        int top = height / 2 - 160;
-        int right = center + 250;
-        int bottom = height / 2 + 160;
+        int verticalCenter = height / 2;
 
         NovaGlassUi.drawBackdrop(context, width, height);
-        NovaGlassUi.drawPanel(context, left, top, right - left, bottom - top,
-                NovaVisualSettings.accent);
-        NovaGlassUi.drawDivider(context, left + 16, top + 48, right - left - 32, 0x6695D9F5);
-        context.drawText(textRenderer, "N O V A C R A F T   /   S P A T I A L   U I",
-                left + 18, top + 13, MUTED, false);
-        context.drawText(textRenderer, "NovaVisual", left + 18, top + 30, 0xFFFFFFFF, false);
-        context.drawText(textRenderer, "Client-side visual toolkit  ·  Minecraft 1.21.11",
-                left + 18, top + 42, 0xFFB6CBE0, false);
+        var matrices = context.getMatrices();
+        matrices.pushMatrix();
+        try {
+            matrices.translate(center, verticalCenter);
+            matrices.scale(scale, scale);
+            matrices.translate(-center, -verticalCenter);
 
-        super.render(context, mouseX, mouseY, delta);
+            int left = center - 250;
+            int top = verticalCenter - 160;
+            int right = center + 250;
+            int bottom = verticalCenter + 160;
+            NovaGlassUi.drawPanel(context, left, top, right - left, bottom - top,
+                    NovaVisualSettings.accent);
+            NovaGlassUi.drawDivider(context, left + 16, top + 48, right - left - 32, 0x6695D9F5);
+            context.drawText(textRenderer, "N O V A C R A F T   /   S P A T I A L   U I",
+                    left + 18, top + 13, MUTED, false);
+            context.drawText(textRenderer, "NovaVisual", left + 18, top + 30, 0xFFFFFFFF, false);
+            context.drawText(textRenderer, "Client-side visual toolkit  ·  Minecraft 1.21.11",
+                    left + 18, top + 42, 0xFFB6CBE0, false);
 
-        int leftX = center - 226;
-        int rightX = center + 6;
-        int firstY = top + 64;
-        int step = 28;
-        String[] labels = {
-                "Animated menu", "Compact HUD", "Damage flash", "Ambient particles",
-                "Fullbright", "Enemy ESP (hostile mobs)", "HolyWorld event marker", "PvP exit warning",
-                "Low-health vignette"
-        };
-        boolean[] enabled = {
-                NovaVisualSettings.animatedMenu, NovaVisualSettings.compactHud,
-                NovaVisualSettings.damageFlash, NovaVisualSettings.particles,
-                NovaVisualSettings.fullbright, NovaVisualSettings.enemyEsp,
-                NovaVisualSettings.eventAutoMarker, NovaVisualSettings.combatExitWarning,
-                NovaVisualSettings.healthVignette
-        };
-        for (int i = 0; i < labels.length; i++) {
-            glassButton(context, leftX, firstY + i * step, 220, 22,
-                    labels[i] + "  ·  " + (enabled[i] ? "ON" : "OFF"), mouseX, mouseY);
+            // Render the real ButtonWidgets last. Decorative duplicate labels/cards used to
+            // be painted over them here, making the controls look stacked and obscured.
+            super.render(context, mouseX, mouseY, delta);
+        } finally {
+            matrices.popMatrix();
         }
-
-        String[] actions = {
-                "Accent: " + accentName(), "OPTIMIZATION CENTER", "COSMETICS / SKIN STUDIO",
-                "MODRINTH / MOD LIBRARY", "INTERNET / WEB", "HUD / LAYOUT",
-                "COMPASS HUD  ·  " + (NovaVisualSettings.compassHud ? "ON" : "OFF"),
-                "WAYPOINT MANAGER", "DONE"
-        };
-        for (int i = 0; i < actions.length; i++) {
-            glassButton(context, rightX, firstY + i * step, 220, 22,
-                    actions[i], mouseX, mouseY);
-        }
-    }
-
-    private void glassButton(DrawContext ctx, int x, int y, int w, int h,
-                             String label, int mouseX, int mouseY) {
-        boolean hover = mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h;
-        NovaGlassUi.drawCard(ctx, x, y, w, h, hover);
-        ctx.drawText(textRenderer, textRenderer.trimToWidth(label, w - 20),
-                x + 12, y + 7, hover ? 0xFFFFFFFF : 0xFFE4F2FF, false);
     }
 
     private static float easeOut(float value) {

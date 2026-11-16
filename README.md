@@ -2,6 +2,14 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.18.0 development
+
+### PvP Target HUD improvements
+- Expanded the crosshair target card with live armor points and absorption health when present.
+- The health bar now changes color at low-health thresholds and renders absorption as a separate amber segment.
+- The target card's accent briefly changes while the target is in its hurt animation; this is a visual target-state cue, not proof that the local player caused the damage.
+- Fixed the main menu's duplicate decorative labels being painted over real buttons. The existing animated-menu option now applies a subtle, short entrance scale to the actual panel and controls.
+
 ## Version 1.17.0 development
 
 ### Potion effect change alert

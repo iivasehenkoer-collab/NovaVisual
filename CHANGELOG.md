@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.18.0 - development
+- Enhanced PvP Target HUD with target armor points, absorption amount and a segmented health/absorption bar.
+- Health bar color now reflects low-health thresholds; the card accent reacts to the target's hurt animation without claiming local-player hit attribution.
+- Removed duplicate decorative labels/cards drawn over the main menu's real buttons.
+- Implemented a subtle 260 ms entrance scale for the main menu when Animated menu is enabled.
+- Settings format remains at version 14; no new persisted keys were required.
+- Minecraft in-game behavior still requires manual verification.
+
 ## 1.17.0 - development
 - Added Potion Effect Alerts for newly applied effects, amplifier changes and effects ending; the first world snapshot is silent to avoid join-time noise.
 - Added a persistent HUD / Layout → Status toggle and a movable/scalable/opacity-adjustable HUD Editor widget for effect notifications.
