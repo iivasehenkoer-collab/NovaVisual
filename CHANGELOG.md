@@ -2,7 +2,7 @@
 
 ## 1.19.0 - development
 - Refined PvP exit warning detection to require player-attributed damage instead of treating all health loss as combat.
-- Nearby player hurt animations only count when the local player is recorded as the attacker, avoiding false warnings from unrelated fights in loaded chunks.
+- Other players' hurt animations only count when the local player is recorded as the attacker, avoiding false warnings from unrelated fights in loaded chunks.
 - Combat tracking now resets on world changes, disconnects and feature disable; re-enabling starts from a fresh baseline.
 - Added a compact 15-second remaining-time bar to the combat warning HUD.
 - No new configuration keys were added; existing settings format 14 remains compatible.
@@ -49,10 +49,10 @@
 - Settings format advances to version 10. The editor uses the Minecraft 1.21.11 DrawContext matrix stack; in-game verification remains pending.
 
 ## 1.13.2 - development
-- Fullbright now captures the user's gamma before applying maximum brightness and persists that restore value in novavisual.properties.
+- Fullbright now captures the user's gamma before applying maximum brightness and persists that restore value in `novavisual.properties`.
 - Disabling Fullbright restores the captured gamma even when Minecraft was restarted while Fullbright remained enabled; malformed or out-of-range stored values safely fall back/clamp.
 - Advanced the settings format to version 9 while preserving backward-compatible defaults.
-- GitHub Actions build succeeded for the glass UI fix in run #43199223460; in-game verification has not been performed.
+- GitHub Actions run #43199223460 completed successfully: Gradle build, source packaging, artifact upload and prerelease publication all passed. In-game verification has not been performed.
 
 ## 1.13.1 - development
 - Added shared NovaGlassUi primitives for rounded translucent panels, glass cards, subtle highlights and ambient cyan/violet glow.
@@ -73,7 +73,7 @@
 - Added a single persistent client waypoint: F8 saves/replaces the current block position and F9 clears it.
 - Added a dimension-aware Waypoint HUD with a relative forward/left/right/back arrow, horizontal distance, saved XYZ and vertical offset.
 - The waypoint is stored in novavisual.properties and survives client restarts; navigation is suppressed in other dimensions and the HUD identifies the saved dimension.
-- Added a persisted Waypoint HUD toggle to the main settings screen and HUD Layout → Status; configuration format advanced to version 8 while keeping previous keys backward-compatible.
+- Added a persisted Waypoint HUD toggle to the main menu and HUD Layout → Status; configuration format advanced to version 8 while keeping previous keys backward-compatible.
 - Added keybinding translations and updated README usage/build notes. Gradle CI and in-game verification are pending for this revision.
 
 ## 1.11.0 - development
@@ -98,7 +98,7 @@
 ## 1.8.0 - development
 - Added a low-health vignette visual warning with a red edge tint that activates below 35% health.
 - Vignette intensity scales with remaining health and uses a subtle pulse; no mixin or server interaction is required.
-- Added a persisted Low-health Vignette toggle to the main settings screen and HUD / Layout; configuration format advanced to version 4 while retaining fallback loading for previous settings.
+- Added a persisted Low-health Vignette toggle to the main settings screen and HUD / Layout; configuration format advanced to version 4 while retaining fallback loading for previous keys.
 - Adjusted HUD Layout vertical spacing and panel bounds so its expanded controls do not overlap the heading or Back button.
 
 ## 1.7.0 - development

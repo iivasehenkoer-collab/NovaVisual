@@ -73,7 +73,7 @@ public final class NovaCombatWarning {
             int hurtTime = other.hurtTime;
             Integer previous = previousHurtTimes.put(uuid, hurtTime);
 
-            // Only count a nearby player's fresh hurt animation when the local
+            // Only count another player's fresh hurt animation when the local
             // player is recorded as its attacker. Unrelated fights no longer
             // put the user into a false combat state.
             if (previous != null && hurtTime > previous && wasHitByPlayer(other, player)) {
@@ -122,7 +122,7 @@ public final class NovaCombatWarning {
         String message = "PVP ACTIVITY  ·  Avoid disconnecting!  ·  " + seconds + "s";
         message = client.textRenderer.trimToWidth(message, Math.max(1, screenWidth - 32));
         int textWidth = client.textRenderer.getWidth(message);
-        int cardWidth = Math.min(screenWidth - 12, textWidth + 20);
+        int cardWidth = Math.max(1, Math.min(Math.max(1, screenWidth - 12), textWidth + 20));
         int x = (screenWidth - cardWidth) / 2;
         int y = 12;
 

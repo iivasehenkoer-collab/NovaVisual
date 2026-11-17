@@ -21,19 +21,27 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - Fixed the main menu's duplicate decorative labels being painted over real buttons. The existing animated-menu option now applies a subtle, short entrance scale to the actual panel and controls.
 
 ## Version 1.17.0 development
+
+### Potion effect change alert
 - Tracks active potion effects by registry ID and shows a short HUD notification when an effect is applied, its amplifier changes, or it ends.
 - Takes an initial snapshot on world entry, so existing effects do not generate a burst of false notifications.
 - Added a persistent **Potion Effect Alerts** toggle to HUD / Layout → Status and an independently movable, scalable and opacity-adjustable HUD Editor widget.
 - Settings format advances to version 14; older settings keep the enabled-by-default behavior.
-- Enemy ESP remembers each hostile mob's previous glowing state and restores it when the mob leaves the active set or the feature is disabled.
+
+### Enemy ESP state restoration
+- Enemy ESP now remembers each hostile mob's previous glowing state and restores it when the mob leaves the active set or the feature is disabled, instead of blindly forcing glowing off.
 
 ## Version 1.16.0 development
+
+### Low armor durability alert
 - Detects when equipped damageable armor crosses below 20% remaining durability and shows a short warning card.
 - Identifies the affected equipment slot and item; the warning fades automatically and can be moved, resized and made transparent in the HUD Editor.
 - Added a persistent **Low Durability Alert** toggle to HUD / Layout → Status. The detector initializes from the currently equipped gear and does not warn just because a low-durability item was already equipped when joining a world.
-- Settings format advances to version 13; older settings remain backward-compatible.
+- Settings format advances to version 13; existing settings remain backward-compatible.
 
 ## Version 1.15.0 development
+
+### HUD Profiles
 - Added ready-made PvP, Anarchy and Survival layouts directly to the HUD Editor.
 - Each profile configures widget visibility, screen placement, size, opacity and accent color.
 - PvP focuses on target/keystrokes/armor; Anarchy adds compass, waypoint, world information and resource panels; Survival emphasizes resources, navigation and player status.
@@ -41,22 +49,34 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - Existing custom layouts are kept as Custom on upgrade; presets are applied only when selected.
 
 ## Version 1.14.0 development
+
+### Totem Pop Alert
 - Detects a local totem consumption by correlating a totem-count decrease with recent player damage and the vanilla 1 HP totem recovery state.
 - Shows a short animated alert with the session pop count and remaining totems.
-- Adds the alert as a draggable, scalable and opacity-adjustable HUD Editor widget; toggle it under **HUD / Layout → Combat**.
+- Added the alert as a draggable, scalable and opacity-adjustable HUD Editor widget; toggle it under **HUD / Layout → Combat**.
+- The session counter resets when leaving the world; the alert is client-side and does not claim to read server combat-tag state.
 
 ## Version 1.13.3 development
+
+### HUD Editor
 - Added a mouse-driven editor for independently moving HUD widgets.
 - Added per-widget size controls (50%–200%), opacity controls (20%–100%) and a reset action.
 - Positions are normalized to the scaled GUI size and saved in config/novavisual.properties.
+- Untouched widgets keep their previous automatic placement; settings format advances to version 10.
 
 ## Version 1.13.2 development
-- Fullbright remembers the gamma value that was active before it was enabled.
-- The saved value is stored in config/novavisual.properties and restored when Fullbright is disabled, including after restarting Minecraft while the feature was enabled.
+
+### Fullbright persistence fix
+- Fullbright now remembers the gamma value that was active before it was enabled.
+- The saved value is stored in `config/novavisual.properties` and restored when Fullbright is disabled, including after restarting Minecraft while the feature was enabled.
+- Existing configuration files remain compatible; the settings format advances to version 9.
 
 ## Version 1.13.1 development
+
+### visionOS-inspired interface refresh
 - Added shared rounded glass surfaces, translucent layered panels, subtle edge highlights and cyan/violet ambient glow.
 - Applied the shared glass UI system to the NovaVisual home screen, HUD settings, waypoint manager, Optimization Center, Cosmetics Studio, Modrinth browser and lightweight web browser.
+- The visual treatment uses Minecraft's DrawContext fill pipeline; it does not require shaders, mixins or Apple assets.
 
 ## Version 1.13.0 development
 
@@ -76,7 +96,7 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 - Compass HUD: yaw-relative cardinal/intercardinal tape, heading degrees and center tick
 - **Waypoint HUD:** multiple named, persistent destinations; the active point shows a live relative arrow, horizontal distance, saved XYZ and vertical offset, with dimension-aware navigation
 - **Waypoint Manager:** save named locations, select the active destination, delete points and browse up to 12 saved waypoints
-- **F8** updates the active waypoint at the player's current position (creates Quick if none is active); **F9** deletes the active point
+- **F8** updates the active waypoint at the player's current position (creates Quick if none is active); **F9** deletes the active waypoint
 - HUD Layout grouped into Layout, Combat and Status pages, including a Waypoint HUD toggle
 - Damage flash, ambient particles, RGB Aura and moving particle trail
 - Nova Blue / Nova Violet accent, animated menu and Fullbright
@@ -108,4 +128,4 @@ A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fa
 ### Build
 Run gradle build; the remapped JAR should be in build/libs/.
 
-GitHub Actions build verification and in-game verification are separate; consult the Actions run and Release linked from the repository before installing a binary.
+Version 1.13.0 adds a named multi-waypoint manager and keeps saved destinations separate from visual preferences. GitHub Actions build verification and in-game verification are separate; consult the Actions run and Release linked from the repository before installing a binary.
