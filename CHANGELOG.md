@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.20.0 - development
+- Added a confirmed-hit crosshair marker for living entities attacked by the local player.
+- The marker is shown only after a client-visible health/absorption decrease, hurt animation and attacker attribution agree; attack attempts and misses do not trigger it.
+- Added a 420 ms fade, hidden-HUD/screen guards, a 10-tick confirmation window and a cap of six pending targets.
+- Added a persistent Hit Marker toggle to HUD / Layout → Combat; settings format advances to 15 with backward-compatible defaults.
+- In-game multiplayer timing and server-specific attacker synchronization still require manual verification.
+
 ## 1.19.0 - development
 - Refined PvP exit warning detection to require player-attributed damage instead of treating all health loss as combat.
 - Other players' hurt animations only count when the local player is recorded as the attacker, avoiding false warnings from unrelated fights in loaded chunks.

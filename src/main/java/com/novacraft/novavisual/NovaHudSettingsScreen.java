@@ -70,7 +70,12 @@ public final class NovaHudSettingsScreen extends Screen {
                 addToggle(buttonX, rowStartY + rowStep * 4, "Target Range",
                         () -> NovaVisualSettings.targetRangeHud,
                         value -> NovaVisualSettings.targetRangeHud = value);
-                addBackButton(buttonX, rowStartY + rowStep * 5);
+                addDrawableChild(ButtonWidget.builder(toggleText("Hit Marker", NovaVisualSettings.hitMarker), button -> {
+                    NovaVisualSettings.hitMarker = !NovaVisualSettings.hitMarker;
+                    NovaVisualSettings.save();
+                    button.setMessage(toggleText("Hit Marker", NovaVisualSettings.hitMarker));
+                }).dimensions(buttonX, rowStartY + rowStep * 5, 220, 20).build());
+                addBackButton(buttonX, rowStartY + rowStep * 6);
             }
             case STATUS -> {
                 addToggle(buttonX, rowStartY, "Armor Durability HUD",

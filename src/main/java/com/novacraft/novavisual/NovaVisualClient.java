@@ -43,6 +43,7 @@ public final class NovaVisualClient implements ClientModInitializer {
 
         NovaEventMarker.register();
         NovaCombatWarning.register();
+        NovaHitMarker.register();
         NovaVisualEffects.register();
         NovaWaypointHud.register();
 

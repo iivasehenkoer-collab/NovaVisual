@@ -24,6 +24,7 @@ public final class NovaVisualSettings {
     public static boolean enemyEsp = false;
     public static boolean eventAutoMarker = true;
     public static boolean combatExitWarning = true;
+    public static boolean hitMarker = true;
     public static int accent = 0xFF39BDF8;
     public static boolean cosmeticsEnabled = true;
     public static boolean rgbWings = true;
@@ -78,6 +79,7 @@ public final class NovaVisualSettings {
         enemyEsp = bool(values, "enemyEsp", enemyEsp);
         eventAutoMarker = bool(values, "eventAutoMarker", eventAutoMarker);
         combatExitWarning = bool(values, "combatExitWarning", combatExitWarning);
+        hitMarker = bool(values, "hitMarker", hitMarker);
         cosmeticsEnabled = bool(values, "cosmeticsEnabled", cosmeticsEnabled);
         rgbWings = bool(values, "rgbWings", rgbWings);
         rgbAura = bool(values, "rgbAura", rgbAura);
@@ -116,7 +118,7 @@ public final class NovaVisualSettings {
 
     public static void save() {
         Properties values = new Properties();
-        values.setProperty("formatVersion", "14");
+        values.setProperty("formatVersion", "15");
         values.setProperty("animatedMenu", Boolean.toString(animatedMenu));
         values.setProperty("compactHud", Boolean.toString(compactHud));
         values.setProperty("damageFlash", Boolean.toString(damageFlash));
@@ -127,6 +129,7 @@ public final class NovaVisualSettings {
         values.setProperty("enemyEsp", Boolean.toString(enemyEsp));
         values.setProperty("eventAutoMarker", Boolean.toString(eventAutoMarker));
         values.setProperty("combatExitWarning", Boolean.toString(combatExitWarning));
+        values.setProperty("hitMarker", Boolean.toString(hitMarker));
         values.setProperty("accent", Integer.toHexString(accent));
         values.setProperty("cosmeticsEnabled", Boolean.toString(cosmeticsEnabled));
         values.setProperty("rgbWings", Boolean.toString(rgbWings));

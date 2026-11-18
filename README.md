@@ -2,6 +2,15 @@
 
 A client-side visual and utility mod for Minecraft Java Edition 1.21.11 using Fabric.
 
+## Version 1.20.0 development
+
+### Confirmed-hit marker
+- Added a crosshair hit marker for living entities attacked by the local player.
+- A click alone never displays the marker: the client waits up to 10 ticks for a health/absorption decrease, a hurt animation and client-visible attacker attribution to the local player.
+- The marker fades over 420 ms and is hidden while a screen is open or the HUD is hidden.
+- Added a persistent **Hit Marker** toggle under **Right Shift → HUD / Layout → Combat**. Existing settings remain compatible; the format advances to 15.
+- The feature is client-side feedback, not damage prediction. Server synchronization, protection plugins and entity invulnerability can delay or suppress confirmation.
+
 ## Version 1.19.0 development
 
 ### PvP activity detection and disconnect warning
